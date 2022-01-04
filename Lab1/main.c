@@ -5,8 +5,8 @@ int main(void)
 {
 	int a = 10;
 	int b = 5;
-	
 	int c = add(a, b);
+
 	printf("result : %d", c);
 	
     return 0;
