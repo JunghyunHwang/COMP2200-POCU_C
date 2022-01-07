@@ -3,6 +3,7 @@
 
 #define TRUE (1)
 #define FALSE (0)
+#include <stddef.h>
 
 typedef enum color {
     COLOR_BLACK,
@@ -41,3 +42,4 @@ int copy_row(const color_t color, const size_t src, const size_t dst);
 int copy_column(const color_t color, const size_t src, const size_t dst);
 
 #endif /* POMOKU_H */
+
