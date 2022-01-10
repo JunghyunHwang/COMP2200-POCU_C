@@ -16,7 +16,6 @@ int main(void)
     assert(get_last_index_of(s_numbers, 10, 4) == 6);
     assert(get_max_index(s_numbers, 10) == 4);
     assert(get_min_index(s_numbers, 10) == 9);
-    print_array(s_numbers);
     test_insert();
     test_remove_at();
     printf("No prob");
@@ -31,8 +30,6 @@ static void test_insert(void)
 
     assert(insert(s_numbers, 10, -21, 0) == TRUE);
     assert(insert(s_numbers, 11, -22, 11) == TRUE);
-    
-    print_array(s_numbers);
 
     for (i = 0; i < 12; i++)
     {
@@ -56,16 +53,4 @@ static void test_remove_at(void)
     {
         assert(expected_result[i] == s_numbers[i]);
     }
-}
-
-void print_array(int array[])
-{
-    size_t i;
-    printf("{");
-
-    for (i = 0; i < 12; i++) {
-        printf("%d ", array[i]);
-    }
-
-    printf("} \n");
 }
