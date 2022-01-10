@@ -32,25 +32,25 @@ int check_horizontal(const color_t color, size_t row, size_t col);
 
 int check_west_recursive(const color_t color, const size_t row, size_t col);
 
-int check_east_recursive(const color_t color, const size_t row, size_t col, int chaining_stone_number);
+int check_east_recursive(const color_t color, const size_t row, size_t col);
 
 int check_vertical(const color_t color, size_t row, size_t col);
 
-int check_north_recursive(const color_t color, size_t row, const size_t col, int chaining_stone_number);
+int check_north_recursive(const color_t color, size_t row, const size_t col);
 
-int check_south_recursive(const color_t color, size_t row, const size_t col, int chaining_stone_number);
+int check_south_recursive(const color_t color, size_t row, const size_t col);
 
 int check_left_diagonal(const color_t color, size_t row, size_t col);
 
-int check_north_west_recursive(const color_t color, size_t row, size_t col, int chaining_stone_number);
+int check_north_west_recursive(const color_t color, size_t row, size_t col);
 
-int check_south_east_recursive(const color_t color, size_t row, size_t col, int chaining_stone_number);
+int check_south_east_recursive(const color_t color, size_t row, size_t col);
 
 int check_right_diagonal(const color_t color, size_t row, size_t col);
 
-int check_north_east_recursive(const color_t color, size_t row, size_t col, int chaining_stone_number);
+int check_north_east_recursive(const color_t color, size_t row, size_t col);
 
-int check_south_west_recursive(const color_t color, size_t row, size_t col, int chaining_stone_number);
+int check_south_west_recursive(const color_t color, size_t row, size_t col);
 
 /* special moves */
 int insert_row(const color_t color, const size_t row);
