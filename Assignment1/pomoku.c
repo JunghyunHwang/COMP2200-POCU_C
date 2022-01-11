@@ -8,8 +8,7 @@
 static int s_board[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 static size_t s_valid_row_size;
 static size_t s_valid_column_size;
-static int s_black_score;
-static int s_white_score;
+static int s_player_score[2];
 
 void init_game(void)
 {
@@ -24,8 +23,8 @@ void init_game(void)
         }
     }
 
-    s_black_score = 0;
-    s_white_score = 0;
+    s_player_score[0] = 0;
+    s_player_score[1] = 0;
 }
 
 size_t get_row_count(void)
@@ -41,21 +40,11 @@ size_t get_column_count(void)
 
 int get_score(const color_t color)
 {
-    int score;
-
-    switch(color) {
-        case COLOR_BLACK:
-            score = s_black_score;
-        break;
-        case COLOR_WHITE:
-            score = s_white_score;
-        break;
-        default:
-            score = -1;
-        break;
+    if (color != 0 && color != 1) {
+        return -1;
     }
 
-    return score;
+    return s_player_score[color];
 }
 
 int get_color(const size_t row, const size_t col)
@@ -86,7 +75,7 @@ int place_stone(const color_t color, const size_t row, const size_t col)
     if (valid_location) {
         s_board[row][col] = color;
         counting_stone(color, row, col);
-        printf("score is : %d \n", s_black_score);
+        printf("score is : %d \n", s_player_score[color]);
         return valid_location;
     } else {
         return valid_location;
@@ -113,17 +102,7 @@ void counting_stone(const color_t color, const size_t row, const size_t col)
     printf("right_diagonal_score is : %d \n", right_diagonal_score);
     printf("total_score is : %d \n", total_score);
 
-    switch(color) {
-        case COLOR_BLACK:
-            s_black_score += total_score;
-        break;
-        case COLOR_WHITE:
-            s_white_score += total_score;
-        break;
-        default:
-            assert(0);
-        break;
-    }
+    s_player_score[color] += total_score;
 }
 
 int check_horizontal_chaining(const color_t color, size_t row, size_t col)
