@@ -252,3 +252,57 @@ int check_south_west_recursive(const color_t color, size_t row, size_t col)
     chaining_stone_count = check_south_west_recursive(color, row + 1, col - 1);
     return ++chaining_stone_count;
 }
+
+/* special move */
+/* 스킬 사용시 점수 계산 다시 */
+/* insert는 가능한 크기 사이에서만 한다고 가정 함 (보드 크기가 15 일때 row 15에 추가 못함) */
+
+void print_board()
+{
+    size_t i;
+    size_t j;
+
+    printf("=======board======= \n");
+    for (i = 0; i < s_valid_row_size; i++) {
+        for (j = 0; j < s_valid_column_size; j++) {
+            printf("%d ", s_board[i][j]);
+        }
+        printf("\n");
+    }
+    printf("=================== \n"); 
+}
+
+int insert_row(const color_t color, const size_t row)
+{
+    int require_score = 3;
+    int temp_array[MAX_BOARD_SIZE];
+    int temp;
+    size_t i;
+    size_t j;
+
+    print_board();
+
+    for (i = 0; i < s_valid_column_size; i++)
+    {
+        temp_array[i] = -1;
+    }
+
+    if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row >= s_valid_row_size) {
+        return 0;
+    }
+
+    s_valid_row_size++;
+
+    for (i = row; i < s_valid_row_size; i++) {
+        for (j = 0; j < s_valid_column_size; j++) {
+            temp = s_board[i][j];
+            s_board[i][j] = temp_array[j];
+            temp_array[j] = temp;
+        }
+    }
+
+    s_player_score[color] -= require_score;
+
+    print_board();
+    return 1;
+}

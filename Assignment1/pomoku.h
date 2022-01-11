@@ -69,5 +69,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst);
 
 int copy_column(const color_t color, const size_t src, const size_t dst);
 
+void print_board(void);
+
 #endif /* POMOKU_H */
 

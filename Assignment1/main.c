@@ -19,8 +19,13 @@ int main(void)
     place_stone(COLOR_BLACK, 8, 6);
     printf("=======place stone 6========= \n");
     place_stone(COLOR_BLACK, 3, 11);
+    printf("imposible %d \n", insert_row(COLOR_BLACK, 14));
+
     printf("=======place stone 7========= \n");
     place_stone(COLOR_BLACK, 4, 10);
+
+    printf("posible %d \n", insert_row(COLOR_BLACK, 14));
+
     
     return 0;
 }
