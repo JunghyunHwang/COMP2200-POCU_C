@@ -395,23 +395,3 @@ int remove_column(const color_t color, const size_t col)
     print_board(); /* test */
     return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
