@@ -9,7 +9,7 @@
 static int s_board[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 static size_t s_valid_row_size;
 static size_t s_valid_column_size;
-static int s_player_score[2];
+static int s_player_score[3];
 
 void init_game(void)
 {
@@ -18,14 +18,15 @@ void init_game(void)
     s_valid_row_size = DEFAULT_BOARD_SIZE;
     s_valid_column_size = DEFAULT_BOARD_SIZE;
 
-    for (i = 0; i < s_valid_row_size; i++) {
-        for (j = 0; j < s_valid_column_size; j++) {
+    for (i = 0; i < MAX_BOARD_SIZE; i++) {
+        for (j = 0; j < MAX_BOARD_SIZE; j++) {
             s_board[i][j] = -1;
         }
     }
 
-    s_player_score[0] = 0;
-    s_player_score[1] = 0;
+    s_player_score[0] = 0; /* COLOR_BLACK */
+    s_player_score[1] = 0; /* COLOR_WHITE */
+    s_player_score[3] = 20000; /* test */
 }
 
 size_t get_row_count(void)
@@ -42,7 +43,7 @@ size_t get_column_count(void)
 int get_score(const color_t color)
 {
     if (color != 0 && color != 1) {
-        return -1;
+        return -1; 
     }
 
     return s_player_score[color];
@@ -273,6 +274,8 @@ void print_board()
     printf("=================== \n"); 
 }
 
+/* 15 x 15 보드의 경우 색인은  [0] ~ [14] 까지입니다. 하지만 [15]에도 삽입이 가능해야 합니다. */
+
 int insert_row(const color_t color, const size_t row)
 {
     int require_score = 3;
@@ -281,9 +284,9 @@ int insert_row(const color_t color, const size_t row)
     size_t i;
     size_t j;
 
-    print_board();
+    print_board(); /* test */
 
-    if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row >= s_valid_row_size) {
+    if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row > s_valid_row_size) {
         return 0;
     }
 
@@ -291,7 +294,7 @@ int insert_row(const color_t color, const size_t row)
         temp_array[i] = -1;
     }
 
-    s_valid_row_size++;
+    ++s_valid_row_size;
 
     for (i = row; i < s_valid_row_size; i++) {
         for (j = 0; j < s_valid_column_size; j++) {
@@ -303,7 +306,7 @@ int insert_row(const color_t color, const size_t row)
 
     s_player_score[color] -= require_score;
 
-    print_board();
+    print_board(); /* test */
     return 1;
 }
 
@@ -315,9 +318,9 @@ int insert_column(const color_t color, const size_t col)
     size_t i;
     size_t j;
 
-    print_board();
+    print_board(); /* test */
 
-    if (s_player_score[color] < require_score || s_valid_column_size >= MAX_BOARD_SIZE || col >= s_valid_column_size) {
+    if (s_player_score[color] < require_score || s_valid_column_size >= MAX_BOARD_SIZE || col > s_valid_column_size) {
         return 0;
     }
 
@@ -325,7 +328,7 @@ int insert_column(const color_t color, const size_t col)
         temp_array[i] = -1;
     }
 
-    s_valid_column_size++;
+    ++s_valid_column_size;
 
     for (i = col; i < s_valid_column_size; i++) {
         for (j = 0; j < s_valid_row_size; j++) {
@@ -337,11 +340,78 @@ int insert_column(const color_t color, const size_t col)
 
     s_player_score[color] -= require_score;
 
-    print_board();
+    print_board(); /* test */
     return 1;
 }
 
 int remove_row(const color_t color, const size_t row)
 {
-    
+    int require_score = 3;
+    size_t i;
+    size_t j;
+
+    print_board(); /* test */
+
+    if (s_player_score[color] < require_score || s_valid_row_size <= MIN_BOARD_SIZE || row >= s_valid_row_size) {
+        return 0;
+    }
+
+    --s_valid_row_size;
+
+    for (i = row; i < s_valid_row_size; i++) {
+        for (j = 0; j < s_valid_column_size; j++) {
+            s_board[i][j] = s_board[i + 1][j];
+        }
+    }
+
+    s_player_score[color] -= require_score;
+
+    print_board(); /* test */
+    return 1;
 }
+
+int remove_column(const color_t color, const size_t col)
+{
+    int require_score = 3;
+    size_t i;
+    size_t j;
+
+    print_board(); /* test */
+
+    if (s_player_score[color] < require_score || s_valid_column_size <= MIN_BOARD_SIZE || col >= s_valid_column_size) {
+        return 0;
+    }
+
+    --s_valid_column_size;
+
+    for (i = col; i < s_valid_column_size; i++) {
+        for (j = 0; j < s_valid_row_size; j++) {
+            s_board[j][i] = s_board[j][i + 1];
+        }
+    }
+
+    s_player_score[color] -= require_score;
+
+    print_board(); /* test */
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

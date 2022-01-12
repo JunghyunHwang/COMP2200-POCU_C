@@ -24,6 +24,6 @@ int main(void)
     place_stone(COLOR_BLACK, 4, 10);
     assert(4 == get_score(COLOR_BLACK));
 
-    insert_column(COLOR_BLACK, 7);
+    remove_row(COLOR_ANORAK, 5);
     return 0;
 }
