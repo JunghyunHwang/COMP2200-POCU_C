@@ -5,8 +5,7 @@
 int main(void)
 {
     init_game();
-    printf("Board row size : %u \n", get_row_count());
-    printf("Board column size : %u \n", get_column_count());
+
     printf("=======place stone 1========= \n");
     place_stone(COLOR_BLACK, 7, 7);
     printf("=======place stone 2========= \n");
@@ -24,6 +23,13 @@ int main(void)
     place_stone(COLOR_BLACK, 4, 10);
     assert(4 == get_score(COLOR_BLACK));
 
-    remove_row(COLOR_ANORAK, 5);
+    printf("=======place stone 8========= \n");
+    place_stone(COLOR_ANORAK, 7, 14);
+    place_stone(COLOR_ANORAK, 14, 7);
+
+    assert(1 == swap_rows(COLOR_ANORAK, 0, 14));
+    assert(1 == swap_columns(COLOR_ANORAK, 0, 14));
+    assert(0 == swap_columns(COLOR_ANORAK, 0, 15));
+
     return 0;
 }
