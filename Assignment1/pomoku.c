@@ -3,6 +3,7 @@
 #include "pomoku.h"
 
 #define MAX_BOARD_SIZE (20)
+#define MIN_BOARD_SIZE (9)
 #define DEFAULT_BOARD_SIZE (15)
 
 static int s_board[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
@@ -114,7 +115,7 @@ int check_horizontal_chaining(const color_t color, size_t row, size_t col)
     if (chaining_stone_count < 5) {
         return 0;
     } else {
-        return chaining_stone_count % 5 + 1;
+        return chaining_stone_count - 4;
     }
 }
 
@@ -151,7 +152,7 @@ int check_vertical_chaining(const color_t color, size_t row, size_t col)
     if (chaining_stone_count < 5) {
         return 0;
     } else {
-        return chaining_stone_count % 5 + 1;
+        return chaining_stone_count - 4;
     }
 }
 
@@ -188,7 +189,7 @@ int check_left_diagonal_chaining(const color_t color, size_t row, size_t col)
     if (chaining_stone_count < 5) {
         return 0;
     } else {
-        return chaining_stone_count % 5 + 1;
+        return chaining_stone_count - 4;
     }
 }
 
@@ -225,7 +226,7 @@ int check_right_diagonal_chaining(const color_t color, size_t row, size_t col)
     if (chaining_stone_count < 5) {
         return 0;
     } else {
-        return chaining_stone_count % 5 + 1;
+        return chaining_stone_count - 4;
     }
 }
 
@@ -282,13 +283,12 @@ int insert_row(const color_t color, const size_t row)
 
     print_board();
 
-    for (i = 0; i < s_valid_column_size; i++)
-    {
-        temp_array[i] = -1;
-    }
-
     if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row >= s_valid_row_size) {
         return 0;
+    }
+
+    for (i = 0; i < s_valid_column_size; i++) {
+        temp_array[i] = -1;
     }
 
     s_valid_row_size++;
@@ -305,4 +305,43 @@ int insert_row(const color_t color, const size_t row)
 
     print_board();
     return 1;
+}
+
+int insert_column(const color_t color, const size_t col)
+{
+    int require_score = 3;
+    int temp_array[MAX_BOARD_SIZE];
+    int temp;
+    size_t i;
+    size_t j;
+
+    print_board();
+
+    if (s_player_score[color] < require_score || s_valid_column_size >= MAX_BOARD_SIZE || col >= s_valid_column_size) {
+        return 0;
+    }
+
+    for (i = 0; i < s_valid_row_size; i++) {
+        temp_array[i] = -1;
+    }
+
+    s_valid_column_size++;
+
+    for (i = col; i < s_valid_column_size; i++) {
+        for (j = 0; j < s_valid_row_size; j++) {
+            temp = s_board[j][i];
+            s_board[j][i] = temp_array[j];
+            temp_array[j] = temp;
+        }
+    }
+
+    s_player_score[color] -= require_score;
+
+    print_board();
+    return 1;
+}
+
+int remove_row(const color_t color, const size_t row)
+{
+    
 }
