@@ -74,14 +74,14 @@ int place_stone(const color_t color, const size_t row, const size_t col)
 
     if (valid_location) {
         s_board[row][col] = color;
-        counting_stone(color, row, col);
+        count_stone(color, row, col);
         return valid_location;
     } else {
         return valid_location;
     }
 }
 
-void counting_stone(const color_t color, const size_t row, const size_t col)
+void count_stone(const color_t color, const size_t row, const size_t col)
 {
     int horizontal_score;
     int vertical_score;
@@ -430,7 +430,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
     int require_score = 4;
     size_t i;
 
-    if (s_player_score[color] < require_score || src > s_valid_column_size || dst > s_valid_column_size) {
+    if (s_player_score[color] < require_score || src >= s_valid_row_size || dst >= s_valid_row_size) {
         return 0;
     }
 
@@ -448,7 +448,7 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
     int require_score = 4;
     size_t i;
 
-    if (s_player_score[color] < require_score || src > s_valid_column_size || dst > s_valid_column_size) {
+    if (s_player_score[color] < require_score || src >= s_valid_column_size || dst >= s_valid_column_size) {
         return 0;
     }
 
