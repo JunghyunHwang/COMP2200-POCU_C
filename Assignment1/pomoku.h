@@ -25,7 +25,7 @@ int place_stone(const color_t color, const size_t row, const size_t col);
 
 /* check stone chaining */
 
-void counting_stone(const color_t color, size_t row, size_t col);
+void count_stone(const color_t color, size_t row, size_t col);
 
 int check_horizontal_chaining(const color_t color, size_t row, size_t col);
 
