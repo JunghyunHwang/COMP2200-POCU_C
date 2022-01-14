@@ -9,6 +9,7 @@ void test_swap_row(void);
 void test_insert_row(void);
 void test_remove_row(void);
 void test_copy_row(void);
+void print_board(void);
 
 int main(void)
 {
@@ -34,6 +35,12 @@ int main(void)
 
     printf("No prob");
     return 0;
+}
+
+void print_board()
+{
+    size_t i;
+    size_t j;
 }
 
 void test_init_game(void)

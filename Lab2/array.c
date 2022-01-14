@@ -1,77 +1,80 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdio.h>
-#define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof(arr[0]));
 
 int get_index_of(const int numbers[], const size_t element_count, const int num)
 {
-    int result = -1;
+    int result_index = -1;
     size_t i;
 
     for (i = 0; i < element_count; i++) {
         if (numbers[i] == num) {
-            result = i;
+            result_index = i;
             break;
         }
     }
 
-    return result;
+    return result_index;
 }
 
 int get_last_index_of(const int numbers[], const size_t element_count, const int num)
 {
-    int result = -1;
+    int result_index = -1;
     size_t i;
 
     for (i = 0; i < element_count; i++) {
         if (numbers[i] == num) {
-            result = i;
+            result_index = i;
         }
     }
 
-    return result;
+    return result_index;
 }
 
 int get_max_index(const int numbers[], const size_t element_count)
 {
-    int result = -1;
+    int result_index = -1;
+    int max;
     size_t i;
-    int max = INT_MIN + 1;
 
     if (element_count == 0) {
-        return result;
-    }
-	
-    for (i = 0; i < element_count; i++) {
-        if (numbers[i] > max) {
-            max = numbers[i];
-        }
+        return result_index;
     }
 
-    result = get_index_of(numbers, element_count, max);
+    max = numbers[0];
+    result_index = 0;
 	
-    return result;
+    for (i = 1; i < element_count; i++) {
+        if (numbers[i] > max) {
+            max = numbers[i];
+            result_index = i;
+        }
+    }
+	
+    return result_index;
 }
 
 int get_min_index(const int numbers[], const size_t element_count)
 {
-    int result = -1;
+    int result_index = -1;
+    int min;
     size_t i;
-    int min = INT_MAX;
 
     if (element_count == 0) {
-        return result;
+        return result_index;
     }
 
-    for (i = 0; i < element_count; i++) {
+    min = numbers[0];
+    result_index = 0;
+
+    for (i = 1; i < element_count; i++) {
         if (numbers[i] < min) {
             min = numbers[i];
+            result_index = i;
         }
     }
 
-    result = get_index_of(numbers, element_count, min);
-
-    return result;
+    return result_index;
 }
 
 int is_all_positive(const int numbers[], const size_t element_count)
