@@ -22,9 +22,10 @@ int get_last_index_of(const int numbers[], const size_t element_count, const int
     int result_index = -1;
     size_t i;
 
-    for (i = 0; i < element_count; i++) {
+    for (i = element - 1; i >= 0; i--) {
         if (numbers[i] == num) {
             result_index = i;
+            break;
         }
     }
 
