@@ -7,6 +7,10 @@ int get_index_of(const int numbers[], const size_t element_count, const int num)
     int result_index = -1;
     size_t i;
 
+    if (element_count == 0) {
+        return result_index;
+    }
+
     for (i = 0; i < element_count; i++) {
         if (numbers[i] == num) {
             result_index = i;
@@ -21,6 +25,10 @@ int get_last_index_of(const int numbers[], const size_t element_count, const int
 {
     int result_index = -1;
     size_t i;
+
+    if (element_count == 0) {
+        return result_index;
+    }
 
     for (i = element_count - 1; i >= 0; i--) {
         if (numbers[i] == num) {
@@ -132,7 +140,7 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
 
     for (i = pos; i < element_count + insert_element_count; i++) {
         temp = numbers[i];
-        numbers[i] = insert_element_value ;
+        numbers[i] = insert_element_value;
         insert_element_value = temp;
     }
 
