@@ -30,10 +30,9 @@ int get_last_index_of(const int numbers[], const size_t element_count, const int
         return result_index;
     }
 
-    for (i = element_count - 1; i >= 0; i--) {
+    for (i = 0; i < element_count; i++) {
         if (numbers[i] == num) {
             result_index = i;
-            break;
         }
     }
 

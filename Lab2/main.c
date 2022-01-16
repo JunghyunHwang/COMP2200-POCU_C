@@ -12,10 +12,8 @@ void print_array(int array[]);
 
 int main(void)
 {
-    int test[] = { };
     assert(get_index_of(s_numbers, 10, 4) == 1);
     assert(get_last_index_of(s_numbers, 10, 4) == 6);
-    assert(get_last_index_of(test, 0, 1) == -1);
     assert(get_max_index(s_numbers, 10) == 4);
     assert(get_min_index(s_numbers, 10) == 9);
     test_insert();
