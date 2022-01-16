@@ -132,12 +132,11 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
 
     for (i = pos; i < element_count + insert_element_count; i++) {
         temp = numbers[i];
-        numbers[i] = insert_element_value;
+        numbers[i] = insert_element_value 
         insert_element_value = temp;
     }
 
     result = 1;
-
     return result;
 }
 
