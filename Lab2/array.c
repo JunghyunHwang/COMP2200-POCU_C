@@ -122,8 +122,8 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
 {
     int result = 0;
     int temp;
-    int input_value = num;
     int insert_element_count = 1;
+    int insert_element_value = num;
     size_t i;
 
     if (element_count < pos) {
@@ -132,11 +132,12 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
 
     for (i = pos; i < element_count + insert_element_count; i++) {
         temp = numbers[i];
-        numbers[i] = input_value;
-        input_value = temp;
+        numbers[i] = insert_element_value;
+        insert_element_value = temp;
     }
 
     result = 1;
+
     return result;
 }
 
@@ -150,9 +151,10 @@ int remove_at(int numbers[], const size_t element_count, const size_t index)
     }
 
     for (i = index; i < element_count; i++) {
-        numbers[i] = i == element_count - 1 ? INT_MIN : numbers[i + 1];
+        numbers[i] = (i == element_count - 1) ? INT_MIN : numbers[i + 1];
     }
 
     result = 1;
+
     return result;
 }
