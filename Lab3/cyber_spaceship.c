@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include "cyber_spaceship.h"
 
-#define CAB_LENGTH (50)
-
 const char* get_longest_safe_zone_or_null(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count, size_t* out_longest_safe_area_length)
 {
     char multiverse_cab[30] = { 0, };
-    int safe_zone_index[30];
-    int safe_zone_length[30];
+    int safe_zone_index[30] = { 0, };
+    int safe_zone_length[30] = { 0, };
     int longest_length;
     char* result_address;
     size_t i;
@@ -51,10 +49,18 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
         }
     }
 
+    print_cab(multiverse_cab);
+
     /* Check longest safe area */
     longest_length = safe_zone_length[0];
     index = safe_zone_index[0];
-
+    
+    printf("safe_zone_length: ");
+    for(i = 0; i < 30; i++) {
+        printf("%d, ", safe_zone_length[i]);
+    }
+    printf("\n");
+    
     for (i = 1; i < j; i++) {
         if (safe_zone_length[i] >= longest_length) {
             longest_length = safe_zone_length[i];
@@ -62,8 +68,20 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
         }
     }
 
+    printf("longest_length: %d\n", longest_length);
+
     *out_longest_safe_area_length = longest_length;
     result_address = multiverse_cab + universe_distance + index;
 
     return result_address;
+}
+
+void print_cab(char cab[])
+{
+    size_t i;
+    printf("multicab: ");
+    for (i = 0; i < 30; i++) {
+        printf("%d", cab[i]);
+    }
+    printf("\n");
 }
