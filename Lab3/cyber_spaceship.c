@@ -89,7 +89,7 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
                 total_travel_time += 0.1;
                 break;
             case 1:
-                total_travel_time += 0.2
+                total_travel_time += 0.2;
                 break;
             default:
                 assert(FALSE);

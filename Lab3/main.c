@@ -176,14 +176,32 @@ void test_etc(void)
     printf("test_etc clear\n\n");
 }
 
+void my_test_case(void)
+{
+    const char cyber_asteroid_belt[100];
+    const char* cluster_start_addresses[4];
+    size_t cluster_lengths[4];
+    size_t out_longest_safe_area_length = 0;
+    size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
+    const char* longest_safe_cluster_start_address;
+
+    cluster_start_addresses[0] = &cyber_asteroid_belt[0];
+    cluster_start_addresses[1] = &cyber_asteroid_belt[0];
+    cluster_start_addresses[2] = &cyber_asteroid_belt[51];
+    cluster_start_addresses[3] = &cyber_asteroid_belt[51];
+
+    cluster_lengths[0] = 49U;
+    cluster_lengths[1] = 51U;
+    cluster_lengths[2] = 49U;
+    cluster_lengths[3] = 49U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 100, cluster_start_addresses, cluster_lengths, 4, out_longest_safe_area_length_p);
+    assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[51]);
+}
+
 int main(void)
 {
-    double test = 5.5 + 0.5;
-    printf("Floating point value: %f\n", test);
-    printf("Floating point casting: %d\n", (int)test);
-
-    test_cab_length_upto_100();
-    test_etc();
+    my_test_case();
 
     printf("No prob");
 
