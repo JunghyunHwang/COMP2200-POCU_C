@@ -36,7 +36,7 @@ int main(void)
 
     printf("cyber_asteroid_belt address: %p\n", (void*)cyber_asteroid_belt);
     printf("=======================\n");
-    printf("expected address: %p\n", (void*)&cyber_asteroid_belt[0]);
+    printf("expected address: %p\n", (void*)&cyber_asteroid_belt[6]);
     printf("result address: %p\n", (void*)longest_safe_cluster_start_address);
     printf("expected Longest length value: %d\n", 5);
     printf("result Longest length value: %d\n", out_longest_safe_area_length);
