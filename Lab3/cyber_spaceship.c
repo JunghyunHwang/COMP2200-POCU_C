@@ -64,8 +64,6 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 int get_travel_time(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count)
 {
     double total_travel_time = 0;
-    size_t safe_area_length = 0;
-    size_t danger_area_length = 0;
     size_t i;
     size_t j;
 
@@ -84,13 +82,17 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
         }
         
         if (overlap_cluster_count % 2 == 0) {
-            safe_area_length++;
+            total_travel_time += 0.1;
+        } else {
+            total_travel_time += 0.5;
         }
     }
 
-    danger_area_length = cab_length - safe_area_length;
-    total_travel_time = safe_area_length / 10 + danger_area_length / 5;
     total_travel_time += 0.5;
+    printf("=========================\n");
+    printf("CAB length: %d\n\n", cab_length);
+    printf("Total travel time: %f\n", total_travel_time);
+    printf("Cating travel time: %d\n", (int)total_travel_time);
 
     return (int)total_travel_time;
 }
