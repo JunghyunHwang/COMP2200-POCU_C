@@ -197,6 +197,15 @@ void my_test_case(void)
         assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[15]);
         assert(out_longest_safe_area_length == 15);
 
+        /* No safe area */
+        out_longest_safe_area_length = 0;
+        cluster_start_addresses[0] = &cyber_asteroid_belt[0];
+        cluster_lengths[0] = 30U;
+
+        longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 30, cluster_start_addresses, cluster_lengths, 1, out_longest_safe_area_length_p);
+        assert(longest_safe_cluster_start_address == NULL);
+        assert(out_longest_safe_area_length == 0);
+
         /* cluster start address cab out of range */
         out_longest_safe_area_length = 0;
         cluster_start_addresses[0] = &cyber_asteroid_belt[0] - 1;
@@ -239,11 +248,70 @@ void my_test_case(void)
     }
 }
 
+void B02_2ClustersNoOverlap4(void)
+{
+    const char cyber_asteroid_belt[31];
+    const char* cluster_start_addresses[2];
+    size_t cluster_lengths[2];
+    size_t out_longest_safe_area_length = 0;
+    size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
+    const char* longest_safe_cluster_start_address;
+
+    /*1*/
+    cluster_start_addresses[0] = &cyber_asteroid_belt[0];
+    cluster_start_addresses[1] = &cyber_asteroid_belt[16];
+
+    cluster_lengths[0] = 7U;
+    cluster_lengths[1] = 6U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 31, cluster_start_addresses, cluster_lengths, 2, out_longest_safe_area_length_p);
+    printf("%d, %d, %d \n", longest_safe_cluster_start_address, &cyber_asteroid_belt[16] + 6, out_longest_safe_area_length);
+    assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[16] + 6);
+    assert(out_longest_safe_area_length == 9);
+
+    /*2*/
+    cluster_start_addresses[0] = &cyber_asteroid_belt[0];
+    cluster_start_addresses[1] = &cyber_asteroid_belt[16];
+
+    cluster_lengths[0] = 6U;
+    cluster_lengths[1] = 6U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 31, cluster_start_addresses, cluster_lengths, 2, out_longest_safe_area_length_p);
+    printf("%d, %d, %d \n", longest_safe_cluster_start_address, &cyber_asteroid_belt[0] + 6, out_longest_safe_area_length);
+    assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[0] + 6);
+    assert(out_longest_safe_area_length == 10);
+
+    /*3*/
+    cluster_start_addresses[0] = &cyber_asteroid_belt[0];
+    cluster_start_addresses[1] = &cyber_asteroid_belt[16];
+
+    cluster_lengths[0] = 7U;
+    cluster_lengths[1] = 5U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 31, cluster_start_addresses, cluster_lengths, 2, out_longest_safe_area_length_p);
+    printf("%d, %d, %d \n", longest_safe_cluster_start_address, &cyber_asteroid_belt[16] + 5, out_longest_safe_area_length);
+    assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[16] + 5);
+    assert(out_longest_safe_area_length == 10);
+
+    /*4*/
+    cluster_start_addresses[0] = &cyber_asteroid_belt[1];
+    cluster_start_addresses[1] = &cyber_asteroid_belt[16];
+
+    cluster_lengths[0] = 6U;
+    cluster_lengths[1] = 6U;
+
+    longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 31, cluster_start_addresses, cluster_lengths, 2, out_longest_safe_area_length_p);
+    printf("%d, %d, %d \n", longest_safe_cluster_start_address, &cyber_asteroid_belt[16] + 6, out_longest_safe_area_length);
+    assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[16] + 6);
+    assert(out_longest_safe_area_length == 9);
+}
+
 int main(void)
 {
     my_test_case();
     test_cab_length_upto_100();
     test_etc();
+    B02_2ClustersNoOverlap4();
 
     printf("No prob");
 
