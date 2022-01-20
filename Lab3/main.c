@@ -44,7 +44,7 @@ void test_cab_length_upto_100(void)
             assert(longest_safe_cluster_start_address == cyber_asteroid_belt);
             assert(*out_longest_safe_area_length_p == i);
             time_in_mins = get_travel_time(cyber_asteroid_belt, i, cluster_start_addresses, cluster_lengths, 2);
-            /*assert(time_in_mins == (i + 5) / 10);*/
+            assert(time_in_mins == (i + 5) / 10); 
         }
     }
     /* 1 cluster */
@@ -56,6 +56,7 @@ void test_cab_length_upto_100(void)
         size_t out_longest_safe_area_length = 0;
         size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
         const char* longest_safe_cluster_start_address;
+        
         size_t i;
         cluster_start_addresses[0] = &cyber_asteroid_belt[0];
         for (i = 1; i <= 100; i++) {
@@ -64,7 +65,7 @@ void test_cab_length_upto_100(void)
             
             assert(*out_longest_safe_area_length_p == 0);
             time_in_mins = get_travel_time(cyber_asteroid_belt, i, cluster_start_addresses, cluster_lengths, 1);
-            /* assert(time_in_mins == (i * 2 + 5) / 10);  check if your double value is like x.9999... < x+1 */
+            assert(time_in_mins == (i * 2 + 5) / 10); /* check if your double value is like x.9999... < x+1 */
         }
     }
     printf("test_cab_length_upto_100 clear\n\n");
@@ -176,6 +177,7 @@ void test_etc(void)
     printf("test_etc clear\n\n");
 }
 
+
 void my_test_case(void)
 {
     /* 1 cluster */
@@ -187,7 +189,7 @@ void my_test_case(void)
         size_t* out_longest_safe_area_length_p = &out_longest_safe_area_length;
         const char* longest_safe_cluster_start_address;
         size_t i;
-
+        
         cluster_start_addresses[0] = &cyber_asteroid_belt[0];
         cluster_lengths[0] = 15U;
 
@@ -195,7 +197,8 @@ void my_test_case(void)
         assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[15]);
         assert(out_longest_safe_area_length == 15);
 
-        /* cluster start address previous cab */
+        /* cluster start address cab out of range */
+        out_longest_safe_area_length = 0;
         cluster_start_addresses[0] = &cyber_asteroid_belt[0] - 1;
         cluster_lengths[0] = 16U;
 
@@ -203,6 +206,7 @@ void my_test_case(void)
         assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[15]);
         assert(out_longest_safe_area_length == 15);
 
+        out_longest_safe_area_length = 0;
         cluster_start_addresses[0] = &cyber_asteroid_belt[0] - 15;
         cluster_lengths[0] = 5U;
 
@@ -210,6 +214,7 @@ void my_test_case(void)
         assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[0]);
         assert(out_longest_safe_area_length == 30);
 
+        out_longest_safe_area_length = 0;
         cluster_start_addresses[0] = &cyber_asteroid_belt[29] + 1;
         cluster_lengths[0] = 5U;
 
@@ -217,8 +222,19 @@ void my_test_case(void)
         assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[0]);
         assert(out_longest_safe_area_length == 30);
 
+        printf("==========cluster length 1 test ============ \n");
         for (i = 0; i < 30; i++) {
-            
+            out_longest_safe_area_length = 0;
+            cluster_start_addresses[0] = &cyber_asteroid_belt[i];
+            cluster_lengths[0] = 1U;
+
+            longest_safe_cluster_start_address = get_longest_safe_zone_or_null(cyber_asteroid_belt, 30, cluster_start_addresses, cluster_lengths, 1, out_longest_safe_area_length_p);
+
+            if (i > 14) {
+                assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[0]);
+            } else {
+                assert(longest_safe_cluster_start_address == &cyber_asteroid_belt[i + cluster_lengths[0]]);
+            }
         }
     }
 }
@@ -226,6 +242,8 @@ void my_test_case(void)
 int main(void)
 {
     my_test_case();
+    test_cab_length_upto_100();
+    test_etc();
 
     printf("No prob");
 
