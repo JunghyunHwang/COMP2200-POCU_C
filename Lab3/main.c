@@ -44,7 +44,7 @@ void test_cab_length_upto_100(void)
             assert(longest_safe_cluster_start_address == cyber_asteroid_belt);
             assert(*out_longest_safe_area_length_p == i);
             time_in_mins = get_travel_time(cyber_asteroid_belt, i, cluster_start_addresses, cluster_lengths, 2);
-            /* assert(time_in_mins == (i + 5) / 10); */
+            assert(time_in_mins == (i + 5) / 10);
         }
     }
     /* 1 cluster */

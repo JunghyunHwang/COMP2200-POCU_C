@@ -8,8 +8,8 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
     size_t j;
 
     size_t safe_area_length = 0;
-    int first_safe_area_index = 0;
     size_t longest_safe_area_index = 0;
+    int first_safe_area_index = 0;
 
     if (cab_length == 0) {
         *out_longest_safe_area_length = 0;
@@ -20,8 +20,8 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
     }
     
     for (i = 0; i < cab_length; i++) {
-        int is_safe;
         size_t overlap_cluster_count = 0;
+        int is_safe;
 
         for (j = 0; j < cluster_count; j++) {
             if (cab_start_location + i >= cluster_start_locations[j] && cab_start_location + i <= cluster_start_locations[j] + cluster_lengths[j] - 1) {
@@ -64,7 +64,8 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 int get_travel_time(const char* const cab_start_location, const size_t cab_length, const char* const cluster_start_locations[], const size_t cluster_lengths[], const size_t cluster_count)
 {
     double total_travel_time = 0;
-    s
+    size_t safe_area_length = 0;
+    size_t danger_area_length = 0;
     size_t i;
     size_t j;
 
@@ -74,7 +75,6 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
     }
 
     for (i = 0; i < cab_length; i++) {
-        int is_safe;
         size_t overlap_cluster_count = 0;
 
         for (j = 0; j < cluster_count; j++) {
@@ -82,22 +82,14 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
                 overlap_cluster_count++;
             }
         }
-
-        is_safe = overlap_cluster_count % 2;
-
-        switch (is_safe) {
-        case 0:
-            total_travel_time += 0.1;
-            break;
-        case 1:
-            total_travel_time += 0.2;
-            break;
-        default:
-            assert(0);
-            break;
+        
+        if (overlap_cluster_count % 2 == 0) {
+            safe_area_length++;
         }
     }
 
+    danger_area_length = cab_length - safe_area_length;
+    total_travel_time = safe_area_length / 10 + danger_area_length / 5;
     total_travel_time += 0.5;
 
     return (int)total_travel_time;
