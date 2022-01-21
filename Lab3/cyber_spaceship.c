@@ -38,6 +38,11 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
             }
 
             safe_area_length++;
+
+            if (*out_longest_safe_area_length <= safe_area_length) {
+                *out_longest_safe_area_length = safe_area_length;
+                longest_safe_area_index = first_safe_area_index;
+            }
             break;
         case 1:
             safe_area_length = 0;
@@ -46,11 +51,6 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
         default:
             assert(0);
             break;
-        }
-
-        if (*out_longest_safe_area_length <= safe_area_length) {
-            *out_longest_safe_area_length = safe_area_length;
-            longest_safe_area_index = first_safe_area_index;
         }
     }
 
