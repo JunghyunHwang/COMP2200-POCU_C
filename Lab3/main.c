@@ -233,7 +233,6 @@ void my_test_case(void)
 
         printf("==========cluster length 1 test ============ \n");
         for (i = 0; i < 30; i++) {
-            out_longest_safe_area_length = 0;
             cluster_start_addresses[0] = &cyber_asteroid_belt[i];
             cluster_lengths[0] = 1U;
 
