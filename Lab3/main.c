@@ -307,11 +307,22 @@ void B02_2ClustersNoOverlap4(void)
 }
 
 int main(void)
-{
+{    
     my_test_case();
     test_cab_length_upto_100();
     test_etc();
     B02_2ClustersNoOverlap4();
+
+    {
+        int test[5] = { 5, 5, 5, 5, 0 };
+        int* first_ptr = test;
+        int* last_ptr = first_ptr + 4;
+        printf("first address: %p\n", (void*)first_ptr);
+        printf("last address: %p\n", (void*)last_ptr);
+        printf("Array test first value: %d\n", *first_ptr);
+        printf("Array test last value: %d\n", *last_ptr);
+        printf("Address difference: %d\n", last_ptr - first_ptr);
+    }
 
     printf("No prob");
 

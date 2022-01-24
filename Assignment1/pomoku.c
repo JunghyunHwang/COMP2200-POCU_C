@@ -5,6 +5,9 @@
 #define MAX_BOARD_SIZE (20)
 #define MIN_BOARD_SIZE (10)
 #define DEFAULT_BOARD_SIZE (15)
+#define EMPTY (-1)
+#define TRUE (1)
+#define FALSE (0)
 
 static int s_board[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
 static size_t s_valid_row_size;
@@ -20,7 +23,7 @@ void init_game(void)
 
     for (i = 0; i < MAX_BOARD_SIZE; i++) {
         for (j = 0; j < MAX_BOARD_SIZE; j++) {
-            s_board[i][j] = -1;
+            s_board[i][j] = EMPTY;
         }
     }
 
@@ -55,10 +58,10 @@ int get_color(const size_t row, const size_t col)
 
 int is_placeable(const size_t row, const size_t col)
 {
-    if (row >= s_valid_row_size || col >= s_valid_column_size || s_board[row][col] != -1) {
-        return 0;
+    if (row >= s_valid_row_size || col >= s_valid_column_size || s_board[row][col] != EMPTY) {
+        return FALSE;
     } else {
-        return 1;
+        return TRUE;
     }
 }
 
@@ -67,12 +70,12 @@ int place_stone(const color_t color, const size_t row, const size_t col)
     int valid_location;
 
     if (color != 0 && color != 1) {
-        return 0;
+        return FALSE;
     }
 
     valid_location = is_placeable(row, col);
 
-    if (valid_location) {
+    if (valid_location == TRUE) {
         s_board[row][col] = color;
         count_stone(color, row, col);
         return valid_location;
@@ -250,8 +253,6 @@ int check_south_west_recursive(const color_t color, size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-
-
 /* special move */
 
 int insert_row(const color_t color, const size_t row)
@@ -263,7 +264,7 @@ int insert_row(const color_t color, const size_t row)
     size_t j;
 
     if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row > s_valid_row_size) {
-        return 0;
+        return FALSE;
     }
 
     ++s_valid_row_size;
@@ -278,7 +279,7 @@ int insert_row(const color_t color, const size_t row)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int insert_column(const color_t color, const size_t col)
@@ -290,7 +291,7 @@ int insert_column(const color_t color, const size_t col)
     size_t j;
 
     if (s_player_score[color] < require_score || s_valid_column_size >= MAX_BOARD_SIZE || col > s_valid_column_size) {
-        return 0;
+        return FALSE;
     }
 
     ++s_valid_column_size;
@@ -305,7 +306,7 @@ int insert_column(const color_t color, const size_t col)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int remove_row(const color_t color, const size_t row)
@@ -315,7 +316,7 @@ int remove_row(const color_t color, const size_t row)
     size_t j;
 
     if (s_player_score[color] < require_score || s_valid_row_size <= MIN_BOARD_SIZE || row >= s_valid_row_size) {
-        return 0;
+        return FALSE;
     }
 
     --s_valid_row_size;
@@ -328,7 +329,7 @@ int remove_row(const color_t color, const size_t row)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int remove_column(const color_t color, const size_t col)
@@ -338,7 +339,7 @@ int remove_column(const color_t color, const size_t col)
     size_t j;
 
     if (s_player_score[color] < require_score || s_valid_column_size <= MIN_BOARD_SIZE || col >= s_valid_column_size) {
-        return 0;
+        return FALSE;
     }
 
     --s_valid_column_size;
@@ -351,7 +352,7 @@ int remove_column(const color_t color, const size_t col)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int swap_rows(const color_t color, const size_t row0, const size_t row1)
@@ -361,7 +362,7 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
     size_t i;
 
     if (s_player_score[color] < require_score || row0 >= s_valid_row_size || row1 >= s_valid_row_size) {
-        return 0;
+        return FALSE;
     }
 
     for (i = 0; i < s_valid_column_size; i++) {
@@ -372,7 +373,7 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int swap_columns(const color_t color, const size_t col0, const size_t col1)
@@ -382,7 +383,7 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
     size_t i;
 
     if (s_player_score[color] < require_score || col0 >= s_valid_column_size || col1 >= s_valid_column_size) {
-        return 0;
+        return FALSE;
     }
 
     for (i = 0; i < s_valid_row_size; i++) {
@@ -393,7 +394,7 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int copy_row(const color_t color, const size_t src, const size_t dst)
@@ -402,7 +403,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
     size_t i;
 
     if (s_player_score[color] < require_score || src >= s_valid_row_size || dst >= s_valid_row_size) {
-        return 0;
+        return FALSE;
     }
 
     for (i = 0; i < s_valid_column_size; i++) {
@@ -411,7 +412,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
 
 int copy_column(const color_t color, const size_t src, const size_t dst)
@@ -420,7 +421,7 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
     size_t i;
 
     if (s_player_score[color] < require_score || src >= s_valid_column_size || dst >= s_valid_column_size) {
-        return 0;
+        return FALSE;
     }
 
     for (i = 0; i < s_valid_row_size; i++) {
@@ -429,5 +430,5 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
 
     s_player_score[color] -= require_score;
 
-    return 1;
+    return TRUE;
 }
