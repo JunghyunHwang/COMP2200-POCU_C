@@ -20,7 +20,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
     }
     
     for (i = 0; i < cab_length; ++i) {
-        const char* current_location = cab_start_location + i;
+        const char* cab_current_location = cab_start_location + i;
         size_t overlap_cluster_count = 0;
         int is_safe;
 
@@ -28,7 +28,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
             const char* cluster_start_location = cluster_start_locations[j];
             const char* cluster_end_location = cluster_start_locations[j] + cluster_lengths[j] - 1;
 
-            if (cluster_start_location <= current_location && current_location <= cluster_end_location) {
+            if (cluster_start_location <= cab_current_location && cab_current_location <= cluster_end_location) {
                 ++overlap_cluster_count;
             }
         }
@@ -79,14 +79,14 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
     }
 
     for (i = 0; i < cab_length; ++i) {
-        const char* current_location = cab_start_location + i;
+        const char* cab_current_location = cab_start_location + i;
         size_t overlap_cluster_count = 0;
 
         for (j = 0; j < cluster_count; ++j) {
             const char* cluster_start_location = cluster_start_locations[j];
             const char* cluster_end_location = cluster_start_locations[j] + cluster_lengths[j] - 1;
 
-            if (cluster_start_location <= current_location && current_location <= cluster_end_location) {
+            if (cluster_start_location <= cab_current_location && cab_current_location <= cluster_end_location) {
                 ++overlap_cluster_count;
             }
         }
