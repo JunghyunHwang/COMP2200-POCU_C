@@ -1,11 +1,63 @@
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include "my_string.h"
 
 int main(void)
 {
-    char str[] = "Bitch don't kill my vibe";
-    reverse(str); /* str이 "yad yppah hO"가 됨 */
+    const char* str = "We all live in a yellow submarine";
+    char str_cpy[34];
+    const char* token;
+
+    strncpy(str_cpy, str, 33);
+    str_cpy[33] = '\0';
+
+
+    reverse(str_cpy);
+    print_string(str_cpy);
+    assert(strcmp("enirambus wolley a ni evil lla eW", str_cpy) == 0);
+
+    assert(index_of(str, "all ") == 3);
+    assert(index_of(str, "marine") == 27);
+    assert(index_of(str, "all good") == -1);
+    assert(index_of(str, "marinett") == -1);
+
+    reverse(str_cpy);
+    print_string(str_cpy);
+
+    assert(strcmp(str_cpy, str) == 0);
+
+    reverse_by_words(str_cpy);
+    print_string(str_cpy);
+    assert(strcmp("eW lla evil ni a wolley enirambus", str_cpy) == 0);
+
+    reverse_by_words(str_cpy);
+    print_string(str_cpy);
+
+    assert(tokenize(NULL, " ") == NULL);
+
+    token = tokenize(str_cpy, " ");
+    print_string(token);
+    assert(token == str_cpy);
+    assert(strcmp(token, "We") == 0);
+
+    token = tokenize(NULL, " ");
+    print_string(token);
+    assert(token == str_cpy + 3);
+    assert(strcmp(token, "all") == 0);
+
+    token = tokenize(NULL, " ");
+    print_string(token);
+    assert(token == str_cpy + 7);
+    assert(strcmp(token, "live") == 0);
+
+    token = reverse_tokenize(NULL, " ");
+    print_string(token);
+    assert(token == str_cpy + 12);
+    assert(strcmp(token, "ni") == 0);
+
+    printf("No prob");
+
     return 0;
 }
