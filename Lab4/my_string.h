@@ -11,10 +11,6 @@ char* tokenize(char* str_or_null, const char* delims);
 
 char* reverse_tokenize(char* str_or_null, const char* delims);
 
-char* tokenize_recursive (char* str_or_null, const char* delims);
-
-void print_string(const char* str);
-
 void swap_character(char* first, char* last);
 
 #endif /* MY_STRING_H */

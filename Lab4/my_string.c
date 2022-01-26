@@ -106,7 +106,8 @@ void reverse_by_words(char* str)
     swap_character(str_start_p, current_location_p);
 }
 
-char* tokenize(char* str_or_null, const char* delims) {
+char* tokenize(char* str_or_null, const char* delims)
+{
     char* current_location_p;
     char* result_p = NULL;
 
@@ -152,7 +153,8 @@ tokenized:
     return result_p;
 }
 
-char* reverse_tokenize(char* str_or_null, const char* delims) {
+char* reverse_tokenize(char* str_or_null, const char* delims)
+{
     char* current_location_p;
     char* result_p;
 
