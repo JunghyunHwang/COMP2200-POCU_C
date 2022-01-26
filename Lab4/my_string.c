@@ -114,8 +114,6 @@ char* tokenize(char* str_or_null, const char* delims) {
         s_tonkenized_p = str_or_null;
     } else if (str_or_null == NULL && s_tonkenized_p == NULL) {
         return NULL;
-    } else if (*str_or_null == '\0') {
-        return NULL;
     }
 
     current_location_p = s_tonkenized_p;
@@ -161,8 +159,6 @@ char* reverse_tokenize(char* str_or_null, const char* delims) {
     if (str_or_null != NULL) {
         s_tonkenized_p = str_or_null;
     } else if (str_or_null == NULL && s_tonkenized_p == NULL) {
-        return NULL;
-    } else if (*str_or_null == '\0') {
         return NULL;
     }
 

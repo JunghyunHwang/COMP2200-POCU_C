@@ -13,6 +13,8 @@ void test_case1(void) {
 void test_case2 (void)
 {
     /*
+    1. reverse()
+    */
     {
         char empty[] = "";
         char empty_reverse[] = "";
@@ -25,10 +27,10 @@ void test_case2 (void)
 
         char odd_num_chars[] = "apple";
         char odd_num_chars_reverse[] = "elppa";
-        
+
         reverse(empty);
         assert(strcmp(empty, empty_reverse) == 0);
-        
+
         reverse(one_char);
         assert(strcmp(one_char, one_char_reverse) == 0);
 
@@ -39,6 +41,9 @@ void test_case2 (void)
         assert(strcmp(odd_num_chars, odd_num_chars_reverse) == 0);
     }
     
+    /*
+        2. index_of()
+    */
     {
         char str[] = "I am a boy and you are a girl, we like banana";
         char empty_str[] = "";
@@ -51,11 +56,8 @@ void test_case2 (void)
         char word_not_found2[] = "z";
         char word_not_found3[] = "your";
         int index;
-        int test;
 
         index = strstr(str, empty) - str;
-        test = index_of(str, empty);
-        printf("%d\n", test);
         assert(index_of(str, empty) == index);
 
         assert(index_of(empty_str, empty) == 0);
@@ -72,8 +74,10 @@ void test_case2 (void)
 
         assert(index_of(str, word_not_found3) == -1);
     }
-    */
 
+    /*
+        3. reverse_by_words()
+    */
     {
         char empty[] = "";
         char empty_reverse[] = "";
@@ -94,9 +98,11 @@ void test_case2 (void)
         assert(strcmp(mult_words, mult_words_reverse) == 0);
     }
 
+    /*
+        4. tokenize()
+    */
     {
         const char* one_delim = " ";
-        int i = 0;
         const char* mult_delim = " ,!";
         char str_strtok[] = "I am a boy, and you are a girl!";
         char str_tokenize[] = "I am a boy, and you are a girl!";
@@ -105,19 +111,11 @@ void test_case2 (void)
         char str_tokenize2[] = "!,I    am  a boy,  and    you   are a   girl!";
         char* token_strtok = strtok(str_strtok, one_delim);
         char* token_tokenize = tokenize(str_tokenize, one_delim);
-        printf("%s\n", token_tokenize);
-        
-        assert(strcmp(token_strtok, token_tokenize) == 0);
-        token_tokenize = tokenize(NULL, one_delim);
-        printf("%s\n", token_tokenize);
 
-/*
         while (token_strtok != NULL && token_tokenize != NULL) {
             assert(strcmp(token_strtok, token_tokenize) == 0);
             token_strtok = strtok(NULL, one_delim);
             token_tokenize = tokenize(NULL, one_delim);
-            printf("start compare\n");
-            printf("%d\n, ", i);
         }
 
         token_strtok = strtok(str_strtok2, mult_delim);
@@ -128,9 +126,11 @@ void test_case2 (void)
             token_strtok = strtok(NULL, mult_delim);
             token_tokenize = tokenize(NULL, mult_delim);
         }
-*/
     }
-/*
+
+    /*
+        5. reverse_tokenize()
+    */
     {
         const char* one_delim = " ";
         const char* mult_delim = " ,!";
@@ -170,7 +170,7 @@ void test_case2 (void)
             }
             token_tokenize = reverse_tokenize(NULL, mult_delim);
         }
-    }*/
+    }
     puts("End");
 }
 
@@ -204,10 +204,13 @@ void my_test(void) {
     printf("%s\n", token);
     assert(token == str_cpy2 + 1);
     assert(strcmp(token, "!") == 0);
+
+    printf("my_test clear");
 }
 
 int main(void)
 {
+    my_test();
     test_case2();
 
     printf("No prob");
