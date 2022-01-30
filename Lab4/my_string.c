@@ -3,7 +3,7 @@
 
 static char* s_tonkenized_p = NULL;
 
-void swap_character(char* first, char* last)
+void reverse_string(char* first, char* last)
 {
     while (first < last) {
         *first ^= *last;
@@ -27,7 +27,7 @@ void reverse(char* str)
     }
 
     --str_last_p;
-    swap_character(str_start_p, str_last_p);
+    reverse_string(str_start_p, str_last_p);
 }
 
 int index_of(const char* str, const char* word)
@@ -85,14 +85,7 @@ void reverse_by_words(char* str)
         if (*current_location_p == ' ') {
             char* word_end_p = current_location_p - 1;
 
-            while (str_start_p < word_end_p) {
-                *str_start_p ^= *word_end_p;
-                *word_end_p ^= *str_start_p;
-                *str_start_p ^= *word_end_p;
-
-                ++str_start_p;
-                --word_end_p;
-            }
+            reverse_string(str_start_p, word_end_p);
 
             str_start_p = current_location_p + 1;
         }
@@ -101,9 +94,7 @@ void reverse_by_words(char* str)
     }
 
     /* last word */
-    --current_location_p;
-
-    swap_character(str_start_p, current_location_p);
+    reverse_string(str_start_p, current_location_p - 1);
 }
 
 char* tokenize(char* str_or_null, const char* delims)
@@ -179,7 +170,7 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
 
                     goto first_character_delims;
                 } else {
-                    swap_character(s_tonkenized_p, current_location_p - 1);
+                    reverse_string(s_tonkenized_p, current_location_p - 1);
 
                     result_p = s_tonkenized_p;
                     s_tonkenized_p = current_location_p + 1;
@@ -195,7 +186,7 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     first_character_delims:;
     }
 
-    swap_character(s_tonkenized_p, current_location_p - 1);
+    reverse_string(s_tonkenized_p, current_location_p - 1);
 
     result_p = s_tonkenized_p;
     s_tonkenized_p = NULL;
