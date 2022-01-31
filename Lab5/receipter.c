@@ -65,7 +65,7 @@ int print_receipt(const char* filename, time_t timestamp)
     out_str[51] = '\0';
 
 	tax = s_subtotal * TAX_RATE;
-	tax = (int)(tax * 100 + 0.05);
+	tax = (int)(tax * 100 + 0.5);
 	tax /= 100;
 
 	total_amount = s_subtotal + s_tip + tax;
@@ -115,6 +115,11 @@ int print_receipt(const char* filename, time_t timestamp)
 
     sprintf(out_str, "%50s\n", TAX_NUMBER);
     printf("%s", out_str);
+
+    ++s_today_order_count;
+    s_number_of_orders = 0;
+	s_tip = 0;
+	s_message = "";
 
     return TRUE;
 }
