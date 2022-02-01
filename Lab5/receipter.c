@@ -79,49 +79,60 @@ int print_receipt(const char* filename, time_t timestamp)
     stream = fopen(filename, "a");
 
     sprintf(out_str, "%s\n", RESTAURANT_NAME);
-    fwrite(out_str, sizeof(out_str[0]), MAX_LINE_COUNT, stream);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
     printf("%s", out_str);
 
     sprintf(out_str, "%d-%d-%d% d:%d:%-28d%05d\n", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, timer.tm_hour, timer.tm_min, timer.tm_sec, s_today_order_count);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     for (i = 0; i < s_number_of_orders; ++i) {
 	    sprintf(out_str, "%33s%17.2f\n", s_order_list[i], s_item_price[i]);
+	    fputs(out_str, stream);
 	    printf("%s", out_str);
     }
 
     sprintf(out_str, "%33s%17.2f\n", "Subtotal", s_subtotal);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     if (s_tip != 0) {
 		sprintf(out_str, "%33s%17.2f\n", "Tip", s_tip);
+	    fputs(out_str, stream);
 	    printf("%s", out_str);
     }
 
 	sprintf(out_str, "%33s%17.2f\n", "Tax", tax);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "%33s%17.2f\n", "Total", total_amount);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "\n");
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     if (s_message != '\0') {
     	sprintf(out_str, "%s\n", s_message);
+	    fputs(out_str, stream);
 	    printf("%s", out_str);
     }
 
     sprintf(out_str, "%s\n", "==================================================");
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "%50s\n", TAX_NUMBER);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
     ++s_today_order_count;
@@ -131,4 +142,3 @@ int print_receipt(const char* filename, time_t timestamp)
 
     return TRUE;
 }
-
