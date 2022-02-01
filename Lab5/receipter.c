@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 #include "receipter.h"
 
 #define RESTAURANT_NAME ("Charles' Seafood")
 #define DELIMTER_LINE ("--------------------------------------------------")
 #define MAX_ORDER_COUNT (10)
 #define MAX_LINE_COUNT (52)
+#define MAX_MESSAGE_LENGTH (77)
 #define TAX_RATE (0.05)
 #define TAX_NUMBER ("Tax#-51234")
 
@@ -64,6 +66,11 @@ int print_receipt(const char* filename, time_t timestamp)
 	size_t i;
 
 	if (s_number_of_orders == 0) {
+	    s_subtotal = 0;
+	    s_number_of_orders = 0;
+		s_tip = 0;
+		s_message = "";
+
 		return FALSE;
 	}
 
@@ -83,9 +90,10 @@ int print_receipt(const char* filename, time_t timestamp)
     printf("%s", out_str);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
+    fputs(out_str, stream);
     printf("%s", out_str);
 
-    sprintf(out_str, "%d-%d-%d% d:%d:%-28d%05d\n", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, timer.tm_hour, timer.tm_min, timer.tm_sec, s_today_order_count);
+    sprintf(out_str, "%02d-%02d-%02d %02d:%02d:%-028d%05d\n", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, timer.tm_hour, timer.tm_min, timer.tm_sec, s_today_order_count);
     fputs(out_str, stream);
     printf("%s", out_str);
 
@@ -98,6 +106,8 @@ int print_receipt(const char* filename, time_t timestamp)
 	    fputs(out_str, stream);
 	    printf("%s", out_str);
     }
+
+    fputc('\n', stream);    
 
     sprintf(out_str, "%33s%17.2f\n", "Subtotal", s_subtotal);
     fputs(out_str, stream);
@@ -121,10 +131,25 @@ int print_receipt(const char* filename, time_t timestamp)
     fputs(out_str, stream);
     printf("%s", out_str);
 
-    if (s_message != '\0') {
-    	sprintf(out_str, "%s\n", s_message);
-	    fputs(out_str, stream);
-	    printf("%s", out_str);
+    if (*s_message != '\0') {
+    	int msg_len = strlen(s_message);
+    	const char* p_str_start = s_message;
+
+	    if (msg_len <= MAX_LINE_COUNT - 2) {
+		    sprintf(out_str, "%s\n", p_str_start);
+		    fputs(out_str, stream);
+		    printf("%s", out_str);
+	    } else {
+	    	printf("Length: %d\n", msg_len);
+	    	fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT - 2, stream);
+		    fputc('\n', stream);
+	    	
+	    	p_str_start += 50;
+	    	msg_len = strlen(p_str_start) > 25 ? 25 : strlen(p_str_start);
+
+	    	fwrite(p_str_start, sizeof(char), msg_len, stream);
+		    fputc('\n', stream);
+	    }
     }
 
     sprintf(out_str, "%s\n", "==================================================");
@@ -135,7 +160,10 @@ int print_receipt(const char* filename, time_t timestamp)
     fputs(out_str, stream);
     printf("%s", out_str);
 
+    fclose(stream);
+
     ++s_today_order_count;
+    s_subtotal = 0;
     s_number_of_orders = 0;
 	s_tip = 0;
 	s_message = "";

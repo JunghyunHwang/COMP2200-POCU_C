@@ -3,50 +3,44 @@
 #include <time.h>
 #include "receipter.h"
 
-/*
-    char str[52];
-    char menu[] = "Give me the beat";
-    double price = 998.425;
-
-    sprintf(str, "%25s%25.2f\n", menu, price);
-    str[51] = '\0';
-    printf("%s", str);
-*/
-
-/*
-printf("유닉스 타임 (Unix Time): %lld 초\n\n", timer); 
-    printf("현재 년: %d\n", timer.tm_year + 1900);
-    printf("현재 월: %d\n", timer.tm_mon + 1);
-    printf("현재 일: %d\n", timer.tm_mday);
-    printf("현재 시: %d\n", timer.tm_hour);
-*/
-
 int main(void)
 {
-/*
-    add_item("Pasta", 52.39);
-    add_item("Ice cream", 52.39);
-    add_item("", 52.39);
-    add_item("Fried rice", 52.39);
-    add_item("Tacoyaki", 52.39);
-    add_item("Tuna sashimi", 52.39);
-    add_item("Magarita", 52.39);
-    add_item("Coffe", 52.39);
-    add_item("Ramen", 52.39);
-    add_item("Burger", 52.39);
-    add_item("Steak", 52.39);
-    add_item("Sushi", 52.39);
-*/
-    time_t now = time(NULL);
-    add_item("Scallops", 24.55); /* TRUE */
-    add_item("Crab",21.45); /* TRUE */
-    add_item("Sashimi", 15.50); /* TRUE */
+    time_t time = 1569472997;
+
+    assert(TRUE == add_item("Magarita", 12.45));
+    assert(TRUE == add_item("Sharkfin soup", 500.12));
+    assert(TRUE == add_item("Kingcrab dip", 125.99));
+    assert(TRUE == add_item("Deep fried scallops", 7.36));
+    assert(TRUE == add_item("Tacoyaki", 6.89));
+    assert(TRUE == add_item("Salmon sashimi", 16.54));
+    assert(TRUE == add_item("Tuna sashimi", 15.42));
+    assert(TRUE == add_item("Unagi soup", 25.48));
+    assert(TRUE == add_item("Nestea ice tea", 5.99));
+    assert(TRUE == add_item("Chocolate brownie fudge", 8.99));
+
+    assert(FALSE == add_item("This won't get added lol", 2.55));
+
+    set_tip(20.55);
 
     set_message("Thanks for dining with us!");
 
-    print_receipt("receipt.txt", now); /* TRUE */
-    
-    printf("No prob");
+    assert(TRUE == print_receipt("receipt0.txt", time));
+
+    assert(TRUE == add_item("Raw sea cucumber", 34.26));
+    assert(TRUE == add_item("Pan fried Mackerel", 16.58));
+    assert(TRUE == add_item("Pepsi", 5.99));
+
+    assert(TRUE == print_receipt("receipt1.txt", time));
+
+    set_message("My message");
+
+    assert(FALSE == print_receipt("receipt2.txt", time));
+
+    assert(TRUE == add_item("Strawberry Shortcake", 15));
+
+    set_tip(5);
+
+    assert(TRUE == print_receipt("receipt3.txt", time));
 
     return 0;
 }
