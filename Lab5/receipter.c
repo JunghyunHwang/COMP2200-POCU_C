@@ -16,6 +16,10 @@ static size_t s_number_of_orders = 0;
 static double s_tip = 0;
 static const char* s_message = "";
 
+/* To do
+ * 특정 길이 넘어가는 글자 수 짜르고 다음 줄로 넘김  
+*/
+
 int add_item(const char* name, double price)
 {
 	if (s_number_of_orders >= MAX_ORDER_COUNT) {
@@ -52,6 +56,7 @@ void set_message(const char* message)
 
 int print_receipt(const char* filename, time_t timestamp)
 {
+	FILE* stream;
 	char out_str[MAX_LINE_COUNT];
 	double total_amount;
 	double tax;
@@ -71,7 +76,10 @@ int print_receipt(const char* filename, time_t timestamp)
 	total_amount = s_subtotal + s_tip + tax;
     timer = *gmtime(&timestamp);
 
+    stream = fopen(filename, "a");
+
     sprintf(out_str, "%s\n", RESTAURANT_NAME);
+    fwrite(out_str, sizeof(out_str[0]), MAX_LINE_COUNT, stream);
     printf("%s", out_str);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
