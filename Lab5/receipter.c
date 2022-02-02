@@ -60,7 +60,7 @@ void set_message(const char* message)
 int print_receipt(const char* filename, time_t timestamp)
 {
     FILE* stream;
-    char out_str[MAX_LINE_COUNT + 1];
+    char out_str[MAX_LINE_COUNT];
     double total_amount;
     double tax;
     char white_space = ' ';
