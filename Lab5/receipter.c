@@ -51,7 +51,7 @@ int print_receipt(const char* filename, time_t timestamp)
     double total_amount;
     double tax;
     char white_space = ' ';
-    struct tm timer;
+    /*struct tm timer;*/
     size_t i;
 
     if (s_number_of_orders == 0) {
@@ -70,7 +70,7 @@ int print_receipt(const char* filename, time_t timestamp)
     tax /= 100;
 
     total_amount = s_subtotal + s_tip + tax;
-    timer = *gmtime(&timestamp);
+    /*timer = *gmtime(&timestamp);*/
 
     stream = fopen(filename, "w");
 
@@ -80,7 +80,7 @@ int print_receipt(const char* filename, time_t timestamp)
     sprintf(out_str, "%s\n", DELIMTER_LINE);
     fputs(out_str, stream);
 
-    sprintf(out_str, "%02d-%02d-%02d%c%02d:%02d:%02d%26c%05d\n", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, white_space, timer.tm_hour, timer.tm_min, timer.tm_sec, white_space, s_today_order_count);
+    sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d\n", 0000, 0, 0, white_space, 0, 0, 0, white_space, s_today_order_count);
     fputs(out_str, stream);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
