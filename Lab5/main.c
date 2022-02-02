@@ -9,7 +9,7 @@ int main(void)
     char message[5] = "Hi";
 
     assert(TRUE == add_item(str, 12.45));
-    assert(TRUE == add_item("Sharkfin soup", 500.12));
+    assert(TRUE == add_item("Sharkfin soup I've nevert tried it", 500.12));
     assert(TRUE == add_item("Kingcrab dip", 125.99));
     assert(TRUE == add_item("Deep fried scallops", 7.36));
     str[0] = 'T';
@@ -39,7 +39,7 @@ int main(void)
     message[2] = 'l';
     message[3] = 'l';
     message[4] = 'o';
-    
+
     assert(TRUE == print_receipt("receipt0.txt", time));
 
     assert(TRUE == add_item("Raw sea cucumber", 34.26));

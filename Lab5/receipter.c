@@ -7,7 +7,7 @@
 #define DELIMTER_LINE2 ("==================================================")
 #define MAX_LINE_COUNT (50)
 #define MAX_MESSAGE_COUNT (75)
-#define MAX_ITEM_NAME_COUNT (25)
+#define MAX_ITEM_NAME_COUNT (26)
 #define MAX_ORDER_COUNT (10)
 #define TAX_RATE (0.05)
 #define TAX_NUMBER ("Tax#-51234")
@@ -23,20 +23,20 @@ static int s_msg_len;
 
 int add_item(const char* name, double price)
 {
-	size_t i = 0;
+    size_t i = 0;
 
     if (s_number_of_orders >= MAX_ORDER_COUNT) {
         return FALSE;
     }
 
-    while (*name != '\0') {
+    while (*name != '\0' && i < MAX_ITEM_NAME_COUNT - 1) {
         s_order_list[s_number_of_orders][i] = *name;
 
         ++name;
         ++i;
     }
 
-    s_order_list[s_number_of_orders][i] = *name;
+    s_order_list[s_number_of_orders][i] = '\0';
     s_item_price[s_number_of_orders] = price;
 
     s_subtotal += price;
@@ -122,7 +122,7 @@ int print_receipt(const char* filename, time_t timestamp)
         const char* p_str_start = s_message;
 
         if (s_msg_len <= MAX_LINE_COUNT) {
-        	fprintf(stream, "%s\n", s_message);
+            fprintf(stream, "%s\n", s_message);
         } else {
             fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT, stream);
             fprintf(stream, "\n");
