@@ -15,7 +15,7 @@ static double s_item_price[MAX_ORDER_COUNT];
 static size_t s_today_order_count = 0;
 static size_t s_number_of_orders = 0;
 static double s_tip = 0;
-static const char* s_message;
+/*static const char* s_message; */
 
 int add_item(const char* name, double price)
 {
