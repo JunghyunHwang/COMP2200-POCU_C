@@ -43,11 +43,11 @@ void set_message(const char* message)
     size_t i;
 
     for (i = 0 ; i < MAX_MESSAGE_COUNT - 1; ++i) {
-    	if (*message == '\0') {
-    		break;
-    	}
+        if (*message == '\0') {
+            break;
+        }
 
-	    s_message[i] = *message++;
+        s_message[i] = *message++;
     }
 
     s_message[i] = '\0';
@@ -68,7 +68,7 @@ int print_receipt(const char* filename, time_t timestamp)
         s_subtotal = 0;
         s_number_of_orders = 0;
         s_tip = 0;
-	    s_message[0] = '\0';
+        s_message[0] = '\0';
         s_msg_len = 0;
 
         return FALSE;
@@ -130,7 +130,7 @@ int print_receipt(const char* filename, time_t timestamp)
         } else {
             fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT - 2, stream);
             fputc('\n', stream);
-	    	
+
             p_str_start += 50;
             s_msg_len -= 50;
 
