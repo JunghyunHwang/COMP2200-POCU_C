@@ -6,7 +6,6 @@
 #define DELIMTER_LINE ("--------------------------------------------------")
 #define MAX_ORDER_COUNT (10)
 #define MAX_LINE_COUNT (52)
-#define MAX_MESSAGE_LENGTH (77)
 #define TAX_RATE (0.05)
 #define TAX_NUMBER ("Tax#-51234")
 
@@ -16,7 +15,7 @@ static double s_item_price[MAX_ORDER_COUNT];
 static size_t s_today_order_count = 0;
 static size_t s_number_of_orders = 0;
 static double s_tip = 0;
-static const char* s_message = "";
+static const char* s_message;
 
 int add_item(const char* name, double price)
 {
