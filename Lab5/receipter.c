@@ -21,8 +21,6 @@ int add_item(const char* name, double price)
 {
     if (s_number_of_orders >= MAX_ORDER_COUNT) {
         return FALSE;
-    } else if (*name == '\0') {
-        return FALSE;
     }
 
     s_order_list[s_number_of_orders] = name;
