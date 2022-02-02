@@ -42,6 +42,7 @@ void set_tip(double tip)
 void set_message(const char* message)
 {
     /*s_message = message;*/
+    printf("%s", message);
 }
 
 int print_receipt(const char* filename, time_t timestamp)
@@ -58,7 +59,7 @@ int print_receipt(const char* filename, time_t timestamp)
         s_subtotal = 0;
         s_number_of_orders = 0;
         s_tip = 0;
-        s_message = "";
+        /*s_message = "";*/
 
         return FALSE;
     }
@@ -109,7 +110,7 @@ int print_receipt(const char* filename, time_t timestamp)
 
     sprintf(out_str, "\n");
     fputs(out_str, stream);
-
+/*
     if (*s_message != '\0') {
         int msg_len = strlen(s_message);
         const char* p_str_start = s_message;
@@ -128,7 +129,7 @@ int print_receipt(const char* filename, time_t timestamp)
             fputc('\n', stream);
         }
     }
-
+*/
     sprintf(out_str, "%s\n", "==================================================");
     fputs(out_str, stream);
 
@@ -141,7 +142,7 @@ int print_receipt(const char* filename, time_t timestamp)
     s_subtotal = 0;
     s_number_of_orders = 0;
     s_tip = 0;
-    s_message = "";
+    /*s_message = "";*/
 	
     return TRUE;
 }
