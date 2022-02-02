@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include <string.h>
 #include "receipter.h"
 
 #define RESTAURANT_NAME ("Charles' Seafood")
 #define DELIMTER_LINE ("--------------------------------------------------")
 #define MAX_ORDER_COUNT (10)
 #define MAX_LINE_COUNT (52)
+#define MAX_MESSAGE_COUNT (76)
 #define TAX_RATE (0.05)
 #define TAX_NUMBER ("Tax#-51234")
 
@@ -15,7 +15,8 @@ static double s_item_price[MAX_ORDER_COUNT];
 static size_t s_today_order_count = 0;
 static size_t s_number_of_orders = 0;
 static double s_tip = 0;
-static const char* s_message = NULL;
+static char s_message[MAX_MESSAGE_COUNT];
+static int s_msg_len;
 
 int add_item(const char* name, double price)
 {
@@ -39,7 +40,18 @@ void set_tip(double tip)
 
 void set_message(const char* message)
 {
-    s_message = message;
+    size_t i;
+
+    for (i = 0 ; i < MAX_MESSAGE_COUNT - 1; ++i) {
+    	if (*message == '\0') {
+    		break;
+    	}
+
+	    s_message[i] = *message++;
+    }
+
+    s_message[i] = '\0';
+    s_msg_len = i;
 }
 
 int print_receipt(const char* filename, time_t timestamp)
@@ -49,14 +61,15 @@ int print_receipt(const char* filename, time_t timestamp)
     double total_amount;
     double tax;
     char white_space = ' ';
-    /*struct tm timer;*/
+    struct tm timer;
     size_t i;
 
     if (s_number_of_orders == 0) {
         s_subtotal = 0;
         s_number_of_orders = 0;
         s_tip = 0;
-        s_message = NULL;
+	    s_message[0] = '\0';
+        s_msg_len = 0;
 
         return FALSE;
     }
@@ -68,7 +81,7 @@ int print_receipt(const char* filename, time_t timestamp)
     tax /= 100;
 
     total_amount = s_subtotal + s_tip + tax;
-    /*timer = *gmtime(&timestamp);*/
+    timer = *gmtime(&timestamp);
 
     stream = fopen(filename, "w");
 
@@ -78,7 +91,7 @@ int print_receipt(const char* filename, time_t timestamp)
     sprintf(out_str, "%s\n", DELIMTER_LINE);
     fputs(out_str, stream);
 
-    sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d\n", 0000, 0, 0, white_space, 0, 0, 0, white_space, s_today_order_count);
+    sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d\n", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, white_space, timer.tm_hour, timer.tm_min, timer.tm_sec, white_space, s_today_order_count);
     fputs(out_str, stream);
 
     sprintf(out_str, "%s\n", DELIMTER_LINE);
@@ -108,11 +121,10 @@ int print_receipt(const char* filename, time_t timestamp)
     sprintf(out_str, "\n");
     fputs(out_str, stream);
 
-    if (s_message != NULL) {
-        int msg_len = strlen(s_message);
+    if (s_message[0] != '\0') {
         const char* p_str_start = s_message;
 
-        if (msg_len <= MAX_LINE_COUNT - 2) {
+        if (s_msg_len <= MAX_LINE_COUNT - 2) {
             sprintf(out_str, "%s\n", p_str_start);
             fputs(out_str, stream);
         } else {
@@ -120,9 +132,9 @@ int print_receipt(const char* filename, time_t timestamp)
             fputc('\n', stream);
 	    	
             p_str_start += 50;
-            msg_len = strlen(p_str_start) > 25 ? 25 : strlen(p_str_start);
+            s_msg_len -= 50;
 
-            fwrite(p_str_start, sizeof(char), msg_len, stream);
+            fwrite(p_str_start, sizeof(char), s_msg_len, stream);
             fputc('\n', stream);
         }
     }
@@ -139,7 +151,8 @@ int print_receipt(const char* filename, time_t timestamp)
     s_subtotal = 0;
     s_number_of_orders = 0;
     s_tip = 0;
-    s_message = NULL;
+    s_message[0] = '\0';
+    s_msg_len = 0;
 	
     return TRUE;
 }
