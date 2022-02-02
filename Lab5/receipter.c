@@ -60,7 +60,7 @@ void set_message(const char* message)
 int print_receipt(const char* filename, time_t timestamp)
 {
     FILE* stream;
-    char out_str[MAX_LINE_COUNT + 1];
+    /*char out_str[MAX_LINE_COUNT + 1];*/
     double total_amount;
     double tax;
     char white_space = ' ';
@@ -84,53 +84,75 @@ int print_receipt(const char* filename, time_t timestamp)
     total_amount = s_subtotal + s_tip + tax;
 
     stream = fopen(filename, "w");
-    
+    fprintf(stream, "%s\n", RESTAURANT_NAME);
+    /*
     fwrite(RESTAURANT_NAME, sizeof(char), RESTAURANT_NAME_LENGTH, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+    fprintf(stream, "%s\n", DELIMTER_LINE1);
+    /*
     fwrite(DELIMTER_LINE1, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+    fprintf(stream, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d\n", timer->tm_year + 1900, timer->tm_mon + 1, timer->tm_mday, white_space, timer->tm_hour, timer->tm_min, timer->tm_sec, white_space, s_today_order_count);
+    /*
     sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d", timer->tm_year + 1900, timer->tm_mon + 1, timer->tm_mday, white_space, timer->tm_hour, timer->tm_min, timer->tm_sec, white_space, s_today_order_count);
     fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+    fprintf(stream, "%s\n", DELIMTER_LINE1);
+	/*
     fwrite(DELIMTER_LINE1, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
     for (i = 0; i < s_number_of_orders; ++i) {
+	    fprintf(stream, "%33s%17.2f\n", s_order_list[i], s_item_price[i]);
+	    /*
         sprintf(out_str, "%33s%17.2f", s_order_list[i], s_item_price[i]);
         fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
         fwrite("\n", sizeof(char), 1, stream);
+        */
     }
 
+    fprintf(stream, "\n");
+    /*
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+    fprintf(stream, "%33s%17.2f\n", "Subtotal", s_subtotal);
+	/*
     sprintf(out_str, "%33s%17.2f", "Subtotal", s_subtotal);
     fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
 
     if (s_tip != 0) {
+	    fprintf(stream, "%33s%17.2f\n", "Tip", s_tip);
+    	/*
         sprintf(out_str, "%33s%17.2f", "Tip", s_tip);
         fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
         fwrite("\n", sizeof(char), 1, stream);
+        */
     }
 
+    fprintf(stream, "%33s%17.2f\n", "Tax", tax);
+    /*
     sprintf(out_str, "%33s%17.2f", "Tax", tax);
     fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+    fprintf(stream, "%33s%17.2f\n", "Total", total_amount);
+    /*
     sprintf(out_str, "%33s%17.2f", "Total", total_amount);
     fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n\n", sizeof(char), 2, stream);
-
+	*/
+    fprintf(stream, "\n");
     if (s_message[0] != '\0') {
         const char* p_str_start = s_message;
 
         if (s_msg_len <= MAX_LINE_COUNT) {
-            sprintf(out_str, "%s\n", p_str_start);
-            fputs(out_str, stream);
+        	fprintf(stream, "%50s\n", s_message);
+	        /*fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT, stream);*/
         } else {
             fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT, stream);
             fwrite("\n", sizeof(char), 1, stream);
@@ -143,12 +165,16 @@ int print_receipt(const char* filename, time_t timestamp)
         }
     }
 
+    fprintf(stream, "%s\n", DELIMTER_LINE2);
+    /*
     fwrite(DELIMTER_LINE2, sizeof(char), MAX_LINE_COUNT, stream);
     fwrite("\n", sizeof(char), 1, stream);
-
+	*/
+	fprintf(stream, "%50s", TAX_NUMBER);
+	/*
     sprintf(out_str, "%50s", TAX_NUMBER);
     fwrite(out_str, sizeof(char), MAX_LINE_COUNT, stream);
-
+	*/
     fclose(stream);
 
     ++s_today_order_count;
