@@ -91,7 +91,7 @@ int print_receipt(const char* filename, time_t timestamp)
     fwrite(DELIMTER_LINE, sizeof(DELIMTER_LINE), 1, stream);
     fwrite("\n", sizeof(char), 1, stream);
 
-    sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05lu", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, white_space, timer.tm_hour, timer.tm_min, timer.tm_sec, white_space, s_today_order_count);
+    sprintf(out_str, "%04d-%02d-%02d%c%02d:%02d:%02d%26c%05d", timer.tm_year + 1900, timer.tm_mon + 1, timer.tm_mday, white_space, timer.tm_hour, timer.tm_min, timer.tm_sec, white_space, s_today_order_count);
     fwrite(out_str, sizeof(out_str), 1, stream);
     fwrite("\n", sizeof(char), 1, stream);
 
