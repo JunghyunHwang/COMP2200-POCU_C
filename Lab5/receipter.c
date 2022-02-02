@@ -129,11 +129,11 @@ int print_receipt(const char* filename, time_t timestamp)
     if (s_message[0] != '\0') {
         const char* p_str_start = s_message;
 
-        if (s_msg_len <= MAX_LINE_COUNT - 2) {
+        if (s_msg_len <= MAX_LINE_COUNT) {
             sprintf(out_str, "%s\n", p_str_start);
             fputs(out_str, stream);
         } else {
-            fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT - 2, stream);
+            fwrite(p_str_start, sizeof(char), MAX_LINE_COUNT, stream);
             fwrite("\n", sizeof(char), 1, stream);
 
             p_str_start += MAX_LINE_COUNT;
