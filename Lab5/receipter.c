@@ -91,7 +91,7 @@ int print_receipt(const char* filename, time_t timestamp)
         fputs(out_str, stream);
     }
 
-    fputc('\n', stream);    
+    fputc('\n', stream);
 
     sprintf(out_str, "%33s%17.2f\n", "Subtotal", s_subtotal);
     fputs(out_str, stream);
@@ -109,7 +109,7 @@ int print_receipt(const char* filename, time_t timestamp)
 
     sprintf(out_str, "\n");
     fputs(out_str, stream);
-
+    /*
     if (*s_message != '\0') {
         int msg_len = strlen(s_message);
         const char* p_str_start = s_message;
@@ -136,12 +136,12 @@ int print_receipt(const char* filename, time_t timestamp)
     fputs(out_str, stream);
 
     fclose(stream);
-
+	*/
     ++s_today_order_count;
     s_subtotal = 0;
     s_number_of_orders = 0;
     s_tip = 0;
     s_message = "";
-
+	
     return TRUE;
 }
