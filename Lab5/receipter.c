@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <time.h>
 #include "receipter.h"
 
 #define RESTAURANT_NAME ("Charles' Seafood")
 #define DELIMTER_LINE ("--------------------------------------------------")
 #define MAX_ORDER_COUNT (10)
-#define MAX_LINE_COUNT (52)
+#define MAX_LINE_COUNT (51)
 #define MAX_MESSAGE_COUNT (76)
 #define TAX_RATE (0.05)
 #define TAX_NUMBER ("Tax#-51234")
@@ -12,8 +13,8 @@
 static double s_subtotal = 0;
 static const char* s_order_list[MAX_ORDER_COUNT];
 static double s_item_price[MAX_ORDER_COUNT];
-static size_t s_today_order_count = 0;
-static size_t s_number_of_orders = 0;
+static int s_today_order_count = 0;
+static int s_number_of_orders = 0;
 static double s_tip = 0;
 static char s_message[MAX_MESSAGE_COUNT];
 static int s_msg_len;
@@ -40,7 +41,7 @@ void set_tip(double tip)
 
 void set_message(const char* message)
 {
-    size_t i;
+    int i;
 
     for (i = 0; i < MAX_MESSAGE_COUNT - 1; ++i) {
         if (*message == '\0') {
@@ -62,7 +63,7 @@ int print_receipt(const char* filename, time_t timestamp)
     double tax;
     char white_space = ' ';
     struct tm timer;
-    size_t i;
+    int i;
 
     if (s_number_of_orders == 0) {
         s_subtotal = 0;
@@ -73,8 +74,6 @@ int print_receipt(const char* filename, time_t timestamp)
 
         return FALSE;
     }
-
-    out_str[51] = '\0';
 
     tax = s_subtotal * TAX_RATE;
     tax = (int)(tax * 100 + 0.5);

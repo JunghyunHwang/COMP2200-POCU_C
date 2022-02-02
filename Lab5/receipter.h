@@ -1,8 +1,6 @@
 #ifndef RECEIPTER_H
 #define RECEIPTER_H
 
-#include <time.h>
-
 #define TRUE (1)
 #define FALSE (0)
 
