@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include "translate.h"
 
-int main(void)
+int main(int argc, const char* argv[])
 {
+    translate(argc, argv);
+
     return 0;
 }

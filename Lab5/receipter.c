@@ -92,6 +92,11 @@ int print_receipt(const char* filename, time_t timestamp)
     total_amount = s_subtotal + s_tip + tax;
 
     stream = fopen(filename, "w");
+
+    if (stream == NULL) {
+    	return FALSE;
+    }
+
     fprintf(stream, "%s\n", RESTAURANT_NAME);
     
     fprintf(stream, "%s\n", DELIMTER_LINE1);
