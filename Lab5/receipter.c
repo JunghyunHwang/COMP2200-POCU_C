@@ -23,11 +23,13 @@ static int s_msg_len;
 
 int add_item(const char* name, double price)
 {
-    size_t i = 0;
+    size_t i;
 
     if (s_number_of_orders >= MAX_ORDER_COUNT) {
         return FALSE;
     }
+
+    i = 0;
 
     while (*name != '\0' && i < MAX_ITEM_NAME_COUNT - 1) {
         s_order_list[s_number_of_orders][i] = *name;
@@ -71,7 +73,7 @@ int print_receipt(const char* filename, time_t timestamp)
     FILE* stream;
     double total_amount;
     double tax;
-    char white_space = ' ';
+    char white_space;
     int i;
     struct tm* timer = gmtime(&timestamp);
 
@@ -84,6 +86,8 @@ int print_receipt(const char* filename, time_t timestamp)
 
         return FALSE;
     }
+
+    white_space = ' ';
 
     tax = s_subtotal * TAX_RATE;
     tax = (int)(tax * 100 + 0.5);
