@@ -14,4 +14,10 @@ typedef enum error_code {
 
 int translate(int argc, const char** argv);
 
+int index_of(const char* set1, char c);
+
+void set_delimiters(char* set1, char* set2, const char* input1, const char* input2);
+
+void filter_input_range(char* filtered, const char* input);
+
 #endif /* TRANSLATE_H */
