@@ -14,11 +14,48 @@ a-ec, fgh => abdec, fghhh
 
 */
 
-void filter_range_input(char* filtered, const char* input)
+void filter_range(char* filtered, const char* input)
 {
+    const char* p_start_input = input;
+
+    while (*input != '\0') {
+        if (*input == '-' && input != p_start_input && input + 1 != '\0' && *(input - 2) != '-') {
+            *filtered = '~';
+        } else {
+            *filtered = *input;
+        }
+
+        ++input;
+        ++filtered;
+    }
+    
+    *filtered = '\0';
+}
+
+void filter_input_range(char* set, const char* input)
+{
+    const char* p_start_input = input;
+    char start_char;
+    char end_char;
+
     while (*input != '\0') {
         if (*input == '-') {
+            start_char = *(input - 1);
+            end_char = *(input + 1);
 
+            if (end_char - start_char <= 1) {
+                continue;
+            }
+
+            ++start_char;
+            --end_char;
+
+            while (start_char <= end_char) {
+                *set = start_char;
+
+                ++start_char;
+                ++set;
+            }
         }
     }
 }
@@ -27,9 +64,11 @@ void set_delimiters(char* set1, char* set2, const char* input1, const char* inpu
 {
     size_t i;
     size_t set2_last_char;
-    char* filtered_input1;
-    char* filtered_input2;
+    char filtered1[MAX_COUNT];
+    char filtered2[MAX_COUNT];
     char* p_start_set2 = set2;
+
+    filter_input_range(set1, input1);
 
     set2_last_char = strlen(input2) - 1;
 
@@ -54,12 +93,12 @@ void set_delimiters(char* set1, char* set2, const char* input1, const char* inpu
     assert(strlen(set1) == strlen(set2));
 }
 
-int index_of(const char* set1, char c)
+int last_index_of(const char* set1, char ch)
 {
     const char* p_start = set1;
 
     while (*set1 != '\0') {
-        if (c == *set1) {
+        if (*set1 == ch) {
             return set1 - p_start;
         }
 
@@ -72,9 +111,10 @@ int index_of(const char* set1, char c)
 int translate(int argc, const char** argv)
 {
 /*
-    char c;
+    char ch;
     int index;
 */
+    size_t set1_length;
     char set1[MAX_COUNT];
     char set2[MAX_COUNT];
 
@@ -90,13 +130,14 @@ int translate(int argc, const char** argv)
 
     printf("SET1: %s\n", set1);
     printf("SET2: %s\n", set2);
+
 /*
-    while ((c = getchar()) != EOF) {
-        if ((index = index_of(set1, c)) != NONE) {
-            c = set2[index];
+    while ((ch = getchar()) != EOF) {
+        if ((index = last_index_of(set1, ch)) != NONE) {
+            ch = set2[index];
         }
 
-        printf("%c", c);
+        printf("%c", ch);
     }
 */
     return TRUE;

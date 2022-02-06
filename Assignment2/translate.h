@@ -20,4 +20,6 @@ void set_delimiters(char* set1, char* set2, const char* input1, const char* inpu
 
 void filter_input_range(char* filtered, const char* input);
 
+void filter_range(char* filtered, const char* input);
+
 #endif /* TRANSLATE_H */
