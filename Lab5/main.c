@@ -6,21 +6,21 @@ int main(void)
 {
     time_t time = 1569472997;
     char str[9] = "Magarita";
-    char message[5] = "Hi";
+    char message[27] = "Thanks for dining with us!";
 
     assert(TRUE == add_item(str, 12.45));
-    assert(TRUE == add_item("Sharkfin soup I've nevert tried it", 500.12));
-    assert(TRUE == add_item("Kingcrab dip", 125.99));
-    assert(TRUE == add_item("Deep fried scallops", 7.36));
     str[0] = 'T';
     str[1] = 'a';
-    str[2] = 'k';
+    str[2] = 'c';
     str[3] = 'o';
     str[4] = 'y';
     str[5] = 'a';
     str[6] = 'k';
     str[7] = 'i';
     str[8] = '\0';
+    assert(TRUE == add_item("Sharkfin soup", 500.12));
+    assert(TRUE == add_item("Kingcrab dip", 125.99));
+    assert(TRUE == add_item("Deep fried scallops", 7.36));
     assert(TRUE == add_item(str, 6.89));
     assert(TRUE == add_item("Salmon sashimi", 16.54));
     assert(TRUE == add_item("Tuna sashimi", 15.42));
@@ -39,6 +39,7 @@ int main(void)
     message[2] = 'l';
     message[3] = 'l';
     message[4] = 'o';
+    message[5] = '\0';
 
     assert(TRUE == print_receipt("receipt0.txt", time));
 
