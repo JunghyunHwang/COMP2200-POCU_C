@@ -5,6 +5,8 @@
 
 #define NONE (-1)
 #define MAX_COUNT (512)
+#define ESCAPE_CHAR_START (7)
+#define ESCAPE_CHAR_END (13)
 
 /* TEST CASE
 
@@ -16,13 +18,21 @@ a-ec, fgh => abdec, fghhh
 
 */
 
-enum error_code filter_input(const char* input, char* filtered)
+enum error_code int_filter_input(const char* input, int* filtered)
 {
-	const char* p_start_input = input;
-    char temp[MAX_COUNT];
-    char* temp_filtered = temp;
+	const char* const p_start_input = input;
+	int* p_start_filtered = filtered;
+	int* p_end_filtered;
+
+    int temp1[MAX_COUNT];
+    int start_range[MAX_COUNT];
+    int* temp_filtered = temp1;
+    int* range_filtered = start_range;
+    int* p_end_range_filtered;
+
     char start_char;
     char end_char;
+    char escape_char;
 
     while (*input != '\0') {
         if (*input == '-' && input != p_start_input && input + 1 != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
@@ -47,37 +57,221 @@ enum error_code filter_input(const char* input, char* filtered)
             ++start_char;
             --end_char;
 
+            /* Add alphabet range*/
             while (start_char <= end_char) {
-            	*filtered = start_char;
+            	*range_filtered = start_char;
 
             	++start_char;
-            	++filtered;
+            	++range_filtered;
             }
 
             ++input;
             ++temp_filtered;
+        } else if (*input == '\\') {
+            escape_char = *(input + 1);
+
+            switch (escape_char) {
+            case '\\':
+                *range_filtered = 92;
+                break;
+            case 'a':
+                *range_filtered = 7;
+                break;
+            case 'b':
+                *range_filtered = 8;
+                break;
+            case 'n':
+                *range_filtered = 10;
+                break;
+            case 'f':
+                *range_filtered = 12;
+                break;
+            case 'r':
+                *range_filtered = 13;
+                break;
+            case 't':
+                *range_filtered = 9;
+                break;
+            case 'v':
+                *range_filtered = 11;
+                break;
+            case '\'':
+                *range_filtered = 39;
+                break;
+            case '\"':
+                *range_filtered = 34;
+                break;
+            default:
+                return ERROR_CODE_INVALID_FORMAT;
+            }
+
+            input += 2;
+            ++range_filtered;
+            continue;
         }
 
         *temp_filtered = *input;
-        *filtered = *input;
+        *range_filtered = *input;
 
         ++input;
-        ++filtered;
+        ++range_filtered;
         ++temp_filtered;
     }
     
+    *range_filtered = '\0';
+    p_end_range_filtered = range_filtered;
+    --range_filtered;
+
+    /* Remove duplicates */
+    while (range_filtered >= start_range) {
+    	char current_char = *range_filtered;
+    	int* p_current = range_filtered + 1;
+
+        while (p_current < p_end_range_filtered) {
+            if (current_char == *p_current) {
+            	break;
+            }
+
+            ++p_current;
+        }
+
+        if (p_current == p_end_range_filtered) {
+            *filtered = current_char;
+            ++filtered;
+        }
+
+        --range_filtered;
+    }
+
     *filtered = '\0';
+    p_end_filtered = filtered - 1;
+
+    while (p_start_filtered < p_end_filtered) {
+        *p_start_filtered ^= *p_end_filtered;
+        *p_end_filtered ^= *p_start_filtered;
+        *p_start_filtered ^= *p_end_filtered;
+
+        ++p_start_filtered;
+        --p_end_filtered;
+    }
 
     return ERROR_CODE_NONE;
 }
 
-void set_delimiters(char* set1, char* set2, const char* input1, const char* input2)
+enum error_code filter_input(const char* input, char* filtered)
+{
+	const char* const p_start_input = input;
+	char* p_start_filtered = filtered;
+	char* p_end_filtered;
+
+    char temp1[MAX_COUNT];
+    char start_range[MAX_COUNT];
+    char* temp_filtered = temp1;
+    char* range_filtered = start_range;
+    char* p_end_range_filtered;
+
+    char start_char;
+    char end_char;
+    char escape_char;
+
+    while (*input != '\0') {
+        if (*input == '-' && input != p_start_input && input + 1 != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
+            *temp_filtered = '~';
+
+            start_char = *(input - 1);
+            end_char = *(input + 1);
+
+            if (end_char - start_char < 0) {
+                return ERROR_CODE_INVALID_RANGE;
+            } else if (end_char - start_char == 0) {
+                ++input;
+                ++temp_filtered;
+
+		        *temp_filtered = *input;
+
+		        ++input;
+                ++temp_filtered;
+                continue;
+            }
+
+            ++start_char;
+            --end_char;
+
+            /* Add alphabet range*/
+            while (start_char <= end_char) {
+            	*range_filtered = start_char;
+
+            	++start_char;
+            	++range_filtered;
+            }
+
+            ++input;
+            ++temp_filtered;
+        } else if (*input == '\\') {
+            escape_char = *(input + 1);
+
+            if (ESCAPE_CHAR_START <= end_char && end_char <= ESCAPE_CHAR_END) {
+
+            } else if (end_char == '\'' || end_char == '\"' || end_char == '\\'){
+                
+            } else {
+                return ERROR_CODE_INVALID_FORMAT;
+            }
+        }
+
+        *temp_filtered = *input;
+        *range_filtered = *input;
+
+        ++input;
+        ++range_filtered;
+        ++temp_filtered;
+    }
+    
+    *range_filtered = '\0';
+    p_end_range_filtered = range_filtered;
+    --range_filtered;
+
+    /* Remove duplicates */
+    while (range_filtered >= start_range) {
+    	char current_char = *range_filtered;
+    	char* p_current = range_filtered + 1;
+
+        while (p_current < p_end_range_filtered) {
+            if (current_char == *p_current) {
+            	break;
+            }
+
+            ++p_current;
+        }
+
+        if (p_current == p_end_range_filtered) {
+            *filtered = current_char;
+            ++filtered;
+        }
+
+        --range_filtered;
+    }
+
+    *filtered = '\0';
+    p_end_filtered = filtered - 1;
+
+    while (p_start_filtered < p_end_filtered) {
+        *p_start_filtered ^= *p_end_filtered;
+        *p_end_filtered ^= *p_start_filtered;
+        *p_start_filtered ^= *p_end_filtered;
+
+        ++p_start_filtered;
+        --p_end_filtered;
+    }
+
+    return ERROR_CODE_NONE;
+}
+
+void set_delimiters(int* set1, int* set2, const char* input1, const char* input2)
 {
     size_t i;
     size_t set2_last_char;
-    char filtered1[MAX_COUNT];
-    char filtered2[MAX_COUNT];
-    char* p_start_set2 = set2;
+    int* p_start_set2 = set2;
 
     set2_last_char = strlen(input2) - 1;
 
@@ -98,13 +292,11 @@ void set_delimiters(char* set1, char* set2, const char* input1, const char* inpu
 
     *set1 = '\0';
     *set2 = '\0';
-
-    assert(strlen(set1) == strlen(set2));
 }
 
-int last_index_of(const char* set1, char ch)
+int index_of(const int* set1, char ch)
 {
-    const char* p_start = set1;
+    const int* p_start = set1;
 
     while (*set1 != '\0') {
         if (*set1 == ch) {
@@ -119,14 +311,13 @@ int last_index_of(const char* set1, char ch)
 
 int translate(int argc, const char** argv)
 {
-/*
     char ch;
     int index;
     int error_code;
-*/
+
     size_t set1_length;
-    char set1[MAX_COUNT];
-    char set2[MAX_COUNT];
+    int set1[MAX_COUNT];
+    int set2[MAX_COUNT];
 
     if (argc > 4) {
         return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
@@ -135,20 +326,21 @@ int translate(int argc, const char** argv)
     if (argc == 4) {
         /* set_delimiters(set1, set2, argv[2], argv[3]); */
     } else {
-        set_delimiters(set1, set2, argv[1], argv[2]);
+    	int_filter_input(argv[1], set1);
+    	int_filter_input(argv[2], set2);
     }
+    printf("Show me the money\n");
+    printf("%d %d %d\n", set1[0], set1[1], set1[2]);
 
-    printf("SET1: %s\n", set1);
-    printf("SET2: %s\n", set2);
-
-/*
     while ((ch = getchar()) != EOF) {
-        if ((index = last_index_of(set1, ch)) != NONE) {
+        if ((index = index_of(set1, ch)) != NONE) {
             ch = set2[index];
         }
 
         printf("%c", ch);
     }
-*/
+
+    printf("No prob\n");
+
     return TRUE;
 }
