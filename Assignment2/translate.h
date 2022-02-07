@@ -15,12 +15,10 @@ typedef enum error_code {
 
 int translate(int argc, const char** argv);
 
-int index_of(const int* set1, char c);
+int index_of(const int* set1, char c, int is_sensitive);
 
-void set_delimiters(int* set1, int* set2, const char* input1, const char* input2);
+enum error_code filter_input(const char* input, int* filtered);
 
-enum error_code filter_input(const char* input, char* filtered);
-
-enum error_code int_filter_input(const char* input, int* filtered);
+enum error_code test_filter_input(const char* input, int* filtered);
 
 #endif /* TRANSLATE_H */
