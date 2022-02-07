@@ -329,8 +329,6 @@ int translate(int argc, const char** argv)
     	int_filter_input(argv[1], set1);
     	int_filter_input(argv[2], set2);
     }
-    printf("Show me the money\n");
-    printf("%d %d %d\n", set1[0], set1[1], set1[2]);
 
     while ((ch = getchar()) != EOF) {
         if ((index = index_of(set1, ch)) != NONE) {
@@ -339,8 +337,6 @@ int translate(int argc, const char** argv)
 
         printf("%c", ch);
     }
-
-    printf("No prob\n");
 
     return TRUE;
 }
