@@ -22,6 +22,105 @@ a-ec, fgh => abdec, fghhh
     512 error
 */
 
+enum error_code test_filter_input(const char* input, int* filtered)
+{
+    const char* const p_start_input = input;
+    int temp1[MAX_COUNT];
+    int* temp_filtered = temp1;
+
+    char start_char;
+    char end_char;
+    char escape_char;
+
+    while (*input != '\0') {
+        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
+            *temp_filtered = '~';
+
+            start_char = *(input - 1);
+            end_char = *(input + 1);
+
+            if (end_char - start_char < 0) {
+                return ERROR_CODE_INVALID_RANGE;
+            } else if (end_char - start_char == 0) {
+                ++input;
+                ++temp_filtered;
+
+                *temp_filtered = *input;
+
+                ++input;
+                ++temp_filtered;
+                continue;
+            }
+
+            ++start_char;
+            --end_char;
+
+            /* Add alphabet range*/
+            while (start_char <= end_char) {
+                *filtered = start_char;
+
+                ++start_char;
+                ++filtered;
+            }
+
+            ++input;
+            ++temp_filtered;
+        } else if (*input == '\\') {
+            escape_char = *(input + 1);
+
+            switch (escape_char) {
+            case '\\':
+                *filtered = '\\';
+                break;
+            case 'a':
+                *filtered = '\a';
+                break;
+            case 'b':
+                *filtered = '\b';
+                break;
+            case 'n':
+                *filtered = '\n';
+                break;
+            case 'f':
+                *filtered = '\f';
+                break;
+            case 'r':
+                *filtered = '\r';
+                break;
+            case 't':
+                *filtered = '\t';
+                break;
+            case 'v':
+                *filtered = '\v';
+                break;
+            case '\'':
+                *filtered = '\'';
+                break;
+            case '\"':
+                *filtered = '\"';
+                break;
+            default:
+                return ERROR_CODE_INVALID_FORMAT;
+            }
+
+            input += 2;
+            ++filtered;
+            continue;
+        }
+
+        *temp_filtered = *input;
+        *filtered = *input;
+
+        ++input;
+        ++filtered;
+        ++temp_filtered;
+    }
+
+    *filtered = '\0';
+
+    return ERROR_CODE_NONE;
+}
+
 enum error_code filter_input(const char* input, int* filtered)
 {
 	const char* const p_start_input = input;
