@@ -172,9 +172,10 @@ int translate(int argc, const char** argv)
     } else if (argc < 3) {
         return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
     } else if (argc == 4) {
-        if (argc[1][1] != 'i') {
+        if (argv[1][1] != 'i') {
             return ERROR_CODE_INVALID_FLAG;
         }
+        
         is_sensitive = FALSE;
         argv_index = 2;
     } else {
