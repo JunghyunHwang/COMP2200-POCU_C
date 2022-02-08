@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <assert.h>
-#include <string.h>
 #include <ctype.h>
 #include "translate.h"
 
@@ -14,7 +13,7 @@
 
 */
 
-enum error_code switch_escape(char* character)
+enum error_code switch_escape_chracter(char* character)
 {
     switch (*character) {
     case '\\':
@@ -59,35 +58,36 @@ enum error_code filter_input(const char* input, int* filtered)
     const char* const p_start_input = input;
     const int* const p_start_filtered = filtered;
     error_code_t err;
-    int temp1[MAX_COUNT];
-    int* temp_filtered = temp1;
+    int sub[MAX_COUNT];
+    int* sub_filtered = sub;
 
     while (*input != '\0') {
-        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') { /* range */
+        /* range */
+        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(sub_filtered - 2) != '~' && *(sub_filtered - 1) != '~') {
             char start_char = *(filtered - 1);
             char end_char = *(input + 1);
 
             if (end_char == '\\') {
                 end_char = *(input + 2);
-                err = switch_escape(&end_char);
+                err = switch_escape_chracter(&end_char);
 
                 if (err != ERROR_CODE_NONE) {
                     return err;
                 }
             }
 
-            *temp_filtered = '~';
+            *sub_filtered = '~';
 
             if (end_char - start_char < 0) {
                 return ERROR_CODE_INVALID_RANGE;
             } else if (end_char - start_char == 0) {
                 ++input;
-                ++temp_filtered;
+                ++sub_filtered;
 
-                *temp_filtered = *input;
+                *sub_filtered = *input;
 
                 ++input;
-                ++temp_filtered;
+                ++sub_filtered;
                 continue;
             }
 
@@ -103,27 +103,28 @@ enum error_code filter_input(const char* input, int* filtered)
             }
 
             ++input;
-            ++temp_filtered;
-        } else if (*input == '\\') { /* escape */
+            ++sub_filtered;
+        } else if (*input == '\\') { /* escape character */
             char escape_char = *(input + 1);
-            err = switch_escape(&escape_char);
+            err = switch_escape_chracter(&escape_char);
 
             if (err != ERROR_CODE_NONE) {
                 return err;
             }
 
             *filtered = escape_char;
-            *temp_filtered = escape_char;
+            *sub_filtered = escape_char;
+
             input += 2;
             ++filtered;
-            ++temp_filtered;
+            ++sub_filtered;
         } else { /* nomal */
-            *temp_filtered = *input;
+            *sub_filtered = *input;
             *filtered = *input;
 
             ++input;
             ++filtered;
-            ++temp_filtered;
+            ++sub_filtered;
         }
 
         if (filtered - p_start_filtered >= MAX_COUNT) {
@@ -185,9 +186,7 @@ int translate(int argc, const char** argv)
     int* p_set2_last;
     int set2_last_char_index;
 
-    if (argc > 4) {
-        return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
-    } else if (argc < 3) {
+    if (argc > 4 || argc < 3) {
         return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
     } else if (argc == 4) {
         if (argv[1][1] != 'i') {
