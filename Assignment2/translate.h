@@ -15,10 +15,8 @@ typedef enum error_code {
 
 int translate(int argc, const char** argv);
 
-int index_of(const int* set1, char c, int is_sensitive);
+int reverse_index_of(const int* set1, char ch, int is_sensitive);
 
 enum error_code filter_input(const char* input, int* filtered);
-
-enum error_code test_filter_input(const char* input, int* filtered);
 
 #endif /* TRANSLATE_H */

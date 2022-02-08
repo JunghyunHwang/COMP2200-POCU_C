@@ -69,7 +69,7 @@ void check_filter(const char** argv)
     int* p_start = filtered;
     int error_code;
 
-    error_code = test_filter_input(argv[1], filtered);
+    error_code = filter_input(argv[1], filtered);
     assert(error_code == ERROR_CODE_NONE);
 
     printf("filtered:");
@@ -82,11 +82,10 @@ void check_filter(const char** argv)
 
 int main(int argc, const char* argv[])
 {
-    check_filter(argv);
-
-    /*
-    test_case();
     translate(argc, argv);
+    /*
+    check_filter(argv);
+    test_case();
     */
     
     return 0;

@@ -4,10 +4,8 @@
 #include <ctype.h>
 #include "translate.h"
 
-#define NONE (-1)
+#define INDEX_NONE (-1)
 #define MAX_COUNT (512)
-#define ESCAPE_CHAR_START (7)
-#define ESCAPE_CHAR_END (13)
 
 /* TEST CASE
 
@@ -18,26 +16,20 @@ a-ec, fgh => abdec, fghhh
 두개의 다른 배열 중 한 배열에 값을 다른 배열에 옮길때 인덱스를 신경 않아도 됨
 
 */
-/* TO DO
-    512 error
-*/
 
-enum error_code test_filter_input(const char* input, int* filtered)
+enum error_code filter_input(const char* input, int* filtered)
 {
     const char* const p_start_input = input;
+    const int* const p_start_filtered = filtered;
     int temp1[MAX_COUNT];
     int* temp_filtered = temp1;
 
-    char start_char;
-    char end_char;
-    char escape_char;
-
     while (*input != '\0') {
         if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
-            *temp_filtered = '~';
+            char start_char = *(input - 1);
+            char end_char = *(input + 1);
 
-            start_char = *(input - 1);
-            end_char = *(input + 1);
+            *temp_filtered = '~';
 
             if (end_char - start_char < 0) {
                 return ERROR_CODE_INVALID_RANGE;
@@ -66,7 +58,7 @@ enum error_code test_filter_input(const char* input, int* filtered)
             ++input;
             ++temp_filtered;
         } else if (*input == '\\') {
-            escape_char = *(input + 1);
+            char escape_char = *(input + 1);
 
             switch (escape_char) {
             case '\\':
@@ -105,7 +97,7 @@ enum error_code test_filter_input(const char* input, int* filtered)
 
             input += 2;
             ++filtered;
-            continue;
+            goto check_argument_too_long;
         }
 
         *temp_filtered = *input;
@@ -114,6 +106,11 @@ enum error_code test_filter_input(const char* input, int* filtered)
         ++input;
         ++filtered;
         ++temp_filtered;
+
+    check_argument_too_long:
+        if (filtered - p_start_filtered >= MAX_COUNT) {
+            return ERROR_CODE_ARGUMENT_TOO_LONG;
+        }
     }
 
     *filtered = '\0';
@@ -121,175 +118,41 @@ enum error_code test_filter_input(const char* input, int* filtered)
     return ERROR_CODE_NONE;
 }
 
-enum error_code filter_input(const char* input, int* filtered)
+int reverse_index_of(const int* set1, char ch, int is_sensitive)
 {
-	const char* const p_start_input = input;
-	int* p_start_filtered = filtered;
-	int* p_end_filtered;
-
-    int temp1[MAX_COUNT];
-    int start_range[MAX_COUNT];
-    int* temp_filtered = temp1;
-    int* range_filtered = start_range;
-    int* p_end_range_filtered;
-
-    char start_char;
-    char end_char;
-    char escape_char;
-
-    while (*input != '\0') {
-        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
-            *temp_filtered = '~';
-
-            start_char = *(input - 1);
-            end_char = *(input + 1);
-
-            if (end_char - start_char < 0) {
-                return ERROR_CODE_INVALID_RANGE;
-            } else if (end_char - start_char == 0) {
-                ++input;
-                ++temp_filtered;
-
-		        *temp_filtered = *input;
-
-		        ++input;
-                ++temp_filtered;
-                continue;
-            }
-
-            ++start_char;
-            --end_char;
-
-            /* Add alphabet range*/
-            while (start_char <= end_char) {
-            	*range_filtered = start_char;
-
-            	++start_char;
-            	++range_filtered;
-            }
-
-            ++input;
-            ++temp_filtered;
-        } else if (*input == '\\') {
-            escape_char = *(input + 1);
-
-            switch (escape_char) {
-            case '\\':
-                *range_filtered = '\\';
-                break;
-            case 'a':
-                *range_filtered = '\a';
-                break;
-            case 'b':
-                *range_filtered = '\b';
-                break;
-            case 'n':
-                *range_filtered = '\n';
-                break;
-            case 'f':
-                *range_filtered = '\f';
-                break;
-            case 'r':
-                *range_filtered = '\r';
-                break;
-            case 't':
-                *range_filtered = '\t';
-                break;
-            case 'v':
-                *range_filtered = '\v';
-                break;
-            case '\'':
-                *range_filtered = '\'';
-                break;
-            case '\"':
-                *range_filtered = '\"';
-                break;
-            default:
-                return ERROR_CODE_INVALID_FORMAT;
-            }
-
-            input += 2;
-            ++range_filtered;
-            continue;
-        }
-
-        *temp_filtered = *input;
-        *range_filtered = *input;
-
-        ++input;
-        ++range_filtered;
-        ++temp_filtered;
-    }
-    
-    *range_filtered = '\0';
-    p_end_range_filtered = range_filtered;
-    --range_filtered;
-
-    /* Remove duplicates */
-    while (range_filtered >= start_range) {
-    	char current_char = *range_filtered;
-    	int* p_current = range_filtered + 1;
-
-        while (p_current < p_end_range_filtered) {
-            if (current_char == *p_current) {
-            	break;
-            }
-
-            ++p_current;
-        }
-
-        if (p_current == p_end_range_filtered) {
-            *filtered = current_char;
-            ++filtered;
-        }
-
-        --range_filtered;
-    }
-
-    *filtered = '\0';
-    p_end_filtered = filtered - 1;
-
-    while (p_start_filtered < p_end_filtered) {
-        *p_start_filtered ^= *p_end_filtered;
-        *p_end_filtered ^= *p_start_filtered;
-        *p_start_filtered ^= *p_end_filtered;
-
-        ++p_start_filtered;
-        --p_end_filtered;
-    }
-
-    return ERROR_CODE_NONE;
-}
-
-int index_of(const int* set1, char ch, int is_sensitive)
-{
-    const int* p_start = set1;
+    const int* const  p_start = set1;
+    const int* p_current_char = set1;
     int is_alpha = isalpha(ch);
 
+    while (*p_current_char++ != '\0') {
+    }
+
+    p_current_char -= 2;
+
     if (is_sensitive == TRUE || is_alpha == FALSE) {
-        while (*set1 != '\0') {
-            if (*set1 == ch) {
-                return set1 - p_start;
+        while (p_start <= p_current_char) {
+            if (*p_current_char == ch) {
+                return p_current_char - p_start;
             }
 
-            ++set1;
+            --p_current_char;
         }
     } else {
         int mask = 1 << 5;
         ch |= mask;
 
-        while (*set1 != '\0') {
-            int current_char = mask | *set1;
+        while (p_start <= p_current_char) {
+            int current_char = mask | *p_current_char;
 
             if (current_char == ch) {
-                return set1 - p_start;
+                return p_current_char - p_start;
             }
 
-            ++set1;
+            --p_current_char;
         }
     }
 
-    return NONE;
+    return INDEX_NONE;
 }
 
 int translate(int argc, const char** argv)
@@ -306,7 +169,9 @@ int translate(int argc, const char** argv)
 
     if (argc > 4) {
         return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
-    }else if (argc == 4) {
+    } else if (argc < 3) {
+        return ERROR_CODE_WRONG_ARGUMENTS_NUMBER;
+    } else if (argc == 4) {
         is_sensitive = FALSE;
         argv_index = 2;
     } else {
@@ -335,7 +200,7 @@ int translate(int argc, const char** argv)
     set2_last_char_index = p_set2_last - set2 - 1;
 
     while ((ch = getchar()) != EOF) {
-        if ((index = index_of(set1, ch, is_sensitive)) != NONE) {
+        if ((index = reverse_index_of(set1, ch, is_sensitive)) != INDEX_NONE) {
             ch = index > set2_last_char_index ? set2[set2_last_char_index] : set2[index];
         }
 
