@@ -67,17 +67,22 @@ void check_filter(const char** argv)
 {
     int filtered[512];
     int* p_start = filtered;
-    int error_code;
+    error_code_t error_code;
+    size_t i = 0;
 
     error_code = filter_input(argv[1], filtered);
+    printf("ERROR_CODE: %d\n", error_code);
     assert(error_code == ERROR_CODE_NONE);
 
     printf("filtered:");
     while (*p_start != '\0') {
-        printf(" %c", *p_start);
+        printf(" %d", *p_start);
         ++p_start;
+        ++i;
     }
+
     printf("\n");
+    printf("filter count: %d", i);
 }
 
 int main(int argc, const char* argv[])

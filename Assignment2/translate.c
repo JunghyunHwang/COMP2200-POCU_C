@@ -7,27 +7,74 @@
 #define INDEX_NONE (-1)
 #define MAX_COUNT (512)
 
-/* TEST CASE
+/*
 
-a-e, fgh => abcde, fghhh
-a-ec, fgh => abdec, fghhh
-
-포멧팅 하면서 포인터로 연산 할 때의 좋은 점을 발견 할 수 있었습니다.
-두개의 다른 배열 중 한 배열에 값을 다른 배열에 옮길때 인덱스를 신경 않아도 됨
+    포멧팅 하면서 포인터로 연산 할 때의 좋은 점을 발견 할 수 있었습니다.
+    두개의 다른 배열 중 한 배열에 값을 다른 배열에 옮길때 인덱스를 신경 않아도 됨
 
 */
+
+enum error_code switch_escape(char* character)
+{
+    switch (*character) {
+    case '\\':
+        *character = '\\';
+        break;
+    case 'a':
+        *character = '\a';
+        break;
+    case 'b':
+        *character = '\b';
+        break;
+    case 'n':
+        *character = '\n';
+        break;
+    case 'f':
+        *character = '\f';
+        break;
+    case 'r':
+        *character = '\r';
+        break;
+    case 't':
+        *character = '\t';
+        break;
+    case 'v':
+        *character = '\v';
+        break;
+    case '\'':
+        *character = '\'';
+        break;
+    case '\"':
+        *character = '\"';
+        break;
+    default:
+        return ERROR_CODE_INVALID_FORMAT;
+    }
+
+    return ERROR_CODE_NONE;
+}
 
 enum error_code filter_input(const char* input, int* filtered)
 {
     const char* const p_start_input = input;
     const int* const p_start_filtered = filtered;
+    error_code_t err;
     int temp1[MAX_COUNT];
     int* temp_filtered = temp1;
 
     while (*input != '\0') {
-        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') {
-            char start_char = *(input - 1);
+        if (*input == '-' && input != p_start_input && *(input + 1) != '\0' && *(temp_filtered - 2) != '~' && *(temp_filtered - 1) != '~') { /* range */
+            char start_char = *(filtered - 1);
             char end_char = *(input + 1);
+
+            if (end_char == '\\') {
+                end_char = *(input + 2);
+                err = switch_escape(&end_char);
+
+                if (err != ERROR_CODE_NONE) {
+                    return err;
+                }
+            }
 
             *temp_filtered = '~';
 
@@ -47,7 +94,7 @@ enum error_code filter_input(const char* input, int* filtered)
             ++start_char;
             --end_char;
 
-            /* Add alphabet range*/
+            /* Add range*/
             while (start_char <= end_char) {
                 *filtered = start_char;
 
@@ -57,57 +104,28 @@ enum error_code filter_input(const char* input, int* filtered)
 
             ++input;
             ++temp_filtered;
-        } else if (*input == '\\') {
+        } else if (*input == '\\') { /* escape */
             char escape_char = *(input + 1);
+            err = switch_escape(&escape_char);
 
-            switch (escape_char) {
-            case '\\':
-                *filtered = '\\';
-                break;
-            case 'a':
-                *filtered = '\a';
-                break;
-            case 'b':
-                *filtered = '\b';
-                break;
-            case 'n':
-                *filtered = '\n';
-                break;
-            case 'f':
-                *filtered = '\f';
-                break;
-            case 'r':
-                *filtered = '\r';
-                break;
-            case 't':
-                *filtered = '\t';
-                break;
-            case 'v':
-                *filtered = '\v';
-                break;
-            case '\'':
-                *filtered = '\'';
-                break;
-            case '\"':
-                *filtered = '\"';
-                break;
-            default:
-                return ERROR_CODE_INVALID_FORMAT;
+            if (err != ERROR_CODE_NONE) {
+                return err;
             }
 
+            *filtered = escape_char;
+            *temp_filtered = escape_char;
             input += 2;
             ++filtered;
-            goto check_argument_too_long;
+            ++temp_filtered;
+        } else { /* nomal */
+            *temp_filtered = *input;
+            *filtered = *input;
+
+            ++input;
+            ++filtered;
+            ++temp_filtered;
         }
 
-        *temp_filtered = *input;
-        *filtered = *input;
-
-        ++input;
-        ++filtered;
-        ++temp_filtered;
-
-    check_argument_too_long:
         if (filtered - p_start_filtered >= MAX_COUNT) {
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
@@ -159,7 +177,7 @@ int translate(int argc, const char** argv)
 {
     char ch;
     int index;
-    int error_code;
+    error_code_t error_code;
     int is_sensitive;
     int argv_index;
     int set1[MAX_COUNT];
@@ -175,7 +193,7 @@ int translate(int argc, const char** argv)
         if (argv[1][1] != 'i') {
             return ERROR_CODE_INVALID_FLAG;
         }
-        
+
         is_sensitive = FALSE;
         argv_index = 2;
     } else {
