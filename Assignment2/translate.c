@@ -120,7 +120,7 @@ enum error_code filter_input(const char* input, int* filtered)
 
 int reverse_index_of(const int* set1, char ch, int is_sensitive)
 {
-    const int* const  p_start = set1;
+    const int* const p_start = set1;
     const int* p_current_char = set1;
     int is_alpha = isalpha(ch);
 
