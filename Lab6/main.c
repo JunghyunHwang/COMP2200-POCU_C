@@ -3,6 +3,25 @@
 #include <assert.h>
 #include "character_deserializer.h"
 
+void print_character_spec(character_v3_t* out_character)
+{
+    printf("%13s%14s\n", "name:", out_character->name);
+    printf("%13s%14u\n", "level:", out_character->level);
+    printf("%13s%14u\n", "health:", out_character->health);
+    printf("%13s%14u\n", "mana:", out_character->mana);
+    printf("%13s%14u\n", "strength:", out_character->strength);
+    printf("%13s%14u\n", "dexterity:", out_character->dexterity);
+    printf("%13s%14u\n", "intelligence:", out_character->intelligence);
+    printf("%13s%14u\n", "armour:", out_character->armour);
+    printf("%13s%14u\n", "evasion:", out_character->evasion);
+    printf("%13s%14u\n", "fire_res:", out_character->elemental_resistance.fire);
+    printf("%13s%14u\n", "cold_res:", out_character->elemental_resistance.cold);
+    printf("%13s%14u\n", "lightning:", out_character->elemental_resistance.lightning);
+    printf("%13s%14u\n", "leadership:", out_character->leadership);
+    printf("%13s%14u\n", "minion_count", out_character->minion_count);
+    printf("===========================\n");
+}
+
 int main(void)
 {
     character_v3_t superman_v1;
@@ -88,6 +107,10 @@ int main(void)
     assert(wonderwoman_v3.minions[1].health == 45);
     assert(wonderwoman_v3.minions[1].strength == 20);
     assert(wonderwoman_v3.minions[1].defence == 4);
+
+    print_character_spec(&superman_v1);
+    print_character_spec(&batman_v2);
+    print_character_spec(&wonderwoman_v3);
 
     printf("No prob");
 
