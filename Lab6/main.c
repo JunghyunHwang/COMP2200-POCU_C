@@ -28,9 +28,11 @@ int main(void)
     character_v3_t batman_v2;
     character_v3_t flash_v3;
     character_v3_t wonderwoman_v3;
+    character_v3_t no_minions_wonderwoman_v3;
     int version;
 
     version = get_character("Superman_v1.txt", &superman_v1);
+    print_character_spec(&superman_v1);
     assert(version == 1);
     assert(strcmp(superman_v1.name, "player_15") == 0);
     assert(superman_v1.level == 10);
@@ -48,6 +50,7 @@ int main(void)
     assert(superman_v1.elemental_resistance.lightning == 1);
     
     version = get_character("Batman_v2.txt", &batman_v2);
+    print_character_spec(&batman_v2);
     assert(version == 2);
     assert(strcmp(batman_v2.name, "Batman_v2") == 0);
     assert(batman_v2.level == 25);
@@ -65,6 +68,7 @@ int main(void)
     assert(batman_v2.elemental_resistance.lightning == 3);
     
     version = get_character("Flash_v3.txt", &flash_v3);
+    print_character_spec(&flash_v3);
     assert(version == 3);
     assert(strcmp(flash_v3.name, "Flash_v3") == 0);
     assert(flash_v3.level == 50);
@@ -82,6 +86,7 @@ int main(void)
     assert(flash_v3.elemental_resistance.lightning == 10);
     
     version = get_character("Wonderwoman_v3.txt", &wonderwoman_v3);
+    print_character_spec(&wonderwoman_v3);
     assert(version == 3);
     assert(strcmp(wonderwoman_v3.name, "Wonderwoman_v3") == 0);
     assert(wonderwoman_v3.level == 55);
@@ -108,9 +113,23 @@ int main(void)
     assert(wonderwoman_v3.minions[1].strength == 20);
     assert(wonderwoman_v3.minions[1].defence == 4);
 
-    print_character_spec(&superman_v1);
-    print_character_spec(&batman_v2);
-    print_character_spec(&wonderwoman_v3);
+    version = get_character("No_Minions_Wonderwoman_v3.txt", &no_minions_wonderwoman_v3);
+    print_character_spec(&no_minions_wonderwoman_v3);
+    assert(version == 3);
+    assert(strcmp(no_minions_wonderwoman_v3.name, "Wonderwoman_v3") == 0);
+    assert(no_minions_wonderwoman_v3.level == 55);
+    assert(no_minions_wonderwoman_v3.health == 320);
+    assert(no_minions_wonderwoman_v3.mana == 75);
+    assert(no_minions_wonderwoman_v3.strength == 75);
+    assert(no_minions_wonderwoman_v3.dexterity == 55);
+    assert(no_minions_wonderwoman_v3.intelligence == 35);
+    assert(no_minions_wonderwoman_v3.armour == 45);
+    assert(no_minions_wonderwoman_v3.evasion == 30);
+    assert(no_minions_wonderwoman_v3.leadership == 20);
+    assert(no_minions_wonderwoman_v3.minion_count == 0);
+    assert(no_minions_wonderwoman_v3.elemental_resistance.fire == 20);
+    assert(no_minions_wonderwoman_v3.elemental_resistance.cold == 22);
+    assert(no_minions_wonderwoman_v3.elemental_resistance.lightning == 15);
 
     printf("No prob");
 

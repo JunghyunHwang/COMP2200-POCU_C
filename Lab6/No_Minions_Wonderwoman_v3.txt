@@ -1,0 +1,2 @@
+name            |    level    |    health    |    mana    |    strength    |    dexterity    |    intelligence    |    armour    |    evasion    |    fire_res    |    cold_res    |    lightning_res    |    leadership    |    minion_count
+Wonderwoman_v3  |    55       |    320       |    75      |    75          |    55           |    35              |    45        |    30         |    20          |    22          |    15               |    20            |    0

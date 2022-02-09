@@ -4,8 +4,9 @@
 #include <ctype.h>
 #include "character_deserializer.h"
 
-#define MAX_LINE_COUNT (256)
+#define MAX_LINE_COUNT (2048)
 #define MAX_NAME_COUNT (50)
+#define MAX_MINIONS_COUNT (3)
 #define TRUE (1)
 #define FALSE (0)
 #define ASCII_ZERO (48)
@@ -55,7 +56,7 @@ void check_stat_type(char* data, char* delims, character_v3_t* out_character)
     }
 }
 
-int check_valid_name(const char* input)
+/* int check_valid_name(const char* input)
 {
     while (*input != '\0') {
         if (isalpha(*input) == 0 && *input != '_' && (*input < ASCII_ZERO || *input > ASCII_NINE)) {
@@ -65,7 +66,7 @@ int check_valid_name(const char* input)
     }
 
     return TRUE;
-}
+} */
 
 int get_character(const char* filename, character_v3_t* out_character)
 {
@@ -97,6 +98,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
     }
 
+    clearerr(stream);
     fclose(stream);
 
     return result_version;
@@ -134,7 +136,6 @@ void get_character_by_version2(FILE* stream, character_v3_t* out_character)
     fgets(info, MAX_LINE_COUNT, stream);
 
     data = strtok(info, delims);
-    check_valid_name(data);
     strncpy(out_character->name, data, MAX_NAME_COUNT);
     out_character->name[MAX_NAME_COUNT] = '\0';
 
@@ -182,16 +183,17 @@ void get_character_by_version2(FILE* stream, character_v3_t* out_character)
 void get_character_by_version3(FILE* stream, character_v3_t* out_character)
 {
     char info[MAX_LINE_COUNT];
-    char delims[] = " |";
     char* data;
     unsigned int stat = 0;
+    char delims[] = " |";
+    size_t minions_count;
     size_t i;
 
+    /* Read header */
     fgets(info, MAX_LINE_COUNT, stream);
     fgets(info, MAX_LINE_COUNT, stream);
 
     data = strtok(info, delims);
-    check_valid_name(data);
     strncpy(out_character->name, data, MAX_NAME_COUNT);
     out_character->name[MAX_NAME_COUNT] = '\0';
 
@@ -247,14 +249,21 @@ void get_character_by_version3(FILE* stream, character_v3_t* out_character)
         ++i;
     }
 
+    minions_count = out_character->minion_count > MAX_MINIONS_COUNT ? MAX_MINIONS_COUNT : out_character->minion_count;
+
+    if (minions_count == 0) {
+        return;
+    }
+
+    /* Read header */
     fgets(info, MAX_LINE_COUNT, stream);
 
-    for (i = 0; i < out_character->minion_count; ++i) {
+    for (i = 0; i < minions_count; ++i) {
         fgets(info, MAX_LINE_COUNT, stream);
 
         data = strtok(info, delims);
-        check_valid_name(data);
         strncpy(out_character->minions[i].name, data, MAX_NAME_COUNT);
+        out_character->minions[i].name[MAX_NAME_COUNT] = '\0';
 
         data = strtok(NULL, delims);
         sscanf(data, "%u", &stat);
