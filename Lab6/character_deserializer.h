@@ -1,6 +1,8 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
 typedef enum version {
     NOT_DEFINE,
     VERSION_1,
@@ -55,6 +57,8 @@ typedef struct {
 } character_v3_t;
 
 int check_valid_name(const char* input);
+
+void check_stat_type(char* data, char* delims, character_v3_t* out_character);
 
 int get_character(const char* filename, character_v3_t* out_character);
 
