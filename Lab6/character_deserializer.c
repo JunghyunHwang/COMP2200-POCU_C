@@ -10,7 +10,6 @@
 #define FALSE (0)
 #define ASCII_ZERO (48)
 #define ASCII_NINE (57)
-#define _CRT_SECURE_NO_WARNINGS
 
 void print_character_spec(character_v3_t* out_character)
 {
@@ -27,7 +26,7 @@ void print_character_spec(character_v3_t* out_character)
     printf("%13s%14u\n", "cold_res:", out_character->elemental_resistance.cold);
     printf("%13s%14u\n", "lightning:", out_character->elemental_resistance.lightning);
     printf("%13s%14u\n", "leadership:", out_character->leadership);
-    printf("%13s%14lu\n", "minion_count", out_character->minion_count);
+    printf("%13s%14u\n", "minion_count", out_character->minion_count);
 }
 
 void check_stat_type(char* data, char* delims, character_v3_t* out_character)
@@ -137,7 +136,6 @@ void get_character_by_version1(FILE* stream, character_v3_t* out_character)
     char info[MAX_LINE_COUNT];
     char delims[] = ":,";
     char* data;
-    stat_t stat_type;
 
     strncpy(out_character->name, "player_", 7);
     out_character->minion_count = 0;
@@ -160,7 +158,6 @@ void get_character_by_version2(FILE* stream, character_v3_t* out_character)
     char delims[] = ",";
     char* data;
     unsigned int stat = 0;
-    float res_stat;
 
     out_character->minion_count = 0;
 

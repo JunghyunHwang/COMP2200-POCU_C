@@ -1,8 +1,6 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
-#define _CRT_SECURE_NO_WARNINGS
-
 typedef enum version {
     NOT_DEFINE,
     VERSION_1,
@@ -10,7 +8,7 @@ typedef enum version {
     VERSION_3
 } version_t;
 
-typedef enum stat {
+typedef enum stat_type {
     STAT_NAME,
     STAT_LEVEL,
     STAT_HEALTH,
