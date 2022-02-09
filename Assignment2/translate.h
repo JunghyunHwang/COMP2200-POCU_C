@@ -17,6 +17,8 @@ int translate(int argc, const char** argv);
 
 int reverse_index_of(const int* set1, char ch, int is_sensitive);
 
+enum error_code switch_escape_chracter(char* chracter);
+
 enum error_code filter_input(const char* input, int* filtered);
 
 #endif /* TRANSLATE_H */
