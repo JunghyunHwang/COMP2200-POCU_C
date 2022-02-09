@@ -24,7 +24,7 @@ void print_character_spec(character_v3_t* out_character)
     printf("%13s%14u\n", "armour:", out_character->armour);
     printf("%13s%14u\n", "evasion:", out_character->evasion);
     printf("%13s%14u\n", "fire_res:", out_character->elemental_resistance.fire);
-    printf("%13s%14u\n", "colde_res:", out_character->elemental_resistance.cold);
+    printf("%13s%14u\n", "cold_res:", out_character->elemental_resistance.cold);
     printf("%13s%14u\n", "lightning:", out_character->elemental_resistance.lightning);
     printf("%13s%14u\n", "leadership:", out_character->leadership);
     printf("%13s%14lu\n", "minion_count", out_character->minion_count);
