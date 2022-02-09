@@ -1,3 +1,4 @@
+/* #define _CRT_SECURE_NO_WARNINGS */
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
@@ -5,7 +6,7 @@
 #include "character_deserializer.h"
 
 #define MAX_LINE_COUNT (256)
-#define MAX_NAME_COUNT (51)
+#define MAX_NAME_COUNT (50)
 #define TRUE (1)
 #define FALSE (0)
 #define ASCII_ZERO (48)
@@ -61,6 +62,7 @@ void check_stat_type(char* data, char* delims, character_v3_t* out_character)
     } else if (strcmp(data, "id") == 0) {
         data = strtok(NULL, delims);
         strncat(out_character->name, data, MAX_NAME_COUNT - 7);
+        out_character->name[MAX_NAME_COUNT] = '\0';
     } else if (strcmp(data, "hp") == 0) {
         data = strtok(NULL, delims);
         sscanf(data, "%u", &stat);
@@ -167,6 +169,7 @@ void get_character_by_version2(FILE* stream, character_v3_t* out_character)
     data = strtok(info, delims);
     check_valid_name(data);
     strncpy(out_character->name, data, MAX_NAME_COUNT);
+    out_character->name[MAX_NAME_COUNT] = '\0';
 
     data = strtok(NULL, delims);
     sscanf(data, "%u", &stat);
@@ -225,6 +228,7 @@ void get_character_by_version3(FILE* stream, character_v3_t* out_character)
     data = strtok(info, delims);
     check_valid_name(data);
     strncpy(out_character->name, data, MAX_NAME_COUNT);
+    out_character->name[MAX_NAME_COUNT] = '\0';
 
     i = 1;
 
