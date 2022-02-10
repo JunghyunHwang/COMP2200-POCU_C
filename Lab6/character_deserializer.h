@@ -8,22 +8,35 @@ typedef enum version {
     VERSION_3
 } version_t;
 
-typedef enum stat_type {
-    STAT_NAME,
-    STAT_LEVEL,
-    STAT_HEALTH,
-    STAT_MANA,
-    STAT_STRENGTH,
-    STAT_DEXTERITY,
-    STAT_INTELLIGENCE,
-    STAT_ARMOUR,
-    STAT_EVASION,
-    STAT_FIRE_RES,
-    STAT_COLD_RES,
-    STAT_LIGHTNING_RES,
-    STAT_LEADERSHIP,
-    STAT_MINION_COUNT
-} stat_t;
+typedef enum stat_types_v2 {
+    STAT_V2_NAME,
+    STAT_V2_LEVEL,
+    STAT_V2_STRENGTH,
+    STAT_V2_DEXTERITY,
+    STAT_V2_INTELLIGENCE,
+    STAT_V2_ARMOUR,
+    STAT_V2_EVASION,
+    STAT_V2_MAGIC_RES,
+    STAT_V2_HEALTH,
+    STAT_V2_MANA
+} stat_v2_t;
+
+typedef enum stat_types_v3 {
+    STAT_V3_NAME,
+    STAT_V3_LEVEL,
+    STAT_V3_HEALTH,
+    STAT_V3_MANA,
+    STAT_V3_STRENGTH,
+    STAT_V3_DEXTERITY,
+    STAT_V3_INTELLIGENCE,
+    STAT_V3_ARMOUR,
+    STAT_V3_EVASION,
+    STAT_V3_FIRE_RES,
+    STAT_V3_COLD_RES,
+    STAT_V3_LIGHTNING_RES,
+    STAT_V3_LEADERSHIP,
+    STAT_V3_MINION_COUNT
+} stat_v3_t;
 
 typedef struct {
     char name[51];
