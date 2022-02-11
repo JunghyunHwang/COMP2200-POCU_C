@@ -68,13 +68,16 @@ void check_filter(const char** argv)
     int filtered[512];
     int* p_start = filtered;
     error_code_t error_code;
+    const char* p_input = argv[1];
+
     size_t i = 0;
+    printf("Input length: %d\n", strlen(argv[1]));
 
     error_code = filter_input(argv[1], filtered);
     printf("ERROR_CODE: %d\n", error_code);
     assert(error_code == ERROR_CODE_NONE);
 
-    printf("filtered:");
+    printf("Filtered result:");
     while (*p_start != '\0') {
         printf(" %d", *p_start);
         ++p_start;
@@ -82,14 +85,15 @@ void check_filter(const char** argv)
     }
 
     printf("\n");
-    printf("filter count: %d", i);
+    printf("Filtered Count: %d\n", i);
 }
 
 int main(int argc, const char* argv[])
 {
-    translate(argc, argv);
-    /*
     check_filter(argv);
+
+    /*
+    translate(argc, argv);
     test_case();
     */
     

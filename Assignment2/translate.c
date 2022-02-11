@@ -6,13 +6,6 @@
 #define INDEX_NONE (-1)
 #define MAX_COUNT (512)
 
-/*
-
-    포멧팅 하면서 포인터로 연산 할 때의 좋은 점을 발견 할 수 있었습니다.
-    두개의 다른 배열 중 한 배열에 값을 다른 배열에 옮길때 인덱스를 신경 않아도 됨
-
-*/
-
 enum error_code switch_escape_chracter(char* character)
 {
     switch (*character) {
@@ -131,7 +124,6 @@ enum error_code filter_input(const char* input, int* filtered)
             return ERROR_CODE_ARGUMENT_TOO_LONG;
         }
     }
-
     *filtered = '\0';
 
     return ERROR_CODE_NONE;
