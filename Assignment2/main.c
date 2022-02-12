@@ -63,17 +63,29 @@ void test_case(void)
     print_filtered(filtered);
 }
 
-void check_filter(const char** argv)
+void check_filter(const argc, const char** argv)
 {
     int filtered[512];
     int* p_start = filtered;
     error_code_t error_code;
     const char* p_input = argv[1];
+    size_t argv_index;
 
     size_t i = 0;
     printf("Input length: %d\n", strlen(argv[1]));
 
-    error_code = filter_input(argv[1], filtered);
+    if (argc == 4) {
+        if (argv[1][1] != 'i') {
+            printf("Wrong input");
+            return;
+        }
+
+        argv_index = 2;
+    } else {
+        argv_index = 1;
+    }
+    
+    error_code = filter_input(argv[argv_index], filtered);
     printf("ERROR_CODE: %d\n", error_code);
     assert(error_code == ERROR_CODE_NONE);
 
@@ -90,7 +102,7 @@ void check_filter(const char** argv)
 
 int main(int argc, const char* argv[])
 {
-    check_filter(argv);
+    check_filter(argc, argv);
 
     /*
     translate(argc, argv);

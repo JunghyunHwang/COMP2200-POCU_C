@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 #include <ctype.h>
 #include "character_deserializer.h"
 
@@ -13,20 +14,6 @@
 #define ASCII_ZERO (48)
 #define ASCII_NINE (57)
 
-int check_valid_name(const char* name)
-{
-    while (*name != '\0') {
-        if (isalpha(*name) == 0 && *name != '_' && (*name < ASCII_ZERO || *name > ASCII_NINE)) {
-            printf("\'%c\' is invalid characters!", *name);
-            return FALSE;
-        }
-
-        ++name;
-    }
-
-    return TRUE;
-}
-
 int get_character(const char* filename, character_v3_t* out_character)
 {
     version_t result_version = NOT_DEFINE;
@@ -34,6 +21,11 @@ int get_character(const char* filename, character_v3_t* out_character)
     FILE* stream;
 
     stream = fopen(filename, "r");
+
+    if (stream == NULL) {
+        perror("error while opening");
+        return NOT_DEFINE;
+    }
 
     while ((ch = fgetc(stream)) != EOF && result_version == NOT_DEFINE) {
         switch (ch) {
@@ -63,7 +55,21 @@ int get_character(const char* filename, character_v3_t* out_character)
     return result_version;
 }
 
-void check_stat_type(char* data, char* delims, character_v3_t* out_character)
+int check_valid_name(const char* name)
+{
+    while (*name != '\0') {
+        if (isalpha(*name) == 0 && *name != '_' && (*name < ASCII_ZERO || *name > ASCII_NINE)) {
+            printf("\'%c\' is invalid characters!", *name);
+            return FALSE;
+        }
+
+        ++name;
+    }
+
+    return TRUE;
+}
+
+void check_stat_type(char* data, const char* delims, character_v3_t* out_character)
 {
     unsigned int stat;
 
@@ -119,7 +125,7 @@ void check_stat_type(char* data, char* delims, character_v3_t* out_character)
 void get_character_by_version1(FILE* stream, character_v3_t* out_character)
 {
     char line[MAX_LINE_COUNT];
-    char delims[] = ":,";
+    const char* delims = ":,";
     char* data;
 
     strncpy(out_character->name, "player_", 7);
@@ -141,7 +147,7 @@ void get_character_by_version2(FILE* stream, character_v3_t* out_character)
     char line[MAX_LINE_COUNT];
     char* data;
     unsigned int stat;
-    char delims[] = ",";
+    const char* delims = ",";
     size_t stat_number;
 
     out_character->minion_count = 0;
@@ -206,7 +212,7 @@ void get_character_by_version3(FILE* stream, character_v3_t* out_character)
     char line[MAX_LINE_COUNT];
     char* data;
     unsigned int stat;
-    char delims[] = " |";
+    const char* delims = " |";
     size_t minions_count;
     size_t stat_number;
     size_t i;
