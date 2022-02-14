@@ -84,7 +84,7 @@ void check_filter(const argc, const char** argv)
     } else {
         argv_index = 1;
     }
-    
+
     error_code = filter_input(argv[argv_index], filtered);
     printf("ERROR_CODE: %d\n", error_code);
     assert(error_code == ERROR_CODE_NONE);

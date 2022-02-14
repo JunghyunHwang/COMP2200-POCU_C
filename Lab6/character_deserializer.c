@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <errno.h>
 #include <ctype.h>
 #include "character_deserializer.h"
 
@@ -23,7 +22,6 @@ int get_character(const char* filename, character_v3_t* out_character)
     stream = fopen(filename, "r");
 
     if (stream == NULL) {
-        perror("error while opening");
         return NOT_DEFINE;
     }
 
