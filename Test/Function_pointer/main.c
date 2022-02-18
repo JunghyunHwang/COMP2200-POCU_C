@@ -12,10 +12,10 @@ double subtract(double x, double y)
 
 double calculate(double x, double y, double (*func)(double, double))
 {
-	return func(x, y);
+    return func(x, y);
 }
 
-int main(void)
+void usage(void)
 {
     double x;
     double y;
@@ -34,6 +34,20 @@ int main(void)
     result = calculate(x, y, op);
 
     printf("Subtract result: %.2f\n", result);
+}
+
+void size_function_pointer(void)
+{
+    double (*op)(double, double);
+    op = add;
+
+    printf("Size of function pointer: %d\n", sizeof(op));
+}
+
+int main(void)
+{
+    usage();
+    size_function_pointer();
 
     return 0;
 }
