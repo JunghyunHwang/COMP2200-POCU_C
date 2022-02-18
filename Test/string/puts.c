@@ -2,10 +2,11 @@
 #include <stdio.h>
 
 #define MAX_INPUT (256)
+#define MAX_STRING_LENGTH (4)
 
-int main(void)
+void test1(void)
 {
-	int num[20];
+    int num[20];
 	int* data = num;
 	FILE* stream;
 	size_t i = 0;
@@ -27,7 +28,22 @@ int main(void)
 	}
 
 	fclose(stream);
+}
 
+void test2(void)
+{
+    char str[MAX_STRING_LENGTH + 1] = "POCU";
+    printf("%s\n", str);
+}
+
+void test_string_format(void)
+{
+	printf("%x\n", -10);
+}
+
+int main(void)
+{
+    test_string_format();
     printf("No prob\n");
 
     return 0;

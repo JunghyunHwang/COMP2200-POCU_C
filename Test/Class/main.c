@@ -1,8 +1,5 @@
 #include <stdio.h>
-
-typedef struct {
-    void (*honk)(void);
-} car_t;
+#include "class.h"
 
 void print_honk(void)
 {
