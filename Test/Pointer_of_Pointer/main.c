@@ -26,6 +26,18 @@ void test2(void)
 	printf("%c\n", (char*)*p);
 }
 
+void size_of_array(int arr[])
+{
+    printf("arr size: %d\n", sizeof(arr));
+}
+
+void size_of_pointer(void)
+{
+    int arr[3];
+
+    size_of_array(arr);
+}
+
 void cast_point(void)
 {
     int a[2] = { 1, 2 };
@@ -46,7 +58,8 @@ void cast_point(void)
 
 int main(void)
 {
-    cast_point();
+    /*cast_point();*/
+    size_of_pointer();
 
     return 0;
 }
