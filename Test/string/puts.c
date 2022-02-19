@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_INPUT (256)
 #define MAX_STRING_LENGTH (4)
@@ -38,7 +39,24 @@ void test2(void)
 
 void test_string_format(void)
 {
-	printf("%x\n", -10);
+	printf("%5.7s\n", "Hi");
+}
+
+void test_strncpy(void)
+{
+    char src[] = "draw_alarm is goood ";
+    char dest[21];
+    size_t i;
+
+    strncpy(dest, src, 4);
+
+    printf("result:");
+    for (i = 0; i < 21; ++i) {
+        printf(" %d", dest[i]);
+    }
+
+    printf("\n%s", dest);
+    puts("E");
 }
 
 int main(void)
