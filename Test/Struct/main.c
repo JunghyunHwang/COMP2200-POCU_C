@@ -2,17 +2,17 @@
 #include <string.h>
 
 typedef struct {
-        int year;
-        int month;
-        int day;
+    int year;
+    int month[2];
+    int day;
 } date_t;
 
 typedef struct {
-        char position[7];
-        char name[10];
+    char position[7];
+    char name[10];
 } champion_t;
 
-int main(void)
+void test_champion(void)
 {
     champion_t champions[5];
     const char* position_mid = "mid";
@@ -40,6 +40,17 @@ int main(void)
     }
 
     printf("Struct size: %d\n", sizeof(champion_t));
+}
+
+void test_init_struct(void)
+{
+    date_t date = { 2043, 1, 1 };
+    printf("%d-%d-%d\n", date.year, date.month, date.day);
+}
+
+int main(void)
+{
+    test_init_struct();
     
     return 0;
 }
