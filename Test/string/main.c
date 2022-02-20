@@ -59,10 +59,20 @@ void test_strncpy(void)
     puts("E");
 }
 
+void test_sprintf(void)
+{
+    char str[] = "POCU is fun";
+    char line[5];
+    int return_value;
+
+    return_value = sprintf(line, "%.5s", str);
+    printf("String: %sg\n", line);
+    printf("return value: %d\n", return_value);
+}
+
 int main(void)
 {
-    test_string_format();
-    printf("No prob\n");
+    test_sprintf();
 
     return 0;
 }
