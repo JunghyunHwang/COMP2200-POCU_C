@@ -3,11 +3,9 @@
 
 #include "static.h"
 
-extern int g_test;
-extern int s_test;
-
 int main(void)
 {
+	/*
 	int num = 0x123456;
 	size_t i;
 
@@ -17,6 +15,9 @@ int main(void)
 	test_function(++i);
 	printf("int num: %d\n", num);
 	printf("Test extern: %d\n", g_test);
+	*/
+
+	print_static_data();
 
     return 0;
 }

@@ -3,7 +3,7 @@
 
 typedef struct {
     int year;
-    int month[2];
+    int month;
     int day;
 } date_t;
 
@@ -48,9 +48,33 @@ void test_init_struct(void)
     printf("%d-%d-%d\n", date.year, date.month, date.day);
 }
 
+void test_pointer_operator(void)
+{
+    int num[3];
+    void* v_p1;
+    void* v_p2;
+    int* i_p1;
+    int* i_p2;
+
+    champion_t champions[2];
+    int a;
+
+    a = (char*)&champions[1] - (char*)&champions[0];
+
+    v_p1 = &num[0];
+    v_p2 = &num[2];
+
+    i_p1 = &num[0];
+    i_p2 = &num[2];
+
+    printf("Print void pointers: %#x, %#x\n", v_p1, v_p2);
+    printf("Subtract int pointer: %d\n", i_p2 - i_p1);
+    printf("Subtract int pointer casting to char: %d\n", (char*)i_p2 - (char*)i_p1);
+}
+
 int main(void)
 {
-    test_init_struct();
+    test_pointer_operator();
     
     return 0;
 }
