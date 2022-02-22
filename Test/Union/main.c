@@ -29,39 +29,25 @@ void test_bit_flag(void)
 	bit_t flag;
 
 	flag.val = 0x0;
-	flag.bits.b1 = 1;
+	flag.bits.b0 = 1;
 
-	printf("%d\n", flag.val);
+	printf("Hex: 0x%08x Dec: %d\n", flag.val, flag.val);
 }
 
 void test_rgba(void)
 {
-	color_t transe_black;
 	color_t black;
-	color_t red;
-	color_t yellow;
-
-	transe_black.val = 0x0;
 	black.val = 0x0;
 	black.rgba.a = 0xff;
 
-	red.val = 0x0;
-	red.rgba.r = 255;
-	red.rgba.a = 255;
-
-	yellow = red;
-	yellow.rgba.g = 255;
-
-	printf("Transe black: 0x%08x (%d %d %d %d)\n", transe_black.val, transe_black.rgba.r, transe_black.rgba.g, transe_black.rgba.b, transe_black.rgba.a);
-	printf("Red: 0x%08x (%d %d %d %d)\n", red.val, red.rgba.r, red.rgba.g, red.rgba.b, red.rgba.a);
-	printf("yellow: 0x%08x (%d %d %d %d)\n", yellow.val, yellow.rgba.r, yellow.rgba.g, yellow.rgba.b, yellow.rgba.a);
-
-	puts("");
-
-	printf("Black: 0x%08x (%d %d %d %d)\n", black.val, black.rgba.r, black.rgba.g, black.rgba.b, black.rgba.a);
-	printf("Color black address: %p\n", (void*)&black);
-	printf("Color black.val address: %p\n", (void*)&black.val);
+	printf("Black: 0x%08x (%d, %d, %d, %d)\n", black.val, black.rgba.r, black.rgba.g, black.rgba.b, black.rgba.a);
+	printf("Black size %d\n", sizeof(black));
+	printf("Color black address: %7s%p\n", "", (void*)&black);
+	printf("Color black.val address: %3s%p\n", "", (void*)&black.val);
 	printf("Color black.rgba.r address: %p\n", (void*)&black.rgba.r);
+	printf("Color black.rgba.g address: %p\n", (void*)&black.rgba.g);
+	printf("Color black.rgba.b address: %p\n", (void*)&black.rgba.b);
+	printf("Color black.rgba.a address: %p\n", (void*)&black.rgba.a);
 }
 
 int main(void)
