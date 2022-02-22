@@ -1,11 +1,19 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 
 typedef struct {
     int year;
-    int month[2];
+    int month;
     int day;
 } date_t;
+
+typedef struct {
+    int id;
+    short age;
+    char name[32];
+    float weight;
+} user_info_t;
 
 typedef struct {
     char position[7];
@@ -51,6 +59,8 @@ void test_init_struct(void)
 int main(void)
 {
     test_init_struct();
+
+    printf("Struct size: %d\n", sizeof(user_info_t));
     
     return 0;
 }

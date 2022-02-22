@@ -58,8 +58,22 @@ void cast_point(void)
 
 int main(void)
 {
-    /*cast_point();*/
+    /*
+    cast_point();
     size_of_pointer();
+    */
+    int num = 12;
+    char* p_char;
+    int* p_int;
+
+    p_int = &num;
+    p_char = (char*)&num;
+
+    printf("p_int: %4p\n", (void*)p_int);
+    printf("p_char: %4p\n", (void*)p_char);
+
+    printf("p_int + 1: %p\n", (void*)(p_int + 1));
+    printf("p_char + 1: %p\n", (void*)(p_char + 1));
 
     return 0;
 }

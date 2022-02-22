@@ -1,36 +1,63 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <errno.h>
 
-#define MAX_LENGTH (10)
+#define MAX_LENGTH (1024)
 #define TRUE (1)
 
-int main(int argc, char* argv[])
+void print_array(int arr[])
+{
+    size_t i;
+
+    printf("input value:");
+    for (i = 0; i < MAX_LENGTH; ++i) {
+        printf(" %d", arr[i]);
+    }
+    puts("");
+}
+
+void test_read_in_file(void)
 {
     FILE* stream;
-    char char_input[MAX_LENGTH];
-    int int_input[MAX_LENGTH];
-    int* p_input;
-    size_t return_value;
-
-    p_input = int_input;
-
-    printf("File path: %s\n", argv[0]);
-    printf("argc: %d\n", argc);
+    char str[MAX_LENGTH];
 
     stream = fopen("input.txt", "r");
 
-    return_value = fread(int_input, sizeof(int_input[0]), MAX_LENGTH, stream);
-
-    printf("Return value: %d\n", return_value);
-
-    printf("input value:");
-    while (p_input - int_input < MAX_LENGTH) {
-        printf(" %d", *p_input);
-        ++p_input;
+    if (stream == NULL) {
+        perror("Fail to file open");
+        goto file_close;
     }
-    puts("");
 
+    fread(str, sizeof(str), 1, stream);
+    printf("Read: %s\n", str);
+
+file_close:
     fclose(stream);
+}
 
+void test_write_in_file(void)
+{
+    FILE* stream;
+    char str[] = "Bitch don't kill my vibe";
+    
+    stream = fopen("input.txt", "w");
+
+    if (stream == NULL) {
+        perror("Fail to open file");
+        goto file_close;
+    }
+
+    fwrite(str, sizeof(str[0]), MAX_LENGTH, stream);
+    fflush(stream);
+
+file_close:
+    fclose(stream);
+}
+
+int main(void)
+{
+    test_write_in_file();
+    test_read_in_file();
     return 0;
 }
 

@@ -43,7 +43,7 @@ void matrix(int arr[][2])
     }
 }
 
-void multidementional_array(void)
+void test_multidementional_array(void)
 {
     int arr[][2] = {
     	{ 1, 2 },
@@ -53,7 +53,7 @@ void multidementional_array(void)
     matrix(arr);
 }
 
-void check_address_in_array(void)
+void test_check_address_in_array(void)
 {
 	int nums[3][5] = {
 		{ 1, 2, 3, 4, 5 },
@@ -78,7 +78,7 @@ void check_address_in_array(void)
 	printf("strs[2] offset from strs[0]: %d\n", strs[2] - strs[0]);
 }
 
-void check_offset(void)
+void test_check_offset(void)
 {
 	int nums[5] = { 1, 2, 3, 4, 5 };
 	int* p_num = nums + 4;
@@ -88,6 +88,6 @@ void check_offset(void)
 
 int main(void)
 {
-    check_offset();
+    test_reference_copy();
 	return 0;
 }

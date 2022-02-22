@@ -1,1 +1,7 @@
-25,38,23,50,20,20,50
+25.1 first
+38 second
+23 third
+50 fourth
+20 fifth
+20 sixth
+50 seventh
