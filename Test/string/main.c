@@ -47,11 +47,11 @@ void test1(void)
 void test_strncpy(void)
 {
     char src[] = "POCU";
-    char dest[2];
+    char dest[5];
     size_t i;
     size_t dest_length;
 
-    strncpy(dest, src, 3);
+    strncpy(dest, src, 5);
 
     printf("src length: %d\n", strlen(src));
     printf("dest length: %d\n", dest_length = strlen(dest));

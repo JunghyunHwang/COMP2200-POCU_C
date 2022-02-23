@@ -20,6 +20,9 @@ void test_read_in_file(void)
 {
     FILE* stream;
     char str[MAX_LENGTH];
+    char empty_str[MAX_LENGTH];
+    int result;
+    int num;
 
     stream = fopen("input.txt", "r");
 
@@ -30,6 +33,13 @@ void test_read_in_file(void)
 
     fread(str, sizeof(str), 1, stream);
     printf("Read: %s\n", str);
+
+    result = sscanf(empty_str, "%d", &num);
+    printf("result: %d\n", result);
+
+    if (result > 0) {
+        printf("num: %d\n", num);
+    }
 
 file_close:
     fclose(stream);

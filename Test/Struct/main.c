@@ -9,6 +9,13 @@ typedef struct {
 } date_t;
 
 typedef struct {
+    int num1;
+    char ch[8];
+    int num2;
+    date_t date;
+} test_t;
+
+typedef struct {
     int id;
     short age;
     char name[32];
@@ -80,15 +87,33 @@ void test_pointer_operator(void)
     printf("Subtract int pointer casting to char: %d\n", (char*)i_p2 - (char*)i_p1);
 }
 
+void test_struct_in_memory(void)
+{
+    date_t date;
+    test_t test;
+
+    printf("date address: %p\n", (void*)&date);
+    printf("date.year address: %p\n", (void*)&date.year);
+    printf("date.month address: %p\n", (void*)&date.month);
+    printf("date.day address: %p\n", (void*)&date.day);
+    printf("distance date.year and date.day: %d\n", &date.day - &date.year); /* 2 */
+    puts("========================================");
+
+    printf("date address: %p\n", (void*)&test);
+    printf("test.num address: %p\n", (void*)&test.num1);
+    printf("test.char address: %p\n", (void*)&test.ch);
+    printf("test.num2 address: %p\n", (void*)&test.num2);
+    printf("test.date address: %p\n", (void*)&test.date);
+    printf("date.year address: %p\n", (void*)&test.date.year);
+    printf("date.month address: %p\n", (void*)&test.date.month);
+    printf("date.day address: %p\n", (void*)&test.date.day);
+    printf("distance date.year and date.day: %d\n", &test.num2 - &test.num1); /* 3 */
+}
+
 int main(void)
 {
-<<<<<<< HEAD
-    test_init_struct();
+    /* 구조체가 메모리에 어떻게 올라가는 */
+    test_struct_in_memory();
 
-    printf("Struct size: %d\n", sizeof(user_info_t));
-=======
-    test_pointer_operator();
->>>>>>> 0d7105aaecda398c380d6d7c927d69286f80024a
-    
     return 0;
 }
