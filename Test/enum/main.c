@@ -1,39 +1,13 @@
 #include <stdio.h>
 
-typedef enum {
-	CHAMPION_ARI,
-	CHAMPION_leesin,
-	CHAMPION_nasus,
-	CHAMPION_vayne,
-	CHAMPION_blitz
-} champ_t;
-
-typedef enum {
-	ROLE_MID,
-	ROLE_juggle,
-	ROLE_TOP,
-	ROLE_BOTTOM,
-	ROLE_SUPPORTER,
-	ROLE_OBSERTVER
-} role_t;
-
-void no_intelligence_enum(void)
+int main(int argc, char const *argv[])
 {
-    champ_t my_champ = CHAMPION_ARI;
-    role_t my_role = ROLE_MID;
+	int i;
+	printf("%d\n", argc);
 
-    printf("My champ is %d\n", my_champ);
-    printf("My role is %d\n", my_role);
+	for (i = 0; i < argc; ++i) {
+		printf("%s\n", argv[i] + 1);
+	}
 
-    my_champ = ROLE_TOP;
-    printf("My champ is %d\n", my_champ);
-    my_champ = ROLE_OBSERTVER;
-    printf("My champ is %d\n", my_champ);
-}
-
-int main(void)
-{
-    no_intelligence_enum();
-
-    return 0;
+	return 0;
 }
