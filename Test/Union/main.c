@@ -24,14 +24,24 @@ typedef union {
 	} rgba;
 } color_t;
 
+typedef union {
+	int lvalue;
+	short rvalue[2];
+} divide_t;
+
+typedef union {
+	char  c[5];
+	float f;
+} ped_t;
+
 void test_bit_flag(void)
 {
 	bit_t flag;
 
 	flag.val = 0x0;
-	flag.bits.b0 = 1;
+	flag.bits.b4 = 1;
 
-	printf("Hex: 0x%08x Dec: %d\n", flag.val, flag.val);
+	printf("Hex: %08x, Dec: %d\n", flag.val, flag.val);
 }
 
 void test_rgba(void)
@@ -44,18 +54,39 @@ void test_rgba(void)
 	printf("Black size %d\n", sizeof(black));
 	printf("Color black address: %7s%p\n", "", (void*)&black);
 	printf("Color black.val address: %3s%p\n", "", (void*)&black.val);
-	printf("Color black.rgba.r address: %p\n", (void*)&black.rgba.r);
-	printf("Color black.rgba.g address: %p\n", (void*)&black.rgba.g);
-	printf("Color black.rgba.b address: %p\n", (void*)&black.rgba.b);
-	printf("Color black.rgba.a address: %p\n", (void*)&black.rgba.a);
+	printf("Color black.rgba.r address: %p, value: %d\n", (void*)&black.rgba.r, black.rgba.r);
+	printf("Color black.rgba.g address: %p, value: %d\n", (void*)&black.rgba.g, black.rgba.g);
+	printf("Color black.rgba.b address: %p, value: %d\n", (void*)&black.rgba.b, black.rgba.b);
+	printf("Color black.rgba.a address: %p, value: %d\n", (void*)&black.rgba.a, black.rgba.a);
+}
+
+void test_divide_union(void)
+{
+	divide_t test;
+
+	test.lvalue = 0x0;
+	test.rvalue[0] = 10;
+
+	printf("divide size: %d\n", sizeof(divide_t));
+	printf("int address: %p, int value: %d\n", (void*)test.lvalue, test.lvalue);
+	printf("short address: %p\n", (void*)test.rvalue);
 }
 
 int main(void)
 {
 	/*
 	test_bit_flag();
-	*/
 	test_rgba();
+	test_divide_union();
+	*/
+
+	int test[2][3] = {
+		{ 1, 2, 3 },
+		{ 4, 5, 6 }
+	};
+
+	printf("%d\n", &test[1][1] - &test[0][1]);
+	printf("%05d", 5);
 
 	return 0;
 }
