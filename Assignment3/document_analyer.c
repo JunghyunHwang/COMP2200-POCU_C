@@ -50,7 +50,7 @@ int load_document(const char* document)
 
 char*** tokenize_sentence(const char* str)
 {
-    char*** result;
+    char*** result_sentences;
     const char* p_current;
     const char* p_sentence_start;
     size_t num_sentence_tokenized;
@@ -59,7 +59,7 @@ char*** tokenize_sentence(const char* str)
     p_sentence_start = str;
 
     num_sentence_tokenized = 0;
-    result = NULL;
+    result_sentences = NULL;
 
     for (; *p_current != '\0'; ++p_current) {
         const char* p_delim = DELIM_SENTENCE;
@@ -71,8 +71,8 @@ char*** tokenize_sentence(const char* str)
                     goto next_character;
                 }
 
-                result = realloc(result, (num_sentence_tokenized + 1) * sizeof(char*));
-                result[num_sentence_tokenized] = tokenize_word(p_sentence_start);
+                result_sentences = realloc(result_sentences, (num_sentence_tokenized + 1) * sizeof(char*));
+                result_sentences[num_sentence_tokenized] = tokenize_word(p_sentence_start);
 
                 ++num_sentence_tokenized;
                 p_sentence_start = p_current + 1;
@@ -86,12 +86,12 @@ char*** tokenize_sentence(const char* str)
 
     s_total_sentence_count += num_sentence_tokenized;
 
-    return result;
+    return result_sentences;
 }
 
 char** tokenize_word(const char* str)
 {
-    char** result;
+    char** result_words;
     char* word;
     const char* p_current;
     const char* p_word_start;
@@ -102,7 +102,7 @@ char** tokenize_word(const char* str)
     p_word_start = str;
 
     num_word_tokenized = 0;
-    result = NULL;
+    result_words = NULL;
 
     for (; *p_current != '\0'; ++p_current) {
         const char* p_delim = DELIM_WORD;
@@ -121,8 +121,8 @@ char** tokenize_word(const char* str)
 
                 p_word_start = p_current + 1;
 
-                result = realloc(result, (num_word_tokenized + 1) * sizeof(char*));
-                result[num_word_tokenized] = word;
+                result_words = realloc(result_words, (num_word_tokenized + 1) * sizeof(char*));
+                result_words[num_word_tokenized] = word;
                 ++num_word_tokenized;
 
                 goto next_character;
@@ -134,7 +134,7 @@ char** tokenize_word(const char* str)
 
     s_total_word_count += num_word_tokenized;
 
-    return result;
+    return result_words;
 }
 
 void dispose(void)
@@ -151,9 +151,12 @@ void dispose(void)
 void dispose_sentence(const char*** paragrah)
 {
     size_t i;
+    size_t sentences_count;
 
-    for (i = 0; i <= s_total_sentence_count; ++i) {
-        dispose_sentence(paragrah[i]);
+    sentences_count = sizeof(paragrah) / sizeof(char*);
+
+    for (i = 0; i <= sentences_count; ++i) {
+        dispose_word(paragrah[i]);
     }
 
     free(paragrah);
@@ -162,10 +165,15 @@ void dispose_sentence(const char*** paragrah)
 void dispose_word(const char** sentence)
 {
     size_t i;
+    size_t words_count;
 
-    for (i = 0; i <= s_total_word_count; ++i) {
+    words_count = sizeof(sentence) / sizeof(char*);
+
+    for (i = 0; i <= words_count; ++i) {
         free(sentence[i]);
     }
+
+    free(sentence);
 }
 
 size_t get_total_word_count(void)
