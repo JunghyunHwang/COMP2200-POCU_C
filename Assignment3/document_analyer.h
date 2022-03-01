@@ -6,7 +6,9 @@
 
 int load_document(const char* document);
 
-char** tokenize_sentence(const char* str);
+char*** tokenize_sentence(const char* str);
+
+char** tokenize_word(const char* str);
 
 void dispose(void);
 

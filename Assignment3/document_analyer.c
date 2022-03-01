@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -36,7 +37,7 @@ int load_document(const char* document)
     	}
 
     	s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
-    	s_document[num_paragraph_tokenized] = tokenize_paragraph(line);
+    	s_document[num_paragraph_tokenized] = tokenize_sentence(line);
     }
 
     puts("");
@@ -44,14 +45,87 @@ int load_document(const char* document)
     return TRUE;
 }
 
-char*** tokenize_paragraph(const char* str)
+char*** tokenize_sentence(const char* str)
 {
     char*** result;
+    const char* p_current;
+    const char* p_sentence_start;
+    size_t num_sentence_tokenized;
+
+    p_current = str;
+    p_sentence_start = str;
+
+    num_sentence_tokenized = 0;
+    result = NULL;
+
+    for (; *p_current != '\0'; ++p_current) {
+        const char* p_delim = DELIM_SENTENCE;
+
+        for(; *p_delim != '\0'; ++p_delim) {
+            if (*p_current == *p_delim) {
+                if (p_current == p_sentence_start) {
+                    p_sentence_start = p_current + 1;
+                    goto next_character;
+                }
+
+                result = realloc(result, (num_sentence_tokenized + 1) * sizeof(char*));
+                result[num_sentence_tokenized] = tokenize_word(p_sentence_start);
+
+                ++num_sentence_tokenized;
+                p_sentence_start = p_current + 1;
+                goto next_character;
+            }
+        }
+
+    next_character:;
+    }
+
+    return result;
 }
 
-char** tokenize_sentence(const char* str)
+char** tokenize_word(const char* str)
 {
-    
+    char** result;
+    char* word;
+    const char* p_current;
+    const char* p_word_start;
+    size_t num_word_tokenized;
+    size_t word_count;
+
+    p_current = str;
+    p_word_start = str;
+
+    num_word_tokenized = 0;
+    result = NULL;
+
+    for (; *p_current != '\0'; ++p_current) {
+        const char* p_delim = DELIM_WORD;
+
+        for(; *p_delim != '\0'; ++p_delim) {
+            if (*p_current == *p_delim) {
+                if (*p_current == *p_word_start) {
+                    p_word_start = p_current + 1;
+                    goto next_character;
+                }
+
+                result = realloc(result, (num_word_tokenized + 1) * sizeof(char*));
+
+                word_count = p_current - p_word_start;
+                word = malloc(word + 1);
+                memcpy(word, p_word_start, word_count);
+                *(word + word_count) = '\0';
+
+                result[num_word_tokenized] = word;
+                ++num_word_tokenized;
+                p_word_start = p_current + 1;
+                goto next_character;
+            }
+        }
+
+    next_character:;
+    }
+
+    return result;
 }
 
 void dispose(void);
