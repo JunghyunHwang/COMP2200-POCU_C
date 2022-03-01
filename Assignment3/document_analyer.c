@@ -11,9 +11,9 @@
 #define DELIM_WORD " ,"
 
 static char**** s_document = NULL;
-static size_t s_total_word_count;
-static size_t s_total_sentence_count;
-static size_t s_total_paragraph_count;
+static size_t s_total_word_count = 0;
+static size_t s_total_sentence_count = 0;
+static size_t s_total_paragraph_count = 0;
 
 int load_document(const char* document)
 {
@@ -38,7 +38,10 @@ int load_document(const char* document)
 
     	s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
     	s_document[num_paragraph_tokenized] = tokenize_sentence(line);
+        ++num_paragraph_tokenized;
     }
+
+    s_total_paragraph_count += num_paragraph_tokenized;
 
     puts("");
 
@@ -73,12 +76,15 @@ char*** tokenize_sentence(const char* str)
 
                 ++num_sentence_tokenized;
                 p_sentence_start = p_current + 1;
+
                 goto next_character;
             }
         }
 
     next_character:;
     }
+
+    s_total_sentence_count += num_sentence_tokenized;
 
     return result;
 }
@@ -108,16 +114,17 @@ char** tokenize_word(const char* str)
                     goto next_character;
                 }
 
-                result = realloc(result, (num_word_tokenized + 1) * sizeof(char*));
-
                 word_count = p_current - p_word_start;
                 word = malloc(word + 1);
                 memcpy(word, p_word_start, word_count);
                 *(word + word_count) = '\0';
 
+                p_word_start = p_current + 1;
+
+                result = realloc(result, (num_word_tokenized + 1) * sizeof(char*));
                 result[num_word_tokenized] = word;
                 ++num_word_tokenized;
-                p_word_start = p_current + 1;
+
                 goto next_character;
             }
         }
@@ -125,10 +132,41 @@ char** tokenize_word(const char* str)
     next_character:;
     }
 
+    s_total_word_count += num_word_tokenized;
+
     return result;
 }
 
-void dispose(void);
+void dispose(void)
+{
+    size_t i;
+
+    for (i = 0; i <= s_total_paragraph_count; ++i) {
+        dispose_sentence(s_document[i]);
+    }
+
+    free(s_document);
+}
+
+void dispose_sentence(const char*** paragrah)
+{
+    size_t i;
+
+    for (i = 0; i <= s_total_sentence_count; ++i) {
+        dispose_sentence(paragrah[i]);
+    }
+
+    free(paragrah);
+}
+
+void dispose_word(const char** sentence)
+{
+    size_t i;
+
+    for (i = 0; i <= s_total_word_count; ++i) {
+        free(sentence[i]);
+    }
+}
 
 size_t get_total_word_count(void)
 {
