@@ -4,25 +4,42 @@
 #include <string.h>
 #include <assert.h>
 
-char** tokenize_malloc(const char* str, const char* delim, int* out_tokenized_count)
+char** tokenize_malloc(const char* str, const char* delim)
 {
     char** result;
+    char* token;
     const char* p_current = str;
     const char* p_tokenize_start = str;
-    char* tmp;
-
     size_t num_tokenized;
     size_t count;
 
     result = NULL;
     num_tokenized = 0;
 
+    if (*str == '\0') {
+        goto add_null;
+    } else if (*delim == '\0') {
+        while (*p_current++ != '\0') {
+        }
+
+        --p_current;
+        count = p_current - p_tokenize_start;
+        result = realloc(result, (num_tokenized + 1) * sizeof(char*));
+
+        token = malloc(count + 1);
+        memcpy(token, p_tokenize_start, count);
+        *(token + count) = '\0';
+
+        result[num_tokenized] = token;
+        ++num_tokenized;
+
+        goto add_null;
+    }
+
     while (*p_current != '\0') {
         const char* p_delim = delim;
-        printf("Current character: %c\n", *p_current);
 
         while (*p_delim != '\0') {
-            printf("Current delim %d\n", *p_delim);
             if (*p_current == *p_delim) {
                 if (p_current == p_tokenize_start) {
                     p_tokenize_start = p_current + 1;
@@ -30,17 +47,15 @@ char** tokenize_malloc(const char* str, const char* delim, int* out_tokenized_co
                 }
 
                 count = p_current - p_tokenize_start;
-                printf("count: %d\n", count);
 
                 result = realloc(result, (num_tokenized + 1) * sizeof(char*));
-                printf("result address: %p\n", (void*)result);
                 assert(result != NULL);
 
-                tmp = malloc(count + 1);
-                memcpy(tmp, p_tokenize_start, count);
-                *(tmp + count) = '\0';
+                token = malloc(count + 1);
+                memcpy(token, p_tokenize_start, count);
+                *(token + count) = '\0';
 
-                result[num_tokenized] = tmp;
+                result[num_tokenized] = token;
 
                 p_tokenize_start = p_current + 1;
                 ++num_tokenized;
@@ -56,24 +71,20 @@ char** tokenize_malloc(const char* str, const char* delim, int* out_tokenized_co
 
     if (p_current != p_tokenize_start) {
         count = p_current - p_tokenize_start;
-        realloc(result, sizeof(char*));
-        tmp = malloc(count + 1);
-        memcpy(tmp, p_tokenize_start, count);
-        *(tmp + count) = '\0';
+        result = realloc(result, (num_tokenized + 1) * sizeof(char*));
+        token = malloc(count + 1);
+        memcpy(token, p_tokenize_start, count);
+        *(token + count) = '\0';
 
-        result[num_tokenized] = tmp;
+        result[num_tokenized] = token;
         ++num_tokenized;
         p_tokenize_start = p_current;
     }
 
-    realloc(result, sizeof(char*));
+add_null:
+    result = realloc(result, (num_tokenized + 1) * sizeof(char*));
     result[num_tokenized] = NULL;
-
-    assert(p_current == p_tokenize_start);
-    assert(result[num_tokenized] == NULL);
-
-    *out_tokenized_count = num_tokenized;
-    printf("num_tokenized: %d\n", num_tokenized);
+    ++num_tokenized;
 
     return result;
 }
