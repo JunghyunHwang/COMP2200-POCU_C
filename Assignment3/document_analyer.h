@@ -12,10 +12,6 @@ char** tokenize_word(const char* str);
 
 void dispose(void);
 
-void dispose_sentence(const char*** paragrah);
-
-void dispose_word(const char** sentence);
-
 size_t get_total_word_count(void);
 
 size_t get_total_sentence_count(void);
