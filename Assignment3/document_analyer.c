@@ -18,18 +18,19 @@ static size_t s_total_paragraph_count = 0;
 
 void print_document(void)
 {
-    size_t i;
-
+    size_t i = 0;
+    size_t j = 0;
+    size_t k = 0;
+/*
     puts("print s_document");
     for (i = 0; i < 6; ++i) {
         printf("%s\n", s_document[0][0][i]);
     }
+*/
+    printf("First word in document: %s\n", s_document[i][j][k]);
 }
 
-void print_sentence(char** sentence)
-{
-
-}
+void print_sentence(char** sentence);
 
 int load_document(const char* document)
 {
@@ -52,7 +53,6 @@ int load_document(const char* document)
     		break;
     	}
 
-        printf("*****input paragraph: %s\n", line);
     	s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
     	s_document[num_paragraph_tokenized] = tokenize_sentence(line);
         ++num_paragraph_tokenized;
@@ -64,7 +64,6 @@ int load_document(const char* document)
     s_document[num_paragraph_tokenized] = NULL;
 
     puts("");
-
     return TRUE;
 }
 
@@ -99,8 +98,6 @@ char*** tokenize_sentence(const char* input_paragraph)
                 *(tmp_sentence + sentence_length) = '\0';
 
                 p_sentence_start = p_current + 1;
-
-                printf("*****input sentence: %s\n", tmp_sentence);
 
                 result_paragraph = realloc(result_paragraph, (num_sentence_tokenized + 1) * sizeof(char*));
                 result_paragraph[num_sentence_tokenized] = tokenize_word(tmp_sentence);
@@ -209,14 +206,26 @@ void dispose(void)
     size_t k;
 
     puts("Dispose memeory");
+    print_document();
 
-    for (i = 0; i <= s_total_paragraph_count; ++i) {
-        sentences_count = get_paragraph_sentence_count((const char***)s_document[i]);
-        word_count = get_paragraph_word_count((const char***)s_document[i]);
+    for (i = 0; i < s_total_paragraph_count; ++i) {
+        const char*** paragraph = (const char***)s_document[i];
+        printf("What the fu k is this?: %s\n", s_document[0][0][0]);
+        sentences_count = get_paragraph_sentence_count(paragraph);
+        printf("It's okay: %s\n", paragraph[0][0]);
+        word_count = get_paragraph_word_count(paragraph);
 
-        for (j = 0; j <= sentences_count; ++j) {
-            for (k = 0; k <= word_count; ++k) {
+        printf("Total Paragraph count: %d\n", s_total_paragraph_count);
+        printf("Sentence count: %d\n", sentences_count);
+        printf("Word count: %d\n", word_count);
+
+        for (j = 0; j < sentences_count; ++j) {
+            for (k = 0; k < word_count; ++k) {
+                printf("%s\n", s_document[i][j][k]);
                 free(s_document[i][j][k]);
+                printf("I: %d\n", i);
+                printf("J: %d\n", j);
+                printf("K: %d\n", k);
             }
 
             free(s_document[i][j]);
@@ -254,19 +263,16 @@ size_t get_paragraph_word_count(const char*** paragraph)
     size_t sentence_count;
     size_t i;
 
-    puts("=========Get word count=========");
     result_count = 0;
     sentence_count = get_paragraph_sentence_count(paragraph);
-    printf("get sentence count in get word count: %d\n", sentence_count);
 
-    for (i = 0; i <= sentence_count; ++i) {
+    printf("It's okay: %s\n", paragraph[0][0]);
+    for (i = 0; i < sentence_count; ++i) {
         for (; *paragraph[i] != NULL; ++paragraph[i]) {
-            printf("%s\n", paragraph[i][result_count]);
             ++result_count;
         }
     }
-
-    printf("=========word count: %d=========\n", result_count);
+    printf("%s\n", paragraph[0][0]);
 
     return result_count;
 }
@@ -274,16 +280,12 @@ size_t get_paragraph_word_count(const char*** paragraph)
 size_t get_paragraph_sentence_count(const char*** paragraph)
 {
     size_t result_count;
-    size_t i;
-    puts("=========Get sentence count=========");
 
     result_count = 0;
 
     for (; *paragraph != NULL; ++paragraph) {
         ++result_count;
     }
-
-    printf("=========sentence count: %d=========\n", result_count);
 
     return result_count;
 }
