@@ -268,7 +268,9 @@ size_t get_paragraph_word_count(const char*** paragraph)
 
     printf("It's okay: %s\n", paragraph[0][0]);
     for (i = 0; i < sentence_count; ++i) {
-        for (; *paragraph[i] != NULL; ++paragraph[i]) {
+        const char** sentence = paragraph[i];
+        
+        for (; *sentence != NULL; ++sentence) {
             ++result_count;
         }
     }
