@@ -2,7 +2,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "document_analyer.h"
+#include "document_analyzer.h"
 
 #define DELIM_SENTENCE ".!?"
 

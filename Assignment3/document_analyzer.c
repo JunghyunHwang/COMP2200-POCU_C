@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <assert.h>
 
-#include "document_analyer.h"
+#include "document_analyzer.h"
 
 #define LINE_LENGTH (4096)
 #define DELIM_SENTENCE ".!?"
