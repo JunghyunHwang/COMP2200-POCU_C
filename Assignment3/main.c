@@ -58,6 +58,8 @@ void official_test(void)
     assert(strcmp(sentence[i++], "too") == 0);
     assert(strcmp(sentence[i++], "easy") == 0);
 
+    assert(print_as_tree("output.txt") == TRUE);
+
     dispose();
 }
 

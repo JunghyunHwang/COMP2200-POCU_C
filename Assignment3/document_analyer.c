@@ -304,4 +304,46 @@ size_t get_sentence_word_count(const char** sentence)
     return result_count;
 }
 
-int print_as_tree(const char* filename);
+int print_as_tree(const char* filename)
+{
+    FILE* stream;
+    size_t sentence_count;
+    size_t word_count;
+    size_t i;
+    size_t j;
+    size_t k;
+
+    stream = fopen(filename, "w");
+
+    if (stream == NULL) {
+        perror("Fail to file open");
+        return FALSE;
+    }
+
+    for (i = 0; i < s_total_paragraph_count; ++i) {
+        char*** paragraph = s_document[i];
+        fprintf(stream, "%s %d:\n", "Paragraph", i);
+
+        sentence_count = get_paragraph_sentence_count((const char***)paragraph);
+
+        for (j = 0; j < sentence_count; ++j) {
+            char** sentence = paragraph[j];
+            fprintf(stream, "%4s%s %d:\n", "", "Sentence", j);
+
+            word_count = get_sentence_word_count((const char**)sentence);
+
+            for (k = 0; k < word_count; ++k) {
+                fprintf(stream, "%8s%s\n", "", sentence[k]);
+            }
+        }
+
+        fprintf(stream, "%c", '\n');
+    }
+
+    fseek(stream, -2, SEEK_END);
+    fprintf(stream, "%c", 0);
+    fprintf(stream, "%c", 0);
+
+
+    return TRUE;
+}
