@@ -19,8 +19,10 @@ Paragraph 0:
         telling
         you
         why
-    Sentence 4:
-        \n\nSanta
+
+Paragraph 1:
+    Sentence 0:
+        Santa
         Clause
         is
         coming
@@ -28,21 +30,23 @@ Paragraph 0:
         town
         for
         reals
-    Sentence 5:
+    Sentence 1:
         It's
         no
         Joke
-    Sentence 6:
-        \n\nHe's
+
+Paragraph 2:
+    Sentence 0:
+        He's
         making
         a
         list
-    Sentence 7:
+    Sentence 1:
         He's
         checking
         it
         twice
-    Sentence 8:
+    Sentence 2:
         Gonna
         find
         out
@@ -50,7 +54,7 @@ Paragraph 0:
         naughty
         and
         nice
-    Sentence 9:
+    Sentence 3:
         So
         be
         nice

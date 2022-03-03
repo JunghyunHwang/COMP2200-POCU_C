@@ -103,14 +103,20 @@ void official_test2(void)
     size_t total_paragraph_count;
 
     assert(load_document("santa.txt") == TRUE);
+
     total_word_count = get_total_word_count();
     total_sentence_count = get_total_sentence_count();
     total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
+
     assert(total_word_count == 45U);
     assert(total_sentence_count == 10U);
     assert(total_paragraph_count == 3U);
 
-    assert(print_as_tree("out_document.txt") == TRUE);
+    assert(print_as_tree("out_santa.txt") == TRUE);
 
     dispose();
 }
