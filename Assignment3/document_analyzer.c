@@ -25,7 +25,7 @@ int load_document(const char* document)
     stream = fopen(document, "r");
 
     if (stream == NULL) {
-    	perror("Fail to file open");
+        perror("Fail to file open");
         return FALSE;
     }
 
@@ -42,8 +42,8 @@ int load_document(const char* document)
         }
 
         printf("\nParagraph: \n%s\n", line);
-    	s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
-    	s_document[num_paragraph_tokenized] = tokenize_sentence(line);
+        s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
+        s_document[num_paragraph_tokenized] = tokenize_sentence(line);
         ++num_paragraph_tokenized;
     }
 
@@ -73,7 +73,7 @@ char*** tokenize_sentence(const char* input_paragraph)
     for (; *p_current != '\0'; ++p_current) {
         const char* p_delim = DELIM_SENTENCE;
 
-        for(; *p_delim != '\0'; ++p_delim) {
+        for (; *p_delim != '\0'; ++p_delim) {
             if (*p_current == *p_delim) {
                 if (p_current == p_sentence_start) {
                     p_sentence_start = p_current + 1;
@@ -124,7 +124,7 @@ char** tokenize_word(const char* input_sentence)
     for (; *p_current != '\0'; ++p_current) {
         const char* p_delim = DELIM_WORD;
 
-        for(; *p_delim != '\0'; ++p_delim) {
+        for (; *p_delim != '\0'; ++p_delim) {
             if (*p_current == *p_delim) {
                 if (*p_current == *p_word_start) {
                     p_word_start = p_current + 1;
@@ -212,7 +212,6 @@ void dispose(void)
             word_count = get_sentence_word_count((const char**)sentence);
 
             for (k = 0; k < word_count; ++k) {
-                printf("%s\n", sentence[k]);
                 free(sentence[k]);
                 sentence[k] = NULL;
                 --s_total_word_count;

@@ -96,13 +96,34 @@ void test_not_loaded(void)
     dispose();
 }
 
+void official_test2(void)
+{
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+
+    assert(load_document("santa.txt") == TRUE);
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+    assert(total_word_count == 45U);
+    assert(total_sentence_count == 10U);
+    assert(total_paragraph_count == 3U);
+
+    assert(print_as_tree("out_document.txt") == TRUE);
+
+    dispose();
+}
+
 int main(void)
 {
     /*
-    */
     test_empty_text();
     official_test();
     test_not_loaded();
+    */
+    
+    official_test2();
 
     puts("No prob");
 
