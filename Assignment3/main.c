@@ -63,9 +63,46 @@ void official_test(void)
     dispose();
 }
 
+void test_empty_text(void)
+{
+    assert(load_document("empty.txt") == TRUE);
+    assert(load_document("hello.txt") == FALSE);
+
+    assert(get_total_word_count() == 0U);
+    assert(get_total_sentence_count() == 0U);
+    assert(get_total_paragraph_count() == 0U);
+
+    assert(get_paragraph_or_null(0) == NULL);
+    assert(get_sentence_or_null(0, 0) == NULL);
+    assert(print_as_tree("output.txt") == FALSE);
+
+    dispose();
+}
+
+void test_not_loaded(void)
+{
+    assert(get_paragraph_or_null(0) == NULL);
+    assert(get_sentence_or_null(0, 0) == NULL);
+    assert(get_total_word_count() == 0U);
+    assert(get_total_sentence_count() == 0U);
+    assert(get_total_paragraph_count() == 0U);
+    assert(load_document("hello.txt") == FALSE);
+    assert(print_as_tree("output_document.txt") == FALSE);
+
+    assert(load_document("document.txt") == TRUE);
+
+    assert(print_as_tree("out_document.txt") == TRUE);
+
+    dispose();
+}
+
 int main(void)
 {
+    /*
+    */
+    test_empty_text();
     official_test();
+    test_not_loaded();
 
     puts("No prob");
 

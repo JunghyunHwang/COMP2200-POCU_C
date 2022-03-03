@@ -32,10 +32,10 @@ int load_document(const char* document)
     num_paragraph_tokenized = 0;
 
     while (TRUE) {
-    	if (fgets(line, LINE_LENGTH, stream) == NULL) {
-    		clearerr(stream);
-    		break;
-    	}
+        if (fgets(line, LINE_LENGTH, stream) == NULL) {
+            clearerr(stream);
+            break;
+        }
 
         if (line[0] == '\n') {
             continue;
@@ -187,18 +187,23 @@ char** tokenize_word(const char* input_sentence)
 
 void dispose(void)
 {
+    size_t paragraph_count;
     size_t sentence_count;
     size_t word_count;
-    size_t free_count;
     size_t i;
     size_t j;
     size_t k;
 
     puts("============ Dispose memeory ============");
 
-    free_count = 0;
+    if (s_total_paragraph_count == 0) {
+        free(*s_document);
+        return;
+    }
 
-    for (i = 0; i < s_total_paragraph_count; ++i) {
+    paragraph_count = s_total_paragraph_count;
+
+    for (i = 0; i < paragraph_count; ++i) {
         char*** paragraph = s_document[i];
         sentence_count = get_paragraph_sentence_count((const char***)paragraph);
 
@@ -209,20 +214,26 @@ void dispose(void)
             for (k = 0; k < word_count; ++k) {
                 printf("%s\n", sentence[k]);
                 free(sentence[k]);
-                ++free_count;
+                sentence[k] = NULL;
+                --s_total_word_count;
             }
 
             free(sentence);
-            ++free_count;    
+            sentence = NULL;
+            --s_total_sentence_count;
         }
 
         free(paragraph);
-        ++free_count;        
+        paragraph = NULL;
+        --s_total_paragraph_count;
     }
 
     free(s_document);
+    s_document = NULL;
 
-    assert(free_count == s_total_paragraph_count + s_total_sentence_count + s_total_word_count);
+    assert(s_total_paragraph_count == 0);
+    assert(s_total_sentence_count == 0);
+    assert(s_total_word_count == 0);
 }
 
 size_t get_total_word_count(void)
@@ -255,6 +266,10 @@ size_t get_paragraph_word_count(const char*** paragraph)
     size_t sentence_count;
     size_t i;
 
+    if (s_total_paragraph_count == 0) {
+        return 0;
+    }
+
     result_count = 0;
     sentence_count = get_paragraph_sentence_count(paragraph);
 
@@ -272,6 +287,10 @@ size_t get_paragraph_word_count(const char*** paragraph)
 size_t get_paragraph_sentence_count(const char*** paragraph)
 {
     size_t result_count;
+
+    if (s_total_paragraph_count == 0) {
+        return 0;
+    }
 
     result_count = 0;
 
@@ -295,6 +314,10 @@ size_t get_sentence_word_count(const char** sentence)
 {
     size_t result_count;
 
+    if (s_total_paragraph_count == 0) {
+        return 0;
+    }
+
     result_count = 0;
 
     for (; *sentence != NULL; ++sentence) {
@@ -313,6 +336,10 @@ int print_as_tree(const char* filename)
     size_t j;
     size_t k;
 
+    if (s_total_paragraph_count == 0) {
+        return FALSE;
+    }
+
     stream = fopen(filename, "w");
 
     if (stream == NULL) {
@@ -322,28 +349,26 @@ int print_as_tree(const char* filename)
 
     for (i = 0; i < s_total_paragraph_count; ++i) {
         char*** paragraph = s_document[i];
-        fprintf(stream, "%s %d:\n", "Paragraph", i);
+
+        if (i > 0) {
+            fprintf(stream, "\n\n");
+        }
+
+        fprintf(stream, "%s %d:", "Paragraph", i);
 
         sentence_count = get_paragraph_sentence_count((const char***)paragraph);
 
         for (j = 0; j < sentence_count; ++j) {
             char** sentence = paragraph[j];
-            fprintf(stream, "%4s%s %d:\n", "", "Sentence", j);
+            fprintf(stream, "\n%4s%s %d:", "", "Sentence", j);
 
             word_count = get_sentence_word_count((const char**)sentence);
 
             for (k = 0; k < word_count; ++k) {
-                fprintf(stream, "%8s%s\n", "", sentence[k]);
+                fprintf(stream, "\n%8s%s", "", sentence[k]);
             }
         }
-
-        fprintf(stream, "%c", '\n');
     }
-
-    fseek(stream, -2, SEEK_END);
-    fprintf(stream, "%c", 0);
-    fprintf(stream, "%c", 0);
-
 
     return TRUE;
 }
