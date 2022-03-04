@@ -22,7 +22,7 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
     size_t num_paragraph_tokenized;
 
-    stream = fopen(document, "r");
+    stream = fopen(document, "rb");
 
     if (stream == NULL) {
         perror("Fail to file open");
@@ -37,11 +37,12 @@ int load_document(const char* document)
             break;
         }
 
-        if (line[0] == '\n') {
+        if (line[0] == '\r' || line[0] == '\n') {
             continue;
         }
 
         printf("\nParagraph: \n%s\n", line);
+
         s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
         s_document[num_paragraph_tokenized] = tokenize_sentence(line);
         ++num_paragraph_tokenized;
@@ -339,7 +340,7 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
-    stream = fopen(filename, "w");
+    stream = fopen(filename, "wb");
 
     if (stream == NULL) {
         perror("Fail to file open");

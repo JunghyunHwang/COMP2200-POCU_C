@@ -124,11 +124,11 @@ void official_test2(void)
 int main(void)
 {
     /*
+    
+    */
     test_empty_text();
     official_test();
     test_not_loaded();
-    */
-    
     official_test2();
 
     puts("No prob");
