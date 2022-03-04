@@ -27,12 +27,11 @@ int load_document(const char* document)
     if (stream == NULL) {
         perror("Fail to file open");
         return FALSE;
-    } else if (fgets(line, LINE_LENGTH, stream) == NULL) { /* empty file */
+    } else if (fgets(line, LINE_LENGTH, stream) == NULL) {
         return TRUE;
     }
 
     rewind(stream);
-
     dispose();
     num_paragraph_tokenized = 0;
 
@@ -202,6 +201,10 @@ void dispose(void)
 
     if (s_document == NULL) {
         return;
+    } else if (s_total_paragraph_count == 0) { /* empty file */
+        puts("Dispose empty file");
+        free(*s_document);
+        return;
     }
 
     puts("============ Dispose memeory ============");
@@ -344,9 +347,7 @@ int print_as_tree(const char* filename)
     size_t j;
     size_t k;
 
-    if (s_document == NULL) {
-        return FALSE;
-    } else if (s_total_paragraph_count == 0) {
+    if (s_document == NULL || s_total_paragraph_count == 0) {
         return FALSE;
     }
 
@@ -364,6 +365,8 @@ int print_as_tree(const char* filename)
         if (i > 0) {
             fprintf(stream, "\n\n");
         }
+
+        fprintf(stream, "%s %d:", "Paragraph", i);
 
         sentence_count = get_paragraph_sentence_count((const char***)paragraph);
 
