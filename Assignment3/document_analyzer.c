@@ -24,14 +24,17 @@ int load_document(const char* document)
 
     dispose();
 
+    num_paragraph_tokenized = 0;
     stream = fopen(document, "rb");
 
     if (stream == NULL) {
         perror("Fail to file open");
+
+        s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
+        s_document[num_paragraph_tokenized] = NULL;
+
         return FALSE;
     }
-
-    num_paragraph_tokenized = 0;
 
     while (TRUE) {
         if (fgets(line, LINE_LENGTH, stream) == NULL) {
@@ -273,9 +276,7 @@ size_t get_paragraph_word_count(const char*** paragraph)
     size_t sentence_count;
     size_t i;
 
-    if (s_document == NULL) {
-        return 0;
-    } else if (s_total_paragraph_count == 0) {
+    if (s_total_paragraph_count == 0) {
         return 0;
     }
 
@@ -297,9 +298,7 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 {
     size_t result_count;
 
-    if (s_document == NULL) {
-        return 0;
-    } else if (s_total_paragraph_count == 0) {
+    if (s_total_paragraph_count == 0) {
         return 0;
     }
 

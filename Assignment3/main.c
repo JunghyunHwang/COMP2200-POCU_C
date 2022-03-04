@@ -128,7 +128,7 @@ void load_two_files(void)
     size_t total_paragraph_count;
 
     assert(load_document("input.txt") == TRUE);
-    assert(print_as_tree("output.txt") == TRUE);
+    assert(load_document("hello.txt") == FALSE);
     assert(load_document("santa.txt") == TRUE);
 
     total_word_count = get_total_word_count();
@@ -151,13 +151,26 @@ void load_two_files(void)
 int main(void)
 {
     /*
-    test_empty_text();
-    official_test();
-    test_not_loaded();
-    official_test2();
     */
-    
+    puts("=== Start test empty ===");
+    test_empty_text();
+    puts("=== Complete tset empty ===");
+
+    puts("=== Start test official ===");
+    official_test();
+    puts("=== Complete test official ===");
+
+    puts("=== Start test not loaded ===");
+    test_not_loaded();
+    puts("=== Complete test not loaded ===");
+
+    puts("=== Start test official2 ===");
+    official_test2();
+    puts("=== Complete test official2 ===");
+
+    puts("=== Start test load_twofiles ===");
     load_two_files();
+    puts("=== Complete test load_twofiles ===");
 
     puts("No prob");
 
