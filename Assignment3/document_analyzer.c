@@ -22,19 +22,19 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
     size_t num_paragraph_tokenized;
 
-    dispose();
-
-    num_paragraph_tokenized = 0;
     stream = fopen(document, "rb");
 
     if (stream == NULL) {
         perror("Fail to file open");
-
-        s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
-        s_document[num_paragraph_tokenized] = NULL;
-
         return FALSE;
+    } else if (fgets(line, LINE_LENGTH, stream) == NULL) { /* empty file */
+        return TRUE;
     }
+
+    rewind(stream);
+
+    dispose();
+    num_paragraph_tokenized = 0;
 
     while (TRUE) {
         if (fgets(line, LINE_LENGTH, stream) == NULL) {
@@ -202,10 +202,6 @@ void dispose(void)
 
     if (s_document == NULL) {
         return;
-    } else if (s_total_paragraph_count == 0) {
-        puts("============ Dispose memeory ============");
-        free(*s_document);
-        return;
     }
 
     puts("============ Dispose memeory ============");
@@ -369,17 +365,13 @@ int print_as_tree(const char* filename)
             fprintf(stream, "\n\n");
         }
 
-        fprintf(stream, "%s %d:", "Paragraph", i);
-
         sentence_count = get_paragraph_sentence_count((const char***)paragraph);
-        printf("Sentence Count: %d\n", sentence_count);
 
         for (j = 0; j < sentence_count; ++j) {
             char** sentence = paragraph[j];
             fprintf(stream, "\n%4s%s %d:", "", "Sentence", j);
 
             word_count = get_sentence_word_count((const char**)sentence);
-            printf("Word Count: %d\n", word_count);
 
             for (k = 0; k < word_count; ++k) {
                 fprintf(stream, "\n%8s%s", "", sentence[k]);
