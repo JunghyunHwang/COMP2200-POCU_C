@@ -22,6 +22,8 @@ int load_document(const char* document)
     char line[LINE_LENGTH];
     size_t num_paragraph_tokenized;
 
+    dispose();
+    
     stream = fopen(document, "rb");
 
     if (stream == NULL) {
@@ -195,12 +197,16 @@ void dispose(void)
     size_t j;
     size_t k;
 
-    puts("============ Dispose memeory ============");
 
-    if (s_total_paragraph_count == 0) {
+    if (s_document == NULL) {
+        return;
+    } else if (s_total_paragraph_count == 0) {
+        puts("============ Dispose memeory ============");
         free(*s_document);
         return;
     }
+
+    puts("============ Dispose memeory ============");
 
     paragraph_count = s_total_paragraph_count;
 
