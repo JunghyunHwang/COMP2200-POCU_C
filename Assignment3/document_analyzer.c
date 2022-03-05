@@ -178,8 +178,6 @@ char** tokenize_word(const char* input_sentence)
     next_character:;
     }
 
-    assert(*p_current == '\0');
-
     if (p_current != p_word_start) {
         word_length = p_current - p_word_start;
         word = malloc(word_length + 1);
@@ -200,7 +198,7 @@ char** tokenize_word(const char* input_sentence)
     assert(p_current == p_word_start);
 
     s_total_word_count += num_word_tokenized;
-
+/*
     {
         size_t i;
         puts("============ Save Word ============");
@@ -209,7 +207,7 @@ char** tokenize_word(const char* input_sentence)
             printf("%s\n", result_sentence[i]);
         }
     }
-
+*/
     result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
     result_sentence[num_word_tokenized] = NULL;
 
