@@ -121,15 +121,57 @@ void official_test2(void)
     dispose();
 }
 
+void load_two_files(void)
+{
+    /*
+        santa 로드 -> empty 로드 -> print_as_tree
+        이러면 내코드는 아무것도 출력 x
+        total_word_count = get_total_word_count();
+        total_sentence_count = get_total_sentence_count();
+        total_paragraph_count = get_total_paragraph_count();
+
+        printf("Total paragraph count: %d\n", total_paragraph_count);
+        printf("Total sentence count: %d\n", total_sentence_count);
+        printf("Total word count: %d\n", total_word_count);
+    */
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+
+    assert(load_document("input.txt") == TRUE);
+    assert(load_document("doesntexist.txt") == FALSE);
+    assert(load_document("empty.txt") == TRUE);
+    /*assert(load_document("santa.txt") == TRUE);*/
+    
+    assert(print_as_tree("output.txt") == TRUE);
+
+    dispose();
+}
+
 int main(void)
 {
     /*
     
     */
-    test_empty_text();
+    puts("=== Start test official ===");
     official_test();
+    puts("=== Complete test official ===");
+
+    puts("=== Start test not loaded ===");
     test_not_loaded();
+    puts("=== Complete test not loaded ===");
+
+    puts("=== Start test official2 ===");
     official_test2();
+    puts("=== Complete test official2 ===");
+    
+    puts("=== Start test empty ===");
+    test_empty_text();
+    puts("=== Complete tset empty ===");
+
+    puts("=== Start test load_twofiles ===");
+    load_two_files();
+    puts("=== Complete test load_twofiles ===");
 
     puts("No prob");
 

@@ -27,8 +27,12 @@ int load_document(const char* document)
     if (stream == NULL) {
         perror("Fail to file open");
         return FALSE;
+    } else if (fgets(line, LINE_LENGTH, stream) == NULL) {
+        return TRUE;
     }
 
+    rewind(stream);
+    dispose();
     num_paragraph_tokenized = 0;
 
     while (TRUE) {
@@ -41,7 +45,7 @@ int load_document(const char* document)
             continue;
         }
 
-        printf("\nParagraph: \n%s\n", line);
+        printf("Paragraph: \n%s\n", line);
 
         s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
         s_document[num_paragraph_tokenized] = tokenize_sentence(line);
@@ -197,12 +201,15 @@ void dispose(void)
     size_t j;
     size_t k;
 
-    puts("============ Dispose memeory ============");
-
-    if (s_total_paragraph_count == 0) {
+    if (s_document == NULL) {
+        return;
+    } else if (s_total_paragraph_count == 0) { /* empty file */
+        puts("Dispose empty file");
         free(*s_document);
         return;
     }
+
+    puts("============ Dispose memeory ============");
 
     paragraph_count = s_total_paragraph_count;
 
@@ -255,7 +262,9 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph_or_null(const size_t paragraph_index)
 {
-    if (paragraph_index >= s_total_paragraph_count) {
+    if (s_document == NULL) {
+        return NULL;
+    } else if (paragraph_index >= s_total_paragraph_count) {
         return NULL;
     }
 
@@ -305,7 +314,9 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const size_t paragraph_index, const size_t sentence_index)
 {
-    if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
+    if (s_document == NULL) {
+        return NULL;
+    } else if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
         return NULL;
     }
 
@@ -338,7 +349,7 @@ int print_as_tree(const char* filename)
     size_t j;
     size_t k;
 
-    if (s_total_paragraph_count == 0) {
+    if (s_document == NULL || s_total_paragraph_count == 0) {
         return FALSE;
     }
 
@@ -349,6 +360,7 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
+    puts("===== Print tree =====");
     for (i = 0; i < s_total_paragraph_count; ++i) {
         char*** paragraph = s_document[i];
 
