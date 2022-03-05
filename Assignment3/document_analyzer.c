@@ -16,6 +16,10 @@ static size_t s_total_word_count = 0;
 static size_t s_total_sentence_count = 0;
 static size_t s_total_paragraph_count = 0;
 
+/*
+    문장이 끝나지 않고 문단이 끝났다면? => 문장도 끝내야함
+*/
+
 int load_document(const char* document)
 {
     FILE* stream;
@@ -53,6 +57,8 @@ int load_document(const char* document)
 
     s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
     s_document[num_paragraph_tokenized] = NULL;
+
+    fclose(stream);
 
     return TRUE;
 }
@@ -330,9 +336,7 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const size_t paragraph_index, const size_t sentence_index)
 {
-    if (s_document == NULL) {
-        return NULL;
-    } else if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
+    if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
         return NULL;
     }
 
@@ -366,6 +370,7 @@ int print_as_tree(const char* filename)
     size_t k;
 
     if (s_document == NULL || s_total_paragraph_count == 0) {
+        puts("Only null loaded document memory");
         return FALSE;
     }
 
@@ -399,6 +404,8 @@ int print_as_tree(const char* filename)
             }
         }
     }
+
+    fclose(stream);
 
     return TRUE;
 }

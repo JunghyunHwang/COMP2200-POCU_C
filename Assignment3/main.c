@@ -174,6 +174,28 @@ void test_not_normal_text(void)
     dispose();
 }
 
+void test_unorganized(void)
+{
+    
+
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+
+    assert(load_document("unorganized.txt") == TRUE);
+    assert(print_as_tree("out_unorganized.txt") == TRUE);
+    
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
+
+    dispose();
+}
+
 int main(void)
 {
     /*
@@ -199,6 +221,7 @@ int main(void)
     load_two_files();
     puts("=== Complete test load_twofiles ===");
 
+<<<<<<< HEAD
     puts("=== Start test nerd text ===");
     test_nerd_text();
     puts("=== Complete test nerd text ===");
@@ -206,6 +229,11 @@ int main(void)
     puts("=== Start test not normal text ===");
     test_not_normal_text();
     puts("=== Complete test not normal text ===");
+=======
+    puts("=== Start test unorganized ===");
+    test_unorganized();
+    puts("=== Complete test unorganized ===");
+>>>>>>> b2a799a8e999d93900ce8780008835dadfc818cd
 
     puts("No prob");
 
