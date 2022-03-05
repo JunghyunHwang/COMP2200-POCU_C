@@ -207,6 +207,8 @@ void test_not_normal_text(void)
 int main(void)
 {
     /*
+    
+    */
     puts("=== Start test official ===");
     official_test();
     puts("=== Complete test official ===");
@@ -222,8 +224,7 @@ int main(void)
     puts("=== Start test load_twofiles ===");
     load_two_files();
     puts("=== Complete test load_twofiles ===");
-    */
-
+    
     puts("=== Start test empty ===");
     test_empty_text();
     puts("=== Complete tset empty ===");

@@ -274,15 +274,14 @@ const char*** get_paragraph_or_null(const size_t paragraph_index)
 
 size_t get_paragraph_word_count(const char*** paragraph)
 {
-    size_t result_count;
+    size_t result_count = 0;
     size_t sentence_count;
     size_t i;
 
     if (s_total_paragraph_count == 0) {
-        return 0;
+        return result_count;
     }
 
-    result_count = 0;
     sentence_count = get_paragraph_sentence_count(paragraph);
 
     for (i = 0; i < sentence_count; ++i) {
@@ -298,13 +297,11 @@ size_t get_paragraph_word_count(const char*** paragraph)
 
 size_t get_paragraph_sentence_count(const char*** paragraph)
 {
-    size_t result_count;
+    size_t result_count = 0;
 
     if (s_total_paragraph_count == 0) {
-        return 0;
+        return result_count;
     }
-
-    result_count = 0;
 
     for (; *paragraph != NULL; ++paragraph) {
         ++result_count;
@@ -315,7 +312,15 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const size_t paragraph_index, const size_t sentence_index)
 {
-    if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
+    size_t sentence_count;
+
+    if (s_total_paragraph_count <= paragraph_index) {
+        return NULL;
+    }
+
+    sentence_count = get_paragraph_sentence_count((const char***)s_document[paragraph_index]);
+
+    if (sentence_count <= sentence_index) {
         return NULL;
     }
 
@@ -324,13 +329,11 @@ const char** get_sentence_or_null(const size_t paragraph_index, const size_t sen
 
 size_t get_sentence_word_count(const char** sentence)
 {
-    size_t result_count;
+    size_t result_count = 0;
 
     if (s_total_paragraph_count == 0) {
-        return 0;
+        return result_count;
     }
-
-    result_count = 0;
 
     for (; *sentence != NULL; ++sentence) {
         ++result_count;
@@ -348,8 +351,7 @@ int print_as_tree(const char* filename)
     size_t j;
     size_t k;
 
-    if (s_document == NULL || s_total_paragraph_count == 0) {
-        puts("Only null loaded document memory");
+    if (s_document == NULL) {
         return FALSE;
     }
 
@@ -360,7 +362,6 @@ int print_as_tree(const char* filename)
         return FALSE;
     }
 
-    puts("===== Print tree =====");
     for (i = 0; i < s_total_paragraph_count; ++i) {
         char*** paragraph = s_document[i];
 
