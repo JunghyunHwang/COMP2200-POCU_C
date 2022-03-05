@@ -21,7 +21,7 @@ void print_tokenized_sentence(char** sentence, size_t tokenized_count)
     size_t i;
 
     puts("============ Save Word ============");
-    for (i = 0; i < toeknized_count; ++i) {
+    for (i = 0; i < tokenized_count; ++i) {
         printf("%s\n", sentence[i]);
     }
 }
