@@ -8,7 +8,7 @@
 #include "document_analyzer.h"
 
 #define LINE_LENGTH (4096)
-#define DELIM_SENTENCE ".!?\n"
+#define DELIM_SENTENCE ".!?"
 #define DELIM_WORD " ,"
 
 static char**** s_document = NULL;
@@ -103,22 +103,6 @@ char*** tokenize_sentence(const char* input_paragraph)
         }
 
     next_character:;
-    }
-
-    if (p_current != p_sentence_start) {
-        sentence_length = p_current - p_sentence_start;
-        tmp_sentence = malloc(sentence_length + 1);
-        memcpy(tmp_sentence, p_sentence_start, sentence_length);
-        *(tmp_sentence + sentence_length) = '\0';
-
-        p_sentence_start = p_current;
-
-        result_paragraph = realloc(result_paragraph, (num_sentence_tokenized + 1) * sizeof(char*));
-        result_paragraph[num_sentence_tokenized] = tokenize_word(tmp_sentence);
-        ++num_sentence_tokenized;
-
-        free(tmp_sentence);
-        tmp_sentence = NULL;
     }
 
     s_total_sentence_count += num_sentence_tokenized;
@@ -221,7 +205,7 @@ void dispose(void)
 
     if (s_document == NULL) {
         return;
-    } else if (s_total_paragraph_count == 0) { /* empty file */
+    } else if (s_total_paragraph_count == 0) { /* loaded empty file */
         puts("Dispose empty file");
         free(*s_document);
         return;

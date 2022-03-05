@@ -4,8 +4,6 @@
 
 #include "document_analyzer.h"
 
-#define DELIM_SENTENCE ".!?"
-
 /*
     size_t total_word_count;
     size_t total_sentence_count;
@@ -209,7 +207,17 @@ void test_not_normal_text(void)
 int main(void)
 {
     /*
+    puts("=== Start test unorganized ===");
+    test_unorganized();
+    puts("=== Complete test unorganized ===");
     
+    puts("=== Start test nerd text ===");
+    test_nerd_text();
+    puts("=== Complete test nerd text ===");
+
+    puts("=== Start test not normal text ===");
+    test_not_normal_text();
+    puts("=== Complete test not normal text ===");
     */
 
     puts("=== Start test official ===");
@@ -227,18 +235,6 @@ int main(void)
     puts("=== Start test empty ===");
     test_empty_text();
     puts("=== Complete tset empty ===");
-
-    puts("=== Start test unorganized ===");
-    test_unorganized();
-    puts("=== Complete test unorganized ===");
-    
-    puts("=== Start test nerd text ===");
-    test_nerd_text();
-    puts("=== Complete test nerd text ===");
-
-    puts("=== Start test not normal text ===");
-    test_not_normal_text();
-    puts("=== Complete test not normal text ===");
 
     puts("=== Start test load_twofiles ===");
     load_two_files();
