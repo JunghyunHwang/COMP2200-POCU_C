@@ -196,7 +196,7 @@ char** tokenize_word(const char* input_sentence)
     result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
     result_sentence[num_word_tokenized] = NULL;
 
-    print_tokenized_sentence(result, num_word_tokenized);
+    print_tokenized_sentence(result_sentence, num_word_tokenized);
 
     return result_sentence;
 }
