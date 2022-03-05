@@ -148,10 +148,22 @@ void official_test2(void)
 
 void load_two_files(void)
 {
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+
     assert(load_document("input.txt") == TRUE);
     assert(load_document("doesntexist.txt") == FALSE);
     assert(load_document("empty.txt") == TRUE);
     assert(load_document("santa.txt") == TRUE);
+
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
     
     assert(print_as_tree("out_santa.txt") == TRUE);
 
@@ -199,6 +211,7 @@ int main(void)
     /*
     
     */
+
     puts("=== Start test official ===");
     official_test();
     puts("=== Complete test official ===");
@@ -215,10 +228,6 @@ int main(void)
     test_empty_text();
     puts("=== Complete tset empty ===");
 
-    puts("=== Start test load_twofiles ===");
-    load_two_files();
-    puts("=== Complete test load_twofiles ===");
-
     puts("=== Start test unorganized ===");
     test_unorganized();
     puts("=== Complete test unorganized ===");
@@ -230,6 +239,10 @@ int main(void)
     puts("=== Start test not normal text ===");
     test_not_normal_text();
     puts("=== Complete test not normal text ===");
+
+    puts("=== Start test load_twofiles ===");
+    load_two_files();
+    puts("=== Complete test load_twofiles ===");
 
     puts("No prob");
 

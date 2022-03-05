@@ -16,10 +16,6 @@ static size_t s_total_word_count = 0;
 static size_t s_total_sentence_count = 0;
 static size_t s_total_paragraph_count = 0;
 
-/*
-    문장이 끝나지 않고 문단이 끝났다면? => 문장도 끝내야함
-*/
-
 int load_document(const char* document)
 {
     FILE* stream;
@@ -198,7 +194,7 @@ char** tokenize_word(const char* input_sentence)
     assert(p_current == p_word_start);
 
     s_total_word_count += num_word_tokenized;
-/*
+
     {
         size_t i;
         puts("============ Save Word ============");
@@ -207,7 +203,7 @@ char** tokenize_word(const char* input_sentence)
             printf("%s\n", result_sentence[i]);
         }
     }
-*/
+
     result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
     result_sentence[num_word_tokenized] = NULL;
 
