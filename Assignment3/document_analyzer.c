@@ -8,7 +8,7 @@
 #include "document_analyzer.h"
 
 #define LINE_LENGTH (4096)
-#define DELIM_SENTENCE ".!?"
+#define DELIM_SENTENCE ".!?\n"
 #define DELIM_WORD " ,"
 
 static char**** s_document = NULL;
@@ -27,11 +27,8 @@ int load_document(const char* document)
     if (stream == NULL) {
         perror("Fail to file open");
         return FALSE;
-    } else if (fgets(line, LINE_LENGTH, stream) == NULL) {
-        return TRUE;
     }
 
-    rewind(stream);
     dispose();
     num_paragraph_tokenized = 0;
 
@@ -45,7 +42,7 @@ int load_document(const char* document)
             continue;
         }
 
-        printf("Paragraph: \n%s\n", line);
+        printf("\nParagraph: \n%s", line);
 
         s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
         s_document[num_paragraph_tokenized] = tokenize_sentence(line);
@@ -63,9 +60,9 @@ int load_document(const char* document)
 char*** tokenize_sentence(const char* input_paragraph)
 {
     char*** result_paragraph;
-    const char* p_current;
-    const char* p_sentence_start;
     char* tmp_sentence;
+    const char* p_sentence_start;
+    const char* p_current;
     size_t num_sentence_tokenized;
     size_t sentence_length;
 
@@ -96,11 +93,30 @@ char*** tokenize_sentence(const char* input_paragraph)
                 result_paragraph[num_sentence_tokenized] = tokenize_word(tmp_sentence);
                 ++num_sentence_tokenized;
 
+                free(tmp_sentence);
+                tmp_sentence = NULL;
+
                 goto next_character;
             }
         }
 
     next_character:;
+    }
+
+    if (p_current != p_sentence_start) {
+        sentence_length = p_current - p_sentence_start;
+        tmp_sentence = malloc(sentence_length + 1);
+        memcpy(tmp_sentence, p_sentence_start, sentence_length);
+        *(tmp_sentence + sentence_length) = '\0';
+
+        p_sentence_start = p_current;
+
+        result_paragraph = realloc(result_paragraph, (num_sentence_tokenized + 1) * sizeof(char*));
+        result_paragraph[num_sentence_tokenized] = tokenize_word(tmp_sentence);
+        ++num_sentence_tokenized;
+
+        free(tmp_sentence);
+        tmp_sentence = NULL;
     }
 
     s_total_sentence_count += num_sentence_tokenized;
@@ -147,6 +163,8 @@ char** tokenize_word(const char* input_sentence)
                 result_sentence[num_word_tokenized] = word;
                 ++num_word_tokenized;
 
+                word = NULL;
+
                 goto next_character;
             }
         }
@@ -169,6 +187,8 @@ char** tokenize_word(const char* input_sentence)
         result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
         result_sentence[num_word_tokenized] = word;
         ++num_word_tokenized;
+
+        word = NULL;
     }
 
     assert(p_current == p_word_start);
@@ -260,9 +280,7 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph_or_null(const size_t paragraph_index)
 {
-    if (s_document == NULL) {
-        return NULL;
-    } else if (paragraph_index >= s_total_paragraph_count) {
+    if (paragraph_index >= s_total_paragraph_count) {
         return NULL;
     }
 

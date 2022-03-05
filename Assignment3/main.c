@@ -6,6 +6,19 @@
 
 #define DELIM_SENTENCE ".!?"
 
+/*
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
+*/
+
 void official_test(void)
 {
     const char** sentence = NULL;
@@ -13,8 +26,20 @@ void official_test(void)
     size_t i = 0U;
     size_t j = 0U;
 
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+
     assert(load_document("doesntexist.txt") == FALSE);
     assert(load_document("input.txt") == TRUE);
+
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
 
     assert(get_total_word_count() == 58U);
     assert(get_total_sentence_count() == 9U);
@@ -123,27 +148,28 @@ void official_test2(void)
 
 void load_two_files(void)
 {
-    /*
-        santa 로드 -> empty 로드 -> print_as_tree
-        이러면 내코드는 아무것도 출력 x
-        total_word_count = get_total_word_count();
-        total_sentence_count = get_total_sentence_count();
-        total_paragraph_count = get_total_paragraph_count();
-
-        printf("Total paragraph count: %d\n", total_paragraph_count);
-        printf("Total sentence count: %d\n", total_sentence_count);
-        printf("Total word count: %d\n", total_word_count);
-    */
-    size_t total_word_count;
-    size_t total_sentence_count;
-    size_t total_paragraph_count;
-
     assert(load_document("input.txt") == TRUE);
     assert(load_document("doesntexist.txt") == FALSE);
     assert(load_document("empty.txt") == TRUE);
-    /*assert(load_document("santa.txt") == TRUE);*/
+    assert(load_document("santa.txt") == TRUE);
     
-    assert(print_as_tree("output.txt") == TRUE);
+    assert(print_as_tree("out_santa.txt") == TRUE);
+
+    dispose();
+}
+
+void test_nerd_text(void)
+{
+    assert(load_document("nerd.txt") == TRUE);
+    assert(print_as_tree("out_nerd.txt") == TRUE);
+
+    dispose();
+}
+
+void test_not_normal_text(void)
+{
+    assert(load_document("not_normal.txt") == TRUE);
+    assert(print_as_tree("out_not_normal.txt") == TRUE);
 
     dispose();
 }
@@ -164,7 +190,7 @@ int main(void)
     puts("=== Start test official2 ===");
     official_test2();
     puts("=== Complete test official2 ===");
-    
+
     puts("=== Start test empty ===");
     test_empty_text();
     puts("=== Complete tset empty ===");
@@ -172,6 +198,14 @@ int main(void)
     puts("=== Start test load_twofiles ===");
     load_two_files();
     puts("=== Complete test load_twofiles ===");
+
+    puts("=== Start test nerd text ===");
+    test_nerd_text();
+    puts("=== Complete test nerd text ===");
+
+    puts("=== Start test not normal text ===");
+    test_not_normal_text();
+    puts("=== Complete test not normal text ===");
 
     puts("No prob");
 

@@ -1,0 +1,59 @@
+Paragraph 0:
+    Sentence 0:
+        This
+        is
+        not
+        normal
+        text
+
+Paragraph 1:
+    Sentence 0:
+        why
+        this
+        text
+        not
+        normal
+    Sentence 1:
+        because
+        this
+        text
+        doesn't
+        have
+        full
+        stop
+
+Paragraph 2:
+    Sentence 0:
+        but
+        my
+        program
+        judge
+        wisely
+
+Paragraph 3:
+    Sentence 0:
+        문장
+        구분
+        문자
+        안
+        써도
+        알잘딱으로
+        문단이
+        끝나면
+        그
+        앞에
+        것들
+        문장으로
+        구분함
+
+Paragraph 4:
+    Sentence 0:
+        어때요
+
+Paragraph 5:
+    Sentence 0:
+        참
+
+Paragraph 6:
+    Sentence 0:
+        똑똑하죠

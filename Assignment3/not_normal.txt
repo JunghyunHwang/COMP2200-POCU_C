@@ -1,0 +1,14 @@
+This is not normal text
+why this text not normal? because this text doesn't have full stop
+but my program judge wisely
+문장 구분 문자 안 써도 알잘딱으로 문단이 끝나면 그 앞에 것들 문장으로 구분함
+어때요?
+참
+
+
+
+
+
+
+
+똑똑하죠
