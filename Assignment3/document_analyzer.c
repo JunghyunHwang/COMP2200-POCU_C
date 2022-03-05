@@ -35,6 +35,11 @@ int load_document(const char* document)
     while (TRUE) {
         if (fgets(line, LINE_LENGTH, stream) == NULL) {
             clearerr(stream);
+
+            if (num_paragraph_tokenized == 0) {
+                return TRUE;
+            }
+
             break;
         }
 
@@ -204,10 +209,6 @@ void dispose(void)
     size_t k;
 
     if (s_document == NULL) {
-        return;
-    } else if (s_total_paragraph_count == 0) { /* loaded empty file */
-        puts("Dispose empty file");
-        free(*s_document);
         return;
     }
 
