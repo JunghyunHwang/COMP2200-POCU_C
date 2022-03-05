@@ -27,11 +27,8 @@ int load_document(const char* document)
     if (stream == NULL) {
         perror("Fail to file open");
         return FALSE;
-    } else if (fgets(line, LINE_LENGTH, stream) == NULL) {
-        return TRUE;
     }
 
-    rewind(stream);
     dispose();
     num_paragraph_tokenized = 0;
 
@@ -262,9 +259,7 @@ size_t get_total_paragraph_count(void)
 
 const char*** get_paragraph_or_null(const size_t paragraph_index)
 {
-    if (s_document == NULL) {
-        return NULL;
-    } else if (paragraph_index >= s_total_paragraph_count) {
+    if (paragraph_index >= s_total_paragraph_count) {
         return NULL;
     }
 
@@ -314,9 +309,7 @@ size_t get_paragraph_sentence_count(const char*** paragraph)
 
 const char** get_sentence_or_null(const size_t paragraph_index, const size_t sentence_index)
 {
-    if (s_document == NULL) {
-        return NULL;
-    } else if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
+    if (paragraph_index >= s_total_paragraph_count || sentence_index >= s_total_sentence_count) {
         return NULL;
     }
 

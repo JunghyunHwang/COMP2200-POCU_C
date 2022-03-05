@@ -140,8 +140,6 @@ void load_two_files(void)
 
     assert(load_document("input.txt") == TRUE);
     assert(load_document("doesntexist.txt") == FALSE);
-    assert(load_document("empty.txt") == TRUE);
-    /*assert(load_document("santa.txt") == TRUE);*/
     
     assert(print_as_tree("output.txt") == TRUE);
 
