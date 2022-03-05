@@ -7,7 +7,7 @@
 
 #include "document_analyzer.h"
 
-#define LINE_LENGTH (4096)
+#define LINE_LENGTH (1024)
 #define DELIM_SENTENCE ".!?"
 #define DELIM_WORD " ,"
 
@@ -15,6 +15,16 @@ static char**** s_document = NULL;
 static size_t s_total_word_count = 0;
 static size_t s_total_sentence_count = 0;
 static size_t s_total_paragraph_count = 0;
+
+void print_tokenized_sentence(char** sentence, size_t tokenized_count)
+{
+    size_t i;
+
+    puts("============ Save Word ============");
+    for (i = 0; i < toeknized_count; ++i) {
+        printf("%s\n", sentence[i]);
+    }
+}
 
 int load_document(const char* document)
 {
@@ -30,6 +40,7 @@ int load_document(const char* document)
     }
 
     dispose();
+
     num_paragraph_tokenized = 0;
 
     while (TRUE) {
@@ -180,21 +191,12 @@ char** tokenize_word(const char* input_sentence)
         word = NULL;
     }
 
-    assert(p_current == p_word_start);
-
     s_total_word_count += num_word_tokenized;
-
-    {
-        size_t i;
-        puts("============ Save Word ============");
-
-        for (i = 0; i < num_word_tokenized; ++i) {
-            printf("%s\n", result_sentence[i]);
-        }
-    }
 
     result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
     result_sentence[num_word_tokenized] = NULL;
+
+    print_tokenized_sentence(result, num_word_tokenized);
 
     return result_sentence;
 }
