@@ -16,6 +16,10 @@ static size_t s_total_word_count = 0;
 static size_t s_total_sentence_count = 0;
 static size_t s_total_paragraph_count = 0;
 
+/*
+    문장이 끝나지 않고 문단이 끝났다면? => 문장도 끝내야함
+*/
+
 int load_document(const char* document)
 {
     FILE* stream;
@@ -343,6 +347,7 @@ int print_as_tree(const char* filename)
     size_t k;
 
     if (s_document == NULL || s_total_paragraph_count == 0) {
+        puts("Only null loaded document memory");
         return FALSE;
     }
 
