@@ -53,6 +53,8 @@ int load_document(const char* document)
     s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
     s_document[num_paragraph_tokenized] = NULL;
 
+    fclose(stream);
+
     return TRUE;
 }
 
@@ -369,6 +371,8 @@ int print_as_tree(const char* filename)
             }
         }
     }
+
+    fclose(stream);
 
     return TRUE;
 }
