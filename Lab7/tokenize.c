@@ -9,13 +9,13 @@ char** tokenize_malloc(const char* str, const char* delim)
     char* token;
     const char* p_current;
     const char* p_tokenize_start;
-    size_t num_tokenized;
-    size_t count;
+    size_t num_tokenized_count;
+    size_t token_length;
 
     p_current = str;
     p_tokenize_start = str;
 
-    num_tokenized = 0;
+    num_tokenized_count = 0;
     result = NULL;
 
     if (*str == '\0') {
@@ -25,14 +25,16 @@ char** tokenize_malloc(const char* str, const char* delim)
         }
         --p_current;
 
-        count = p_current - p_tokenize_start;
-        token = malloc(count + 1);
-        memcpy(token, p_tokenize_start, count);
-        *(token + count) = '\0';
+        token_length = p_current - p_tokenize_start;
+        token = malloc(token_length + 1);
+        memcpy(token, p_tokenize_start, token_length);
+        *(token + token_length) = '\0';
 
-        result = realloc(result, (num_tokenized + 1) * sizeof(char*));
-        result[num_tokenized] = token;
-        ++num_tokenized;
+        result = realloc(result, (num_tokenized_count + 1) * sizeof(char*));
+        result[num_tokenized_count] = token;
+        ++num_tokenized_count;
+
+        token = NULL;
 
         goto add_null;
     }
@@ -42,21 +44,23 @@ char** tokenize_malloc(const char* str, const char* delim)
 
         for (; *p_delim != '\0'; ++p_delim) {
             if (*p_current == *p_delim) {
-                if (p_current == p_tokenize_start) {
+                if (p_current == p_tokenize_start) { /* 연속되는 구분문자 */
                     p_tokenize_start = p_current + 1;
                     goto next_character;
                 }
 
-                count = p_current - p_tokenize_start;
-                token = malloc(count + 1);
-                memcpy(token, p_tokenize_start, count);
-                *(token + count) = '\0';
+                token_length = p_current - p_tokenize_start;
+                token = malloc(token_length + 1);
+                memcpy(token, p_tokenize_start, token_length);
+                *(token + token_length) = '\0';
 
                 p_tokenize_start = p_current + 1;
 
-                result = realloc(result, (num_tokenized + 1) * sizeof(char*));
-                result[num_tokenized] = token;
-                ++num_tokenized;
+                result = realloc(result, (num_tokenized_count + 1) * sizeof(char*));
+                result[num_tokenized_count] = token;
+                ++num_tokenized_count;
+
+                token = NULL;
 
                 goto next_character;
             }
@@ -66,22 +70,24 @@ char** tokenize_malloc(const char* str, const char* delim)
     }
 
     if (p_current != p_tokenize_start) {
-        count = p_current - p_tokenize_start;
-        token = malloc(count + 1);
-        memcpy(token, p_tokenize_start, count);
-        *(token + count) = '\0';
+        token_length = p_current - p_tokenize_start;
+        token = malloc(token_length + 1);
+        memcpy(token, p_tokenize_start, token_length);
+        *(token + token_length) = '\0';
 
         p_tokenize_start = p_current;
 
-        result = realloc(result, (num_tokenized + 1) * sizeof(char*));
-        result[num_tokenized] = token;
-        ++num_tokenized;
+        result = realloc(result, (num_tokenized_count + 1) * sizeof(char*));
+        result[num_tokenized_count] = token;
+        ++num_tokenized_count;
+
+        token = NULL;
     }
 
 add_null:
-    result = realloc(result, (num_tokenized + 1) * sizeof(char*));
-    result[num_tokenized] = NULL;
-    ++num_tokenized;
+    result = realloc(result, (num_tokenized_count + 1) * sizeof(char*));
+    result[num_tokenized_count] = NULL;
+    ++num_tokenized_count;
 
     return result;
 }
