@@ -86,8 +86,32 @@ void test_check_offset(void)
 	printf("offset: %d\n", p_num - nums);
 }
 
+void test_midterm(void)
+{
+	char alpha[4][5] = {
+		{ 'a', 'b', 'c', 'd', 'e' },
+		{ 'f', 'g', 'h', 'i', 'j'},
+		{ 'k', 'l', 'm', 'n', 'o'},
+		{ 'p', 'q', 'r', 's', '\0'}
+	};
+
+	char* p = (char*)((alpha + 1) + 1);
+	char* str = "POCU";
+	char* ch = str;
+	size_t i;
+
+	for (i = 0; i < 5; ++i) {
+		size_t num;
+		printf("%c", *ch);
+		num = ch[1] - ch[0];
+		ch += ch[1] - ch[0];
+		printf("%p\n", (void*)ch);
+		printf("num is %d\n", num);
+	}
+}
+
 int main(void)
 {
-    test_reference_copy();
+    test_midterm();
 	return 0;
 }

@@ -7,7 +7,7 @@
 
 #include "document_analyzer.h"
 
-#define LINE_LENGTH (1023)
+#define LINE_LENGTH (1024)
 #define DELIM_SENTENCE ".!?"
 #define DELIM_WORD " ,"
 
@@ -47,7 +47,7 @@ int load_document(const char* document)
         if (fgets(line, LINE_LENGTH, stream) == NULL) {
             clearerr(stream);
 
-            if (num_paragraph_tokenized == 0) {
+            if (num_paragraph_tokenized == 0) { /* empty file */
                 return TRUE;
             }
 
@@ -61,8 +61,7 @@ int load_document(const char* document)
         printf("\nParagraph: \n%s", line);
 
         s_document = realloc(s_document, (num_paragraph_tokenized + 1) * sizeof(char*));
-        s_document[num_paragraph_tokenized] = tokenize_sentence(line);
-        ++num_paragraph_tokenized;
+        s_document[num_paragraph_tokenized++] = tokenize_sentence(line);
     }
 
     s_total_paragraph_count += num_paragraph_tokenized;
@@ -108,8 +107,7 @@ char*** tokenize_sentence(const char* input_paragraph)
                 p_sentence_start = p_current + 1;
 
                 result_paragraph = realloc(result_paragraph, (num_sentence_tokenized + 1) * sizeof(char*));
-                result_paragraph[num_sentence_tokenized] = tokenize_word(tmp_sentence);
-                ++num_sentence_tokenized;
+                result_paragraph[num_sentence_tokenized++] = tokenize_word(tmp_sentence);
 
                 free(tmp_sentence);
                 tmp_sentence = NULL;
@@ -162,8 +160,7 @@ char** tokenize_word(const char* input_sentence)
                 p_word_start = p_current + 1;
 
                 result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
-                result_sentence[num_word_tokenized] = word;
-                ++num_word_tokenized;
+                result_sentence[num_word_tokenized++] = word;
 
                 word = NULL;
 
@@ -185,8 +182,7 @@ char** tokenize_word(const char* input_sentence)
         p_word_start = p_current;
 
         result_sentence = realloc(result_sentence, (num_word_tokenized + 1) * sizeof(char*));
-        result_sentence[num_word_tokenized] = word;
-        ++num_word_tokenized;
+        result_sentence[num_word_tokenized++] = word;
 
         word = NULL;
     }
