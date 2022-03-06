@@ -7,7 +7,7 @@
 
 #include "document_analyzer.h"
 
-#define LINE_LENGTH (512)
+#define LINE_LENGTH (1023)
 #define DELIM_SENTENCE ".!?"
 #define DELIM_WORD " ,"
 
