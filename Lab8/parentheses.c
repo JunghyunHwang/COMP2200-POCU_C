@@ -5,6 +5,11 @@
 
 #define NOT_PARENTHESIS (-1)
 
+typedef struct {
+    char parenthesis;
+    parenthesis_t address;
+} opening_parentheses_t;
+
 int is_closing_parenthesis(const char* closing_parentheses, const char character)
 {
     int result_index = -1;
@@ -22,9 +27,29 @@ int is_closing_parenthesis(const char* closing_parentheses, const char character
     return result_index;
 }
 
+int is_opening_parenthesis(const char* opening_parentheses, const char character)
+{
+    int result_index = -1;
+    const char* p_current = opening_parentheses;
+
+    while (*p_current != '\0') {
+        if (*p_current == character) {
+            result_index = p_current - opening_parentheses;
+            break;
+        }
+
+        ++p_current;
+    }
+
+    return result_index;
+}
+
 size_t get_matching_parentheses(parenthesis_t* out_parentheses, size_t max_size, const char* str)
 {
+    opening_parentheses_t parentheses_stack[max_size];
+    opening_parentheses_t* p_parenthese_stack = parentheses_stack;
     size_t num_parentheses_count = 0;
+    size_t num_parentheses_stack_count = 0;
     size_t opening_index;
     size_t closing_index;
     const char* p_current;
@@ -40,7 +65,16 @@ size_t get_matching_parentheses(parenthesis_t* out_parentheses, size_t max_size,
     /* 여는 괄호 기준을 배열에 담고 닫는 괄호를 만나면 마지막 요소와 짝꿍 */
 
     while (*p_current != '\0') {
-        const char* p_seek;
+        if (is_opening_parenthesis(opening_parentheses, *p_current) >= 0) {
+            p_parenthese_stack[num_parentheses_stack_count].parenthesis = *p_current;
+            p_parenthese_stack[num_parentheses_stack_count].address = p_current;
+            ++num_parentheses_stack_count;
+        } else if ((mapping_opening_index = is_closing_parenthesis(closing_parentheses, *p_current)) >= 0) {
+            
+        }
+
+
+
 
         mapping_opening_index = is_closing_parenthesis(closing_parentheses, *p_current);
 
