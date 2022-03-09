@@ -2,47 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 
+void test_int_malloc(void)
+{
+    int* nums;
+    int* test;
+    size_t nums_count = 0;
+    size_t i;
+
+    nums = NULL;
+
+    for (i = 0; i < 3; ++i) {
+        nums = realloc(nums, (nums_count + 1) * sizeof(int));
+        nums[i] = i + 1;
+
+        ++nums_count;
+    }
+
+    test = nums + 1;
+    printf("%d\n", *test);
+    printf("%p\n", (void*)test);
+
+    test = NULL;
+    printf("%d\n", *test);
+    printf("%p\n", (void*)test);
+
+	free(nums);
+}
+
 int main(void)
 {
-	size_t i;
-	char*** paragraph = NULL;
-	char** sentence1 = NULL;
-	char* sentence2[3];
-
-	char word1[] = "Hi";
-	char word2[] = "you can call me";
-	char word3[] = "ja hwang";
-
-	char word4[] = "Hello, there";
-	char word5[] = "my name is";
-	char word6[] = "Baro";
-
-	for (i = 0; i < 3; ++i) {
-		if (i == 0) {
-			sentence1 = realloc(sentence1, (i + 1) * sizeof(char*));
-			sentence1[i] = word1;
-		}
-		else if (i == 1) {
-			sentence1 = realloc(sentence1, (i + 1) * sizeof(char*));
-			sentence1[i] = word2;
-		}
-		else {
-			sentence1 = realloc(sentence1, (i + 1) * sizeof(char*));
-			sentence1[i] = word3;
-		}
-	}
-
-	sentence2[0] = word4;
-	sentence2[1] = word5;
-	sentence2[2] = word6;
-
-	printf("sentence1 size: %d\n", strlen(*sentence1));
-	paragraph = realloc(paragraph, 2 * sizeof(char*));
-
-	printf("paragraph size: %d\n", strlen(paragraph));
-
-	free(sentence1);
-	free(paragraph);
+	test_int_malloc();
 
 	return 0;
 }

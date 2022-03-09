@@ -59,29 +59,16 @@ void official_test(void)
 
     assert(parentheses[4].opening_index == 23);
     assert(parentheses[4].closing_index == 24);
+
+    len = get_matching_parentheses(parentheses, 3, "{this}(bracket;[](){[(><>)");
+
+    assert(len = 3);
 }
 
 int main(void)
 {
-    parenthesis_t parentheses[PARENTHESES_MAX_SIZE];
+    official_test();
 
-    size_t len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "}{)(][><");
-
-    assert(len == 0);
-
-    len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "{{{}}}");
-
-    assert(len == 3);
-/*
-    assert(parentheses[0].opening_index == 0);
-    assert(parentheses[0].closing_index == 5);
-
-    assert(parentheses[1].opening_index == 1);
-    assert(parentheses[1].closing_index == 4);
-
-    assert(parentheses[2].opening_index == 2);
-    assert(parentheses[2].closing_index == 3);
-*/
     puts("No prob");
 
     return 0;
