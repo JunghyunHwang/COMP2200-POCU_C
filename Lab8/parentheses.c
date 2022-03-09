@@ -46,8 +46,7 @@ int is_opening_parenthesis(const char* opening_parentheses, const char character
 
 size_t get_matching_parentheses(parenthesis_t* out_parentheses, size_t max_size, const char* str)
 {
-    opening_parentheses_t parentheses_stack[max_size];
-    opening_parentheses_t* p_parenthese_stack = parentheses_stack;
+    const char* parentheses_stack[max_size];
     size_t num_parentheses_count = 0;
     size_t num_parentheses_stack_count = 0;
     size_t opening_index;
@@ -63,46 +62,29 @@ size_t get_matching_parentheses(parenthesis_t* out_parentheses, size_t max_size,
     p_last_opening_parenthsis = NULL;
 
     /* 여는 괄호 기준을 배열에 담고 닫는 괄호를 만나면 마지막 요소와 짝꿍 */
+    /* 49 compile errors change malloc */
 
     while (*p_current != '\0') {
         if (is_opening_parenthesis(opening_parentheses, *p_current) >= 0) {
-            p_parenthese_stack[num_parentheses_stack_count].parenthesis = *p_current;
-            p_parenthese_stack[num_parentheses_stack_count].address = p_current;
-            ++num_parentheses_stack_count;
+            parentheses_stack[num_parentheses_stack_count++] = p_current;
         } else if ((mapping_opening_index = is_closing_parenthesis(closing_parentheses, *p_current)) >= 0) {
-            
-        }
+            const char** p_seek = parentheses_stack + num_parentheses_stack_count - 1;
 
+            while (parentheses_stack <= p_seek) {
+                if (**p_seek == opening_parentheses[mapping_opening_index]) {
+                    opening_index = *p_seek - str;
+                    closing_index = p_current - str;
 
+                    out_parentheses[num_parentheses_count].opening_index = opening_index;
+                    out_parentheses[num_parentheses_count++].closing_index = closing_index;
 
+                    break;
+                }
 
-        mapping_opening_index = is_closing_parenthesis(closing_parentheses, *p_current);
-
-        if (mapping_opening_index == NOT_PARENTHESIS) {
-        	goto next_character;
-        }
-
-        p_seek = p_last_opening_parenthsis != NULL ? p_last_opening_parenthsis : p_current - 1;
-        while (str <= p_seek) {
-            if (*p_seek == opening_parentheses[mapping_opening_index]) {
-                opening_index = p_seek - str;
-                closing_index = p_current - str;
-
-                out_parentheses[num_parentheses_count].opening_index = opening_index;
-                out_parentheses[num_parentheses_count++].closing_index = closing_index;
-
-                p_last_opening_parenthsis = p_seek - 1;
-                break;
+                --p_seek;
             }
-
-            --p_seek;
         }
 
-        if (num_parentheses_count >= max_size) {
-            break;
-        }
-
-    next_character:
         ++p_current;
     }
 
