@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include "document_analyzer.h"
 
@@ -70,6 +71,8 @@ int load_document(const char* document)
     s_document[num_paragraph_tokenized] = NULL;
 
     fclose(stream);
+
+    printf("%d\n", isspace(" "));
 
     return TRUE;
 }
