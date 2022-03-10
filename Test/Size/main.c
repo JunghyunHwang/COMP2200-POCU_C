@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+typedef struct {
+	unsigned char ch;
+	unsigned short num;
+	char str[64];
+} padding_t;
+
 void test_type_size(void)
 {
     char* test1;
@@ -30,12 +36,17 @@ void test_array_size(void)
 	printf("0x%p\n", (void*)&d_nums[0]);
 	printf("0x%p\n", (void*)&d_nums[1]);
 	printf("Distance %d\n", d_nums[1] - d_nums[0]); /* 3 */
+	printf("%f\n", *(d_nums + 1));
 }
 
 int main(void)
 {
+	/*
 	test_type_size();
+	*/
+	
 	test_array_size();
+	printf("%d\n", sizeof(padding_t));
 
 	return 0;
 }
