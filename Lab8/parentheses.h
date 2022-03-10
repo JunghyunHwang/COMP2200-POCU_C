@@ -5,8 +5,8 @@
 #define FALSE (0)
 
 typedef struct {
-	size_t opening_index;
-	size_t closing_index;
+    size_t opening_index;
+    size_t closing_index;
 } parenthesis_t;
 
 int is_parenthesis(const char* closing_parentheses, const char character);
