@@ -11,9 +11,8 @@ void official_test(void)
     size_t len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "}{)(][><");
 
     assert(len == 0);
-
     len = get_matching_parentheses(parentheses, PARENTHESES_MAX_SIZE, "{{{}}}");
-
+    
     assert(len == 3);
 
     assert(parentheses[0].opening_index == 0);
@@ -60,9 +59,15 @@ void official_test(void)
     assert(parentheses[4].opening_index == 23);
     assert(parentheses[4].closing_index == 24);
 
-    len = get_matching_parentheses(parentheses, 3, "{this}(bracket;[](){[(><>)");
+    len = get_matching_parentheses(parentheses, 2, "{(this is[t]{r}(ic)k>>>)}");
 
-    assert(len = 3);
+    assert(len == 2);
+
+    assert(parentheses[0].opening_index == 0);
+    assert(parentheses[0].closing_index == 24);
+
+    assert(parentheses[1].opening_index == 1);
+    assert(parentheses[1].closing_index == 23);
 }
 
 int main(void)
