@@ -23,6 +23,11 @@ int is_parenthesis(const char* opening_parentheses, const char character)
 
 size_t get_matching_parentheses(parenthesis_t* out_parentheses, size_t max_size, const char* str)
 {
+    /* 
+        1. str을 처음 부터 끝까지 훑으면서 여는 괄호는 queue으로, 닫는 괄호는 stack으로 저장
+        2. queue와 stack을 연결 시켜서 
+    */
+
     size_t parentheses_matched_count = 0;
     const char* p_current;
     const char* opening_parentheses = "{([<"; /* 쌍이되는 괄호끼리 같은 index여야 함 */

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <assert.h>
 
 #include "document_analyzer.h"
@@ -209,6 +210,7 @@ int main(void)
     /*
     
     */
+
     puts("=== Start test official ===");
     official_test();
     puts("=== Complete test official ===");

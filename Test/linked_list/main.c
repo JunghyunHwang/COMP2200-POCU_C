@@ -1,56 +1,72 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
     int value;
     void* next;
 } node_t;
 
-void insert_front(node_t** head, int value);
-void print_node(node_t* head);
+void insert_front(node_t** phead, int n);
+void insert_back(node_t** phead, int n);
+void print_node(const node_t* phead);
+void destroy(node_t* phead);
 
 int main(void)
 {
     node_t* head = NULL;
-    insert_front(&head, 3);
+
+    insert_front(&head, 10);
+    insert_front(&head, 9);
+    insert_front(&head, 8);
+    insert_front(&head, 7);
+    insert_front(&head, 6);
     insert_front(&head, 5);
+    insert_front(&head, 4);
+    insert_front(&head, 3);
+    insert_front(&head, 2);
+    insert_front(&head, 1);
+    insert_front(&head, 0);
+
+    print_node(head);
+
+    destroy(head);
+    head = NULL;
+
+    puts("No prob");
 
     return 0;
 }
 
-void insert_front(node_t** head, int value)
+void insert_front(node_t** phead, int n)
 {
-    node_t new_node;
+    node_t* new_node;
 
-    new_node.value = value;
-    new_node.next = *head;
+    new_node = malloc(sizeof(node_t));
 
-    puts("===================");
-
-    printf("new node value: %d\n", new_node.value);
-    printf("new node next node address: %p\n", new_node.next);
-
-    printf("head pointing address: %p\n", (void*)*head);
-
-    *head = &new_node;
-
-    printf("changed head pointing address: %p\n", (void*)*head);
-    printf("new node address: %p\n", (void*)&new_node);
+    new_node->value = n;
+    new_node->next = *phead;
+    *phead = new_node;
 }
 
-void print_node(node_t* head)
+void destroy(node_t* phead)
 {
-    node_t* pp;
-    void* tmp;
+    node_t* tmp;
 
-    pp = head;
-
-    puts("==== Print node ====");
-    while (pp->next != NULL) {
-        printf("%d ", pp->value);
-
-        tmp = pp->next;
-        pp = tmp;
+    while (phead != NULL) {
+        tmp = phead->next;
+        free(phead);
+        phead = tmp;
     }
+}
 
-    puts("");
+void print_node(const node_t* phead)
+{
+	const node_t* pp = phead;
+
+	while (pp != NULL) {
+        printf("%d->", pp->value);
+        pp = pp->next;
+	}
+
+	puts("NULL");
 }
