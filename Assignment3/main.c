@@ -205,12 +205,29 @@ void test_not_normal_text(void)
     dispose();
 }
 
+void test_simple_text(void)
+{
+    size_t total_word_count;
+    size_t total_sentence_count;
+    size_t total_paragraph_count;
+    assert(load_document("simple.txt") == TRUE);
+
+    total_word_count = get_total_word_count();
+    total_sentence_count = get_total_sentence_count();
+    total_paragraph_count = get_total_paragraph_count();
+
+    printf("Total paragraph count: %d\n", total_paragraph_count);
+    printf("Total sentence count: %d\n", total_sentence_count);
+    printf("Total word count: %d\n", total_word_count);
+
+    /*assert(print_as_tree("out_simple.txt") == TRUE);*/
+
+    dispose();
+}
+
 int main(void)
 {
     /*
-    
-    */
-
     puts("=== Start test official ===");
     official_test();
     puts("=== Complete test official ===");
@@ -230,6 +247,11 @@ int main(void)
     puts("=== Start test empty ===");
     test_empty_text();
     puts("=== Complete tset empty ===");
+    */
+
+    puts("=== Start test simple ===");
+    test_simple_text();
+    puts("=== Complete tset simple ===");
 
     puts("No prob");
 

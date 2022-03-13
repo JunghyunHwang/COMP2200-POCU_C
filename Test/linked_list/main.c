@@ -44,6 +44,7 @@ void insert_front(node_t** phead, int n)
     new_node = malloc(sizeof(node_t));
 
     new_node->value = n;
+
     new_node->next = *phead;
     *phead = new_node;
 }
@@ -61,12 +62,12 @@ void destroy(node_t* phead)
 
 void print_node(const node_t* phead)
 {
-	const node_t* pp = phead;
+    const node_t* pp = phead;
 
-	while (pp != NULL) {
+    while (pp != NULL){
         printf("%d->", pp->value);
         pp = pp->next;
-	}
+    }
 
-	puts("NULL");
+    puts("NULL");
 }
