@@ -49,6 +49,23 @@ void insert_front(node_t** phead, int n)
     *phead = new_node;
 }
 
+void remove(node_t** phead, int n)
+{
+    node_t** pp;
+
+    pp = phead;
+    while (*pp != NULL) {
+        if ((*pp)->value == n) {
+            node_t tmp = *pp;
+            *pp = (*pp)->next;
+            free(tmp);
+            break;
+        }
+
+        pp = &(*pp)->next;
+    }
+}
+
 void destroy(node_t* phead)
 {
     node_t* tmp;
