@@ -21,5 +21,6 @@
 }                                       \
 */
 
+#define SET(ary, start, count, value) memset(ary + start, value, count);
 
 #endif /* MACROS_H */
