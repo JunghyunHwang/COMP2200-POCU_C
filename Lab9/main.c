@@ -158,7 +158,18 @@ int main(void)
     test_slack();
     #endif
 
-    ABS(0 - 1);
+    int arr[20];
+    size_t i;
+
+    if (1 == 0) SET(arr, 0, 20, 1);
+    else SET(arr, 0, 1, 1235);
+    assert(arr[0] == 1235);
+
+    SET(arr, 0, 20, 0);
+
+    for (i = 0; i < 20; ++i) {
+        assert(arr[i] == 0);
+    }
 
     puts("No prob");
 
