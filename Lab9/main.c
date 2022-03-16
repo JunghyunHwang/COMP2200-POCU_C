@@ -3,7 +3,6 @@
 
 #include "macros.h"
 
-#if 0
 void test_slack(void)
 {
     int temp_value = 318;
@@ -88,7 +87,7 @@ void test_slack(void)
 
 void official_test(void)
 {
-    nt i = 0;
+    int i = 0;
     int arr[20];
     int* curr;
 
@@ -146,30 +145,15 @@ void official_test(void)
     for (i = 10; i < 20; i++) {
         assert(arr[i] == 0);
     }
-
-    return 0;
 }
-#endif
 
 int main(void)
 {
     #if 0
     official_test();
-    test_slack();
     #endif
 
-    int arr[20];
-    size_t i;
-
-    if (1 == 0) SET(arr, 0, 20, 1);
-    else SET(arr, 0, 1, 1235);
-    assert(arr[0] == 1235);
-
-    SET(arr, 0, 20, 0);
-
-    for (i = 0; i < 20; ++i) {
-        assert(arr[i] == 0);
-    }
+    test_slack();
 
     puts("No prob");
 
