@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "macros.h"
-
+#if 1
 void test_slack(void)
 {
     int temp_value = 318;
@@ -84,6 +84,7 @@ void test_slack(void)
     }
     assert(arr_int[0] == 10000004);
 }
+#endif
 
 int main(void)
 {
@@ -147,6 +148,7 @@ int main(void)
         assert(arr[i] == 0);
     }
     #endif
+
     test_slack();
 
     puts("No prob");
