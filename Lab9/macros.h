@@ -11,4 +11,6 @@
 
 #define RANGE_DESC(curr, max, min) for (curr = max; curr >= min; --curr)
 
+#define SET(ary, start, count, value)
+
 #endif /* MACROS_H */
