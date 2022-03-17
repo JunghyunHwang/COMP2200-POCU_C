@@ -151,9 +151,12 @@ int main(void)
 {
     #if 0
     official_test();
-    #endif
-
     test_slack();
+    #endif
+    int a = 10;
+    int b = 3;
+
+    printf("%d\n", MAX(++a, b));
 
     puts("No prob");
 
