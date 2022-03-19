@@ -8,7 +8,7 @@
 
 typedef struct hashmap {
     size_t (*hash_func)(const char* key);
-    node_t** plist;
+    node_t** plist; /* node의 시작 주소(head)의 주소를 담고있는 주소 */
     size_t length;
 } hashmap_t;
 
