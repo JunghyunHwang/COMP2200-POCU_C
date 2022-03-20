@@ -8,6 +8,18 @@
 #include "node.h"
 #include "hashmap.h"
 
+void print_node(hashmap_t* hashmap, int index)
+{
+    node_t** phead = &(hashmap->plist)[index];
+
+    printf("==== print index '%d' nodes ====\n", index);
+    while (*phead != NULL) {
+        printf("%d->", (*phead)->value);
+        phead = &(*phead)->next;
+    }
+    puts("NULL");
+}
+
 hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* key))
 {
     hashmap_t* hashmap = NULL;
@@ -39,6 +51,10 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     size_t index;
     size_t key_len;
 
+    if (*key == '\0') {
+        return FALSE;
+    }
+
     key_len = strlen(key);
 
     key_value = malloc(key_len + 1);
@@ -48,36 +64,21 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     index = hashmap->hash_func(key) % hashmap->length;
     phead = &(hashmap->plist)[index];
 
-    if (*phead == NULL) {
-        new_node = malloc(sizeof(node_t));
-
-        new_node->key = key_value;
-        new_node->value = value;
-        new_node->next = NULL;
-        *phead = new_node;
-
-        return TRUE;
-    }
-
-    while ((*phead)->next != NULL) {
-        if (strcmp(key_value, (*phead)->key) == 0) {
+    while (*phead != NULL) {
+        if (strcmp((*phead)->key, key) == 0) {
             return FALSE;
         }
 
-        *phead = (*phead)->next;
-    }
-
-    if (strcmp(key_value, (*phead)->key) == 0) {
-        return FALSE;
+        phead = &(*phead)->next;
     }
 
     new_node = malloc(sizeof(node_t));
 
     new_node->key = key_value;
     new_node->value = value;
-    new_node->next = NULL;
 
-    (*phead)->next = new_node;
+    new_node->next = *phead;
+    *phead = new_node;
 
     return TRUE;
 }
@@ -111,8 +112,6 @@ int update_value(hashmap_t* hashmap, const char* key, const int value)
     phead = &(hashmap->plist)[index];
 
     if (*phead == NULL) {
-        printf("[%d]This index empty", index);
-        printf("input key: \"%s\"\n", key);
         return FALSE;
     }
 
@@ -137,20 +136,16 @@ int remove_key(hashmap_t* hashmap, const char* key)
     phead = &(hashmap->plist)[index];
 
     if (*phead == NULL) {
-        printf("[%d]This index empty", index);
-        printf("input key: \"%s\"\n", key);
         return FALSE;
     }
 
     while (*phead != NULL) {
-        if (strcmp(((*phead)->next)->key, key) == 0) {
-            node** tmp = &(*phead)->next;
-            (*phead)->next = (*tmp)->next;
+        if (strcmp((*phead)->key, key) == 0) {
+            node_t* tmp = *phead;
+            *phead = (*phead)->next;
 
-            free((*tmp)->key);
-            free(*tmp);
-            tmp = NULL;
-
+            free(tmp->key);
+            free(tmp);
             return TRUE;
         }
 

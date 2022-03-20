@@ -24,4 +24,6 @@ int remove_key(hashmap_t* hashmap, const char* key);
 
 void destroy(hashmap_t* hashmap);
 
+void print_node(hashmap_t* hashmap, int index);
+
 #endif /* HASHMAP_H */
