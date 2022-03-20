@@ -69,9 +69,9 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     }
 
     key_value = malloc(key_len + 1);
-    strncpy(key_value, key, key_len);
+    memcpy(key_value, key, key_len);
     *(key_value + key_len) = '\0';
-    
+
     new_node = malloc(sizeof(node_t));
 
     new_node->key = key_value;
@@ -79,6 +79,8 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
 
     new_node->next = *phead;
     *phead = new_node;
+
+    key_value = NULL;
 
     return TRUE;
 }

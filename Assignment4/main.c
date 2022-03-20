@@ -37,7 +37,7 @@ int main(void)
 
     destroy(hashmap);
     
-    official_test();
+    /* official_test(); */
 
     puts("No prob");
 
