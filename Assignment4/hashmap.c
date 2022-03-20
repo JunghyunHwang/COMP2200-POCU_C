@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -21,10 +23,7 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
     hashmap->plist = malloc(sizeof(node_t*) * length);
 
     for (i = 0; i < length; ++i) {
-        node_t* new_node;
-        new_node = malloc(sizeof(node_t));
-        new_node = NULL;
-        (hashmap->plist)[i] = new_node;
+        (hashmap->plist)[i] = NULL;
     }
 
     puts("Init hashmap complete");
@@ -34,7 +33,8 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
 
 int add_key(hashmap_t* hashmap, const char* key, const int value)
 {
-    node_t* head_node;
+    node_t** phead;
+    node_t* new_node;
     char* key_value;
     size_t index;
     size_t key_len;
@@ -46,21 +46,118 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     *(key_value + key_len) = '\0';
 
     index = hashmap->hash_func(key) % hashmap->length;
-    head_node = (hashmap->plist)[index];
+    phead = &(hashmap->plist)[index];
 
-    if (head_node == NULL) {
-        node_t* new_node;
-
+    if (*phead == NULL) {
         new_node = malloc(sizeof(node_t));
+
         new_node->key = key_value;
         new_node->value = value;
-        new_node->next = head_node;
-        head_node = new_node;
+        new_node->next = NULL;
+        *phead = new_node;
 
         return TRUE;
     }
 
+    while ((*phead)->next != NULL) {
+        if (strcmp(key_value, (*phead)->key) == 0) {
+            return FALSE;
+        }
+
+        *phead = (*phead)->next;
+    }
+
+    if (strcmp(key_value, (*phead)->key) == 0) {
+        return FALSE;
+    }
+
+    new_node = malloc(sizeof(node_t));
+
+    new_node->key = key_value;
+    new_node->value = value;
+    new_node->next = NULL;
+
+    (*phead)->next = new_node;
+
     return TRUE;
+}
+
+int get_value(const hashmap_t* hashmap, const char* key)
+{
+    node_t** phead;
+    size_t index = hashmap->hash_func(key) % hashmap->length;
+    int result = -1;
+
+    phead = &(hashmap->plist)[index];
+
+    while (*phead != NULL) {
+
+        if (strcmp((*phead)->key, key) == 0) {
+            result = (*phead)->value;
+            break;
+        }
+
+        phead = &(*phead)->next;
+    }
+
+    return result;
+}
+
+int update_value(hashmap_t* hashmap, const char* key, const int value)
+{
+    node_t** phead;
+    size_t index = hashmap->hash_func(key) % hashmap->length;
+
+    phead = &(hashmap->plist)[index];
+
+    if (*phead == NULL) {
+        printf("[%d]This index empty", index);
+        printf("input key: \"%s\"\n", key);
+        return FALSE;
+    }
+
+    while (*phead != NULL) {
+        if (strcmp((*phead)->key, key) == 0) {
+            (*phead)->value = value;
+
+            return TRUE;
+        }
+
+        phead = &(*phead)->next;
+    }
+
+    return FALSE;
+}
+
+int remove_key(hashmap_t* hashmap, const char* key)
+{
+    node_t** phead;
+    size_t index = hashmap->hash_func(key) % hashmap->length;
+
+    phead = &(hashmap->plist)[index];
+
+    if (*phead == NULL) {
+        printf("[%d]This index empty", index);
+        printf("input key: \"%s\"\n", key);
+        return FALSE;
+    }
+
+    while (*phead != NULL) {
+        if (strcmp(((*phead)->next)->key, key) == 0) {
+            node** tmp = &(*phead)->next;
+            (*phead)->next = (*tmp)->next;
+
+            free((*tmp)->key);
+            free(*tmp);
+            tmp = NULL;
+
+            return TRUE;
+        }
+
+        phead = &(*phead)->next;
+    }
+
+    return FALSE;
 }
 
 void destroy(hashmap_t* hashmap)
@@ -80,7 +177,7 @@ void destroy(hashmap_t* hashmap)
         while (node->next != NULL) {
             node_t* tmp = node->next;
             free(node->key);
-            free(node); /*  */
+            free(node);
             node = tmp;
         }
 
