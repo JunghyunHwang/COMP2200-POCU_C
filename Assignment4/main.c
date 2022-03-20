@@ -71,7 +71,7 @@ void test_add_key(hashmap_t* hashmap)
     assert(FALSE == add_key(hashmap, "key2", 2));
 
     /* empty key string */
-    assert(FALSE == add_key(hashmap, "", 1000));
+    assert(TRUE == add_key(hashmap, "", 1000));
 }
 
 void test_get_value(hashmap_t* hashmap)

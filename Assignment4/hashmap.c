@@ -51,9 +51,7 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     size_t index;
     size_t key_len;
 
-    if (*key == '\0') {
-        return FALSE;
-    } else if (hashmap->length == 0) {
+    if (hashmap->length == 0) {
         return FALSE;
     }
 
