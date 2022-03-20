@@ -45,7 +45,7 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
 
 int add_key(hashmap_t* hashmap, const char* key, const int value)
 {
-    node_t** phead;
+    node_t** pp_next_node;
     node_t* new_node;
     char* key_value;
     size_t index;
@@ -58,14 +58,14 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     key_len = strlen(key);
 
     index = hashmap->hash_func(key) % hashmap->length;
-    phead = &(hashmap->plist)[index];
+    pp_next_node = &(hashmap->plist)[index];
 
-    while (*phead != NULL) {
-        if (strcmp((*phead)->key, key) == 0) {
+    while (*pp_next_node != NULL) {
+        if (strcmp((*pp_next_node)->key, key) == 0) {
             return FALSE;
         }
 
-        phead = &(*phead)->next;
+        pp_next_node = &(*pp_next_node)->next;
     }
 
     key_value = malloc(key_len + 1);
@@ -77,8 +77,8 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     new_node->key = key_value;
     new_node->value = value;
 
-    new_node->next = *phead;
-    *phead = new_node;
+    new_node->next = *pp_next_node;
+    *pp_next_node = new_node;
 
     key_value = NULL;
 
@@ -87,20 +87,19 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
 
 int get_value(const hashmap_t* hashmap, const char* key)
 {
-    node_t** phead;
+    node_t** pp_next_node;
     size_t index = hashmap->hash_func(key) % hashmap->length;
     int result = -1;
 
-    phead = &(hashmap->plist)[index];
+    pp_next_node = &(hashmap->plist)[index];
 
-    while (*phead != NULL) {
-
-        if (strcmp((*phead)->key, key) == 0) {
-            result = (*phead)->value;
+    while (*pp_next_node != NULL) {
+        if (strcmp((*pp_next_node)->key, key) == 0) {
+            result = (*pp_next_node)->value;
             break;
         }
 
-        phead = &(*phead)->next;
+        pp_next_node = &(*pp_next_node)->next;
     }
 
     return result;
@@ -108,23 +107,23 @@ int get_value(const hashmap_t* hashmap, const char* key)
 
 int update_value(hashmap_t* hashmap, const char* key, const int value)
 {
-    node_t** phead;
+    node_t** pp_next_node;
     size_t index = hashmap->hash_func(key) % hashmap->length;
 
-    phead = &(hashmap->plist)[index];
+    pp_next_node = &(hashmap->plist)[index];
 
-    if (*phead == NULL) {
+    if (*pp_next_node == NULL) {
         return FALSE;
     }
 
-    while (*phead != NULL) {
-        if (strcmp((*phead)->key, key) == 0) {
-            (*phead)->value = value;
+    while (*pp_next_node != NULL) {
+        if (strcmp((*pp_next_node)->key, key) == 0) {
+            (*pp_next_node)->value = value;
 
             return TRUE;
         }
 
-        phead = &(*phead)->next;
+        pp_next_node = &(*pp_next_node)->next;
     }
 
     return FALSE;
@@ -132,26 +131,26 @@ int update_value(hashmap_t* hashmap, const char* key, const int value)
 
 int remove_key(hashmap_t* hashmap, const char* key)
 {
-    node_t** phead;
+    node_t** pp_next_node;
     size_t index = hashmap->hash_func(key) % hashmap->length;
 
-    phead = &(hashmap->plist)[index];
+    pp_next_node = &(hashmap->plist)[index];
 
-    if (*phead == NULL) {
+    if (*pp_next_node == NULL) {
         return FALSE;
     }
 
-    while (*phead != NULL) {
-        if (strcmp((*phead)->key, key) == 0) {
-            node_t* tmp = *phead;
-            *phead = (*phead)->next;
+    while (*pp_next_node != NULL) {
+        if (strcmp((*pp_next_node)->key, key) == 0) {
+            node_t* tmp = *pp_next_node;
+            *pp_next_node = (*pp_next_node)->next;
 
             free(tmp->key);
             free(tmp);
             return TRUE;
         }
 
-        phead = &(*phead)->next;
+        pp_next_node = &(*pp_next_node)->next;
     }
 
     return FALSE;
