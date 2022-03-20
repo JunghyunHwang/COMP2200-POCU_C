@@ -29,9 +29,22 @@ void test_int_malloc(void)
 	free(nums);
 }
 
+void zero_malloc(void)
+{
+    int a = 10;
+    int* p;
+
+    p = malloc(0);
+
+    *p = a;
+
+    printf("%d\n", *p);
+}
+
 int main(void)
 {
 	test_int_malloc();
+    zero_malloc();
 
 	return 0;
 }

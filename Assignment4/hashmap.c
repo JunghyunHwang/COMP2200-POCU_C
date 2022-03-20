@@ -53,6 +53,8 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
 
     if (*key == '\0') {
         return FALSE;
+    } else if (hashmap->length == 0) {
+        return FALSE;
     }
 
     key_len = strlen(key);
@@ -88,9 +90,14 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
 int get_value(const hashmap_t* hashmap, const char* key)
 {
     node_t** pp_next_node;
-    size_t index = hashmap->hash_func(key) % hashmap->length;
+    size_t index;
     int result = -1;
 
+    if (hashmap->length == 0) {
+        return result;
+    }
+
+    index = hashmap->hash_func(key) % hashmap->length;
     pp_next_node = &(hashmap->plist)[index];
 
     while (*pp_next_node != NULL) {
@@ -108,8 +115,13 @@ int get_value(const hashmap_t* hashmap, const char* key)
 int update_value(hashmap_t* hashmap, const char* key, const int value)
 {
     node_t** pp_next_node;
-    size_t index = hashmap->hash_func(key) % hashmap->length;
+    size_t index;
 
+    if (hashmap->length == 0) {
+        return FALSE;
+    }
+
+    index = hashmap->hash_func(key) % hashmap->length;
     pp_next_node = &(hashmap->plist)[index];
 
     if (*pp_next_node == NULL) {
