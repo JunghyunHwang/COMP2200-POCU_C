@@ -57,10 +57,6 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
 
     key_len = strlen(key);
 
-    key_value = malloc(key_len + 1);
-    strncpy(key_value, key, key_len);
-    *(key_value + key_len) = '\0';
-
     index = hashmap->hash_func(key) % hashmap->length;
     phead = &(hashmap->plist)[index];
 
@@ -72,6 +68,10 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
         phead = &(*phead)->next;
     }
 
+    key_value = malloc(key_len + 1);
+    strncpy(key_value, key, key_len);
+    *(key_value + key_len) = '\0';
+    
     new_node = malloc(sizeof(node_t));
 
     new_node->key = key_value;
