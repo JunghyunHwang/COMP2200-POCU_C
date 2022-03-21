@@ -165,7 +165,7 @@ int remove_key(hashmap_t* hashmap, const char* key)
 
     return FALSE;
 }
-
+/*
 void destroy(hashmap_t* hashmap)
 {
     size_t i;
@@ -174,14 +174,48 @@ void destroy(hashmap_t* hashmap)
     puts("Dispose start");
 
     for (i = 0; i < hashmap->length; ++i) {
-        node_t** pnode = &(hashmap->plist)[i];
+        node_t* node = (hashmap->plist)[i];
 
-        while (*pnode != NULL) {
-            node_t** tmp = &(*pnode)->next;
+        if (node == NULL) {
+            goto next_index;
+        }
 
-            free((*pnode)->key);
-            free(*pnode);
-            pnode = tmp;
+        while (node->next != NULL) {
+            node_t* tmp = node->next;
+            free(node->key);
+            free(node);
+            node = tmp;
+        }
+
+    next_index:;
+    }
+
+    free(hashmap->plist);
+    hashmap->plist = NULL;
+
+    free(hashmap);
+    hashmap = NULL;
+
+    puts("Dispose complete");
+    puts("==================");
+}
+*/
+void destroy(hashmap_t* hashmap)
+{
+    size_t i;
+
+    puts("==================");
+    puts("Dispose start");
+
+    for (i = 0; i < hashmap->length; ++i) {
+        node_t* p_node = (hashmap->plist)[i];
+
+        while (p_node != NULL) {
+            node_t* tmp = p_node->next;
+
+            free(p_node->key);
+            free(p_node);
+            p_node = tmp;
         }
     }
 
