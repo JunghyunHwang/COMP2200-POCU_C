@@ -174,22 +174,15 @@ void destroy(hashmap_t* hashmap)
     puts("Dispose start");
 
     for (i = 0; i < hashmap->length; ++i) {
-        node_t* node = (hashmap->plist)[i];
+        node_t** pnode = &(hashmap->plist)[i];
 
-        if (node == NULL) {
-            goto dispose_node;
+        while (*pnode != NULL) {
+            node_t** tmp = &(*pnode)->next;
+
+            free((*pnode)->key);
+            free(*pnode);
+            pnode = tmp;
         }
-
-        while (node->next != NULL) {
-            node_t* tmp = node->next;
-            free(node->key);
-            free(node);
-            node = tmp;
-        }
-
-    dispose_node:
-        free(node);
-        node = NULL;
     }
 
     free(hashmap->plist);
