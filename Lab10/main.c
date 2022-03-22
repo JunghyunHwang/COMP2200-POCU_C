@@ -26,7 +26,7 @@ int main(void)
     test_same_priority(&todo_list);
 
     finalize_todo_list(&todo_list);
-    
+
     official_test();
 
     /*
@@ -44,7 +44,7 @@ void print_todo_list(todo_list_t* todo_list)
     p_tasks = todo_list->tasks;
 
     for (i = 0; i < (size_t)todo_list->dummy; ++i) {
-        printf("%s\n", p_tasks[i].task_name);
+        printf("%s: %d\n", p_tasks[i].task_name, (int)p_tasks[i].priority);
     }
     puts("===================");
 }
@@ -94,6 +94,7 @@ void test_complete_todo(todo_list_t* todo_list)
 void test_peek_or_null(todo_list_t* todo_list)
 {
     puts("=== test_peek_or_null ===");
+    print_todo_list(todo_list);
 
     test_add_todo_list(todo_list);
     print_todo_list(todo_list);
