@@ -24,7 +24,7 @@ int main(void)
     test_complete_todo(&todo_list);
     test_peek_or_null(&todo_list);
     test_same_priority(&todo_list);
-
+    
     finalize_todo_list(&todo_list);
 
     official_test();
@@ -157,6 +157,7 @@ void official_test(void)
     assert(add_todo(&todo_list, 55, "H"));
     assert(add_todo(&todo_list, 22, "I"));
 
+    print_todo_list(&todo_list);
     assert(get_count(&todo_list) == 9);
     assert(!is_empty(&todo_list));
 
@@ -193,6 +194,5 @@ void official_test(void)
 
     assert(is_empty(&todo_list));
     assert(!complete_todo(&todo_list));
-
     finalize_todo_list(&todo_list);
 }

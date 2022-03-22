@@ -4,12 +4,14 @@
 
 #include "todo_list.h"
 
-#define DELETE_PRIORITY (-1)
+#define INVALID_PRIORITY (-1)
 
 todo_list_t init_todo_list(size_t max_size)
 {
     todo_list_t result;
     todo_list_t* todo_list;
+    task_t* p_tasks;
+    size_t i;
 
     puts("====================");
     puts("Start init todo list");
@@ -17,6 +19,14 @@ todo_list_t init_todo_list(size_t max_size)
     todo_list = malloc(sizeof(todo_list_t));
 
     todo_list->tasks = malloc(sizeof(task_t) * max_size);
+
+    p_tasks = todo_list->tasks;
+
+    for (i = 0; i < max_size; ++i) {
+        p_tasks[i].task_name = "";
+        p_tasks[i].priority = INVALID_PRIORITY;
+    }
+
     todo_list->dummy = 0;
     todo_list->max = max_size;
 
@@ -32,21 +42,19 @@ todo_list_t init_todo_list(size_t max_size)
 
 void finalize_todo_list(todo_list_t* todo_list)
 {
-    task_t* p_task_node;
+    task_t* p_tasks;
     size_t i;
 
     puts("====================");
     puts("Start dispose memory");
 
-    p_task_node = todo_list->tasks;
+    p_tasks = todo_list->tasks;
 
     for (i = 0; i < (size_t)todo_list->dummy; ++i) {
-        free(p_task_node[i].task_name);
+        free(p_tasks[i].task_name);
     }
 
-    p_task_node = NULL;
-
-    free(todo_list->tasks);
+    free(p_tasks);
 
     puts("Complete dispose memory");
     puts("=======================");
@@ -58,14 +66,15 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     task_t new_task;
     char* task_name;
     size_t task_name_length;
+    size_t task_count;
     size_t i;
     
-    if (priority < 0) {
+    if (priority <= INVALID_PRIORITY) {
         return false;
     } else if (todo_list->dummy >= (int)todo_list->max) {
         return false;
     }
-
+    
     p_tasks = todo_list->tasks;
 
     task_name_length = strlen(task);
@@ -77,7 +86,9 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     new_task.priority = priority;
 
     task_t tmp;
-    for (i = 0; i < (size_t)todo_list->dummy + 1; ++i) {
+    task_count = (size_t)todo_list->dummy;
+
+    for (i = 0; i < task_count + 1; ++i) {
         if (p_tasks[i].priority < new_task.priority) {
             tmp = p_tasks[i];
             p_tasks[i] = new_task;
@@ -109,7 +120,7 @@ bool complete_todo(todo_list_t* todo_list)
         p_tasks[i] = p_tasks[i + 1];
     }
 
-    p_tasks[task_count - 1].priority = DELETE_PRIORITY;
+    p_tasks[task_count - 1].priority = INVALID_PRIORITY;
 
     --todo_list->dummy;
 
