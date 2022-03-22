@@ -14,7 +14,7 @@ todo_list_t init_todo_list(size_t max_size)
 
     todo_list = malloc(sizeof(todo_list_t));
 
-    todo_list->tasks = NULL;
+    todo_list->tasks = malloc(sizeof(task_t) * max_size);
     todo_list->dummy = 0;
     todo_list->max = max_size;
 
@@ -31,20 +31,20 @@ todo_list_t init_todo_list(size_t max_size)
 void finalize_todo_list(todo_list_t* todo_list)
 {
     task_t* p_task_node;
+    size_t i;
 
     puts("====================");
     puts("Start dispose memory");
 
     p_task_node = todo_list->tasks;
 
-    while (p_task_node != NULL) {
-        task_t* tmp = p_task_node->next;
-
-        free(p_task_node->task_name);
-        free(p_task_node);
-
-        p_task_node = tmp;
+    for (i = 0; i < (size_t)todo_list->dummy; ++i) {
+        free(p_task_node[i].task_name);
     }
+
+    p_task_node = NULL;
+
+    free(todo_list->tasks);
 
     puts("Complete dispose memory");
     puts("=======================");
@@ -52,10 +52,12 @@ void finalize_todo_list(todo_list_t* todo_list)
 
 bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 {
-    task_t** pp_task_node;
-    task_t* new_task;
-    size_t task_name_length;
+    task_t* p_task_node;
+    task_t new_task;
     char* task_name;
+    size_t task_name_length;
+    size_t i;
+    size_t insert_index;
 
     if (priority < 0) {
         return false;
@@ -63,27 +65,29 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
         return false;
     }
 
-    pp_task_node = &todo_list->tasks;
+    p_task_node = todo_list->tasks;
 
     task_name_length = strlen(task);
     task_name = malloc(task_name_length + 1);
     memcpy(task_name, task, task_name_length);
     *(task_name + task_name_length) = '\0';
 
-    while (*pp_task_node != NULL) {
-        if ((*pp_task_node)->priority < priority) {
+    new_task.task_name = task_name;
+    new_task.priority = priority;
+
+    for (i = 0; i < (size_t)todo_list->dummy; ++i) {
+        if (p_task_node[i].priority < (size_t)priority) {
             break;
         }
-
-        pp_task_node = &(*pp_task_node)->next;
     }
 
-    new_task = malloc(sizeof(task_t));
-    new_task->task_name = task_name;
-    new_task->priority = priority;
+    insert_index = i;
 
-    new_task->next = *pp_task_node;
-    *pp_task_node = new_task;
+    for (; insert_index < (size_t)todo_list->dummy + 1; ++insert_index) {
+        task_t tmp = p_task_node[insert_index];
+        p_task_node[insert_index] = new_task;
+        new_task = tmp;
+    }
 
     ++todo_list->dummy;
 
@@ -92,19 +96,20 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 
 bool complete_todo(todo_list_t* todo_list)
 {
-    task_t** pp_task_node;
+    task_t* p_task_node;
+    size_t i;
 
-    if (todo_list->dummy == 0) {
+    if (todo_list->dummy <= 0) {
         return false;
     }
 
-    pp_task_node = &todo_list->tasks;
+    p_task_node = todo_list->tasks;
 
-    task_t* tmp = (*pp_task_node)->next;
-    free((*pp_task_node)->task_name);
-    free(*pp_task_node);
+    free(p_task_node[0].task_name);
 
-    *pp_task_node = tmp;
+    for (i = 0; i < (size_t)todo_list->dummy - 1; ++i) {
+        p_task_node[i] = p_task_node[i + 1];
+    }
 
     --todo_list->dummy;
 
@@ -120,7 +125,7 @@ const char* peek_or_null(const todo_list_t* todo_list)
     }
 
     p_task_node = todo_list->tasks;
-    
+
     return (const char*)p_task_node->task_name;
 }
 

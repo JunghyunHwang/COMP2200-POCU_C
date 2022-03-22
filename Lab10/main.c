@@ -26,9 +26,11 @@ int main(void)
     test_same_priority(&todo_list);
 
     finalize_todo_list(&todo_list);
-
+    
     official_test();
 
+    /*
+    */
     puts("No prob");
 
     return 0;
@@ -36,18 +38,15 @@ int main(void)
 
 void print_todo_list(todo_list_t* todo_list)
 {
-    task_t** pp_task_node;
+    task_t* p_tasks;
+    size_t i;
 
-    pp_task_node = &todo_list->tasks;
+    p_tasks = todo_list->tasks;
 
-    puts("=== Today todo list ===");
-
-    while (*pp_task_node != NULL) {
-        printf("%s\n", (*pp_task_node)->task_name);
-
-        pp_task_node = &(*pp_task_node)->next;
+    for (i = 0; i < (size_t)todo_list->dummy; ++i) {
+        printf("%s\n", p_tasks[i].task_name);
     }
-    puts("=======================");
+    puts("===================");
 }
 
 void test_add_todo_list(todo_list_t* todo_list)
@@ -68,6 +67,8 @@ void test_add_todo_list(todo_list_t* todo_list)
 
 void test_complete_todo(todo_list_t* todo_list)
 {
+    puts("=== test_complete_todo ===");
+
     print_todo_list(todo_list);
     assert(get_count(todo_list) == 3);
 
@@ -87,15 +88,16 @@ void test_complete_todo(todo_list_t* todo_list)
     assert(false == complete_todo(todo_list));
     assert(is_empty(todo_list));
     print_todo_list(todo_list);
-
-    /* rewind */
-    test_add_todo_list(todo_list);
-    assert(get_count(todo_list) == 3);
-    assert(false == is_empty(todo_list));
+    puts("=======================");
 }
 
 void test_peek_or_null(todo_list_t* todo_list)
 {
+    puts("=== test_peek_or_null ===");
+
+    test_add_todo_list(todo_list);
+    print_todo_list(todo_list);
+
     assert(get_count(todo_list) == 3);
     assert(strcmp(peek_or_null(todo_list), "Play game") == 0);
 
@@ -115,18 +117,14 @@ void test_peek_or_null(todo_list_t* todo_list)
     assert(get_count(todo_list) == 0);
     assert(peek_or_null(todo_list) == NULL);
     assert(is_empty(todo_list));
-
-    /* rewind */
-    test_add_todo_list(todo_list);
-    assert(get_count(todo_list) == 3);
-    assert(false == is_empty(todo_list));
+    puts("=======================");
 }
 
 void test_same_priority(todo_list_t* todo_list)
 {
     while (complete_todo(todo_list)) {
     }
-    
+
     assert(add_todo(todo_list, 0, "meeting"));
     assert(add_todo(todo_list, 0, "Watch 'Attack on titan'"));
     assert(add_todo(todo_list, 0, "Play Horizon:zero dawn"));

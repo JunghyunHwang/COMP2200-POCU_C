@@ -3,8 +3,7 @@
 
 typedef struct task {
     char* task_name;
-    int32_t priority;
-    struct task* next;
+    size_t priority;
 } task_t;
 
 #endif /* TASK_H */
