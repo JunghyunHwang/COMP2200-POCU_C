@@ -4,6 +4,8 @@
 
 #include "todo_list.h"
 
+#define DELETE_PRIORITY (-1)
+
 todo_list_t init_todo_list(size_t max_size)
 {
     todo_list_t result;
@@ -57,8 +59,7 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     char* task_name;
     size_t task_name_length;
     size_t i;
-    size_t tmp_priority;
-
+    
     if (priority < 0) {
         return false;
     } else if (todo_list->dummy >= (int)todo_list->max) {
@@ -72,19 +73,15 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     memcpy(task_name, task, task_name_length);
     *(task_name + task_name_length) = '\0';
 
-    tmp_priority = priority;
-
     new_task.task_name = task_name;
-    new_task.priority = tmp_priority;
+    new_task.priority = priority;
 
     task_t tmp;
     for (i = 0; i < (size_t)todo_list->dummy + 1; ++i) {
-        if (p_tasks[i].priority < tmp_priority) {
+        if (p_tasks[i].priority < new_task.priority) {
             tmp = p_tasks[i];
             p_tasks[i] = new_task;
             new_task = tmp;
-
-            tmp_priority = new_task.priority;
         }
     }
 
@@ -96,6 +93,7 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 bool complete_todo(todo_list_t* todo_list)
 {
     task_t* p_tasks;
+    size_t task_count;
     size_t i;
 
     if (todo_list->dummy <= 0) {
@@ -103,12 +101,15 @@ bool complete_todo(todo_list_t* todo_list)
     }
 
     p_tasks = todo_list->tasks;
+    task_count = (size_t)todo_list->dummy;
 
     free(p_tasks[0].task_name);
 
-    for (i = 0; i < (size_t)todo_list->dummy - 1; ++i) {
+    for (i = 0; i < task_count - 1; ++i) {
         p_tasks[i] = p_tasks[i + 1];
     }
+
+    p_tasks[task_count - 1].priority = DELETE_PRIORITY;
 
     --todo_list->dummy;
 

@@ -28,7 +28,6 @@ int main(void)
     finalize_todo_list(&todo_list);
 
     official_test();
-
     /*
     */
     puts("No prob");
@@ -39,11 +38,21 @@ int main(void)
 void print_todo_list(todo_list_t* todo_list)
 {
     task_t* p_tasks;
+    size_t task_count;
     size_t i;
 
     p_tasks = todo_list->tasks;
+    task_count = (size_t)todo_list->dummy;
 
-    for (i = 0; i < (size_t)todo_list->dummy; ++i) {
+    printf("dummys: %d\n", (int)task_count);
+    puts("-------------");
+
+    if (task_count == 0) {
+        puts("=== empty task ===");
+        return;
+    }
+
+    for (i = 0; i < task_count; ++i) {
         printf("%s: %d\n", p_tasks[i].task_name, (int)p_tasks[i].priority);
     }
     puts("===================");
@@ -87,7 +96,6 @@ void test_complete_todo(todo_list_t* todo_list)
     /* empty todo list */
     assert(false == complete_todo(todo_list));
     assert(is_empty(todo_list));
-    print_todo_list(todo_list);
     puts("=======================");
 }
 
