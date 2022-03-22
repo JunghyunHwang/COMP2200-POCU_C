@@ -165,41 +165,7 @@ int remove_key(hashmap_t* hashmap, const char* key)
 
     return FALSE;
 }
-/*
-void destroy(hashmap_t* hashmap)
-{
-    size_t i;
 
-    puts("==================");
-    puts("Dispose start");
-
-    for (i = 0; i < hashmap->length; ++i) {
-        node_t* node = (hashmap->plist)[i];
-
-        if (node == NULL) {
-            goto next_index;
-        }
-
-        while (node->next != NULL) {
-            node_t* tmp = node->next;
-            free(node->key);
-            free(node);
-            node = tmp;
-        }
-
-    next_index:;
-    }
-
-    free(hashmap->plist);
-    hashmap->plist = NULL;
-
-    free(hashmap);
-    hashmap = NULL;
-
-    puts("Dispose complete");
-    puts("==================");
-}
-*/
 void destroy(hashmap_t* hashmap)
 {
     size_t i;

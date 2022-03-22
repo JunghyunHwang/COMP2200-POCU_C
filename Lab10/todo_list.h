@@ -4,13 +4,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct task {
-    char* task_name;
-    int32_t priority;
-} task_t;
+#include "task.h"
 
 typedef struct todo_list {
-    work_t* plist;
+    task_t* tasks;
     int dummy;
     size_t max;
 } todo_list_t;
