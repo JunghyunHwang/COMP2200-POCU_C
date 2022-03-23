@@ -91,10 +91,14 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 
     for (i = 0; i < task_count + 1; ++i) {
         if (p_tasks[i].priority < new_task.priority) {
-            tmp = p_tasks[i];
-            p_tasks[i] = new_task;
-            new_task = tmp;
+            break;
         }
+    }
+
+    for (; i < task_count + 1; ++i) {
+        tmp = p_tasks[i];
+        p_tasks[i] = new_task;
+        new_task = tmp;
     }
 
     ++todo_list->dummy;
