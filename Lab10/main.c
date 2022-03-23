@@ -10,7 +10,9 @@ void test_complete_todo(todo_list_t* todo_list);
 
 void test_peek_or_null(todo_list_t* todo_list);
 
-void test_same_priority(todo_list_t* todo_list);
+void test_same_priority(void);
+
+void test_max_size_zero(void);
 
 void print_todo_list(todo_list_t* todo_list);
 
@@ -18,17 +20,21 @@ void official_test(void);
 
 int main(void)
 {
-    todo_list_t todo_list = init_todo_list(3);
+    test_same_priority();
+    official_test();
 
+    /*
+    todo_list_t todo_list = init_todo_list(3);
     test_add_todo_list(&todo_list);
     test_complete_todo(&todo_list);
     test_peek_or_null(&todo_list);
-    test_same_priority(&todo_list);
-    
     finalize_todo_list(&todo_list);
 
     official_test();
-    /*
+
+    test_same_priority();
+
+    test_max_size_zero();
     */
     puts("No prob");
 
@@ -77,12 +83,17 @@ void test_add_todo_list(todo_list_t* todo_list)
 void test_complete_todo(todo_list_t* todo_list)
 {
     puts("=== test_complete_todo ===");
+    task_t* p_tasks;
+    p_tasks = todo_list->tasks;
 
     print_todo_list(todo_list);
     assert(get_count(todo_list) == 3);
 
     assert(complete_todo(todo_list));
     assert(get_count(todo_list) == 2);
+
+    printf("address %p\n", (void*)p_tasks[2].task_name);
+    printf("address %p\n", (void*)p_tasks[1].task_name);
     print_todo_list(todo_list);
 
     assert(complete_todo(todo_list));
@@ -129,16 +140,43 @@ void test_peek_or_null(todo_list_t* todo_list)
     puts("=======================");
 }
 
-void test_same_priority(todo_list_t* todo_list)
+void test_same_priority(void)
 {
-    while (complete_todo(todo_list)) {
-    }
+    todo_list_t todo_list = init_todo_list(3);
 
-    assert(add_todo(todo_list, 0, "meeting"));
-    assert(add_todo(todo_list, 0, "Watch 'Attack on titan'"));
-    assert(add_todo(todo_list, 0, "Play Horizon:zero dawn"));
+    assert(add_todo(&todo_list, 0, "meeting"));
+    assert(add_todo(&todo_list, 0, "Watch 'Attack on titan'"));
+    assert(add_todo(&todo_list, 0, "Play Horizon:zero dawn"));
 
-    print_todo_list(todo_list);
+    print_todo_list(&todo_list);
+
+    assert(complete_todo(&todo_list));
+    print_todo_list(&todo_list);
+
+    assert(add_todo(&todo_list, 0, "Go to caffe"));
+    print_todo_list(&todo_list);
+
+    assert(complete_todo(&todo_list));
+    print_todo_list(&todo_list);
+    assert(add_todo(&todo_list, 1, "Go to PC caffe"));
+    print_todo_list(&todo_list);
+
+    assert(complete_todo(&todo_list));
+    print_todo_list(&todo_list);
+
+    finalize_todo_list(&todo_list);
+}
+
+void test_max_size_zero(void)
+{
+    todo_list_t todo_list = init_todo_list(0);
+
+    assert(is_empty(&todo_list));
+    assert(false == add_todo(&todo_list, 10, "A"));
+    assert(get_count(&todo_list) == 0);
+    assert(false == complete_todo(&todo_list));
+
+    finalize_todo_list(&todo_list);
 }
 
 void official_test(void)

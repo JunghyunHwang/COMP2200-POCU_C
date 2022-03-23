@@ -5,6 +5,7 @@
 #include "todo_list.h"
 
 #define INVALID_PRIORITY (-1)
+#define INVALID_TASK_NAME ("")
 
 todo_list_t init_todo_list(size_t max_size)
 {
@@ -120,6 +121,7 @@ bool complete_todo(todo_list_t* todo_list)
         p_tasks[i] = p_tasks[i + 1];
     }
 
+    p_tasks[task_count - 1].task_name = INVALID_TASK_NAME;
     p_tasks[task_count - 1].priority = INVALID_PRIORITY;
 
     --todo_list->dummy;
@@ -137,7 +139,7 @@ const char* peek_or_null(const todo_list_t* todo_list)
 
     p_tasks = todo_list->tasks;
 
-    return (const char*)p_tasks->task_name;
+    return (const char*)p_tasks[0].task_name;
 }
 
 size_t get_count(const todo_list_t* todo_list)
@@ -147,5 +149,5 @@ size_t get_count(const todo_list_t* todo_list)
 
 bool is_empty(const todo_list_t* todo_list)
 {
-    return todo_list->dummy == 0 ? true : false;
+    return (todo_list->dummy == 0);
 }
