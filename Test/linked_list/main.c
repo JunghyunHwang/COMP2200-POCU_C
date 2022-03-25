@@ -1,90 +1,103 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
-    int value;
-    void* next;
-} node_t;
+/*
+    insert_sorted 구현
+    pp가 가르키는 것은 다음 노드 주소의 주소
+*/
 
-void insert_front(node_t** phead, int n);
-void insert_back(node_t** phead, int n);
-void print_node(const node_t* phead);
-void destroy(node_t* phead);
+#include "linked_list.h"
+
+void test_insert_front(void);
+
+void test_insert_sorted(void);
 
 int main(void)
 {
-    node_t* head = NULL;
-
-    insert_front(&head, 10);
-    insert_front(&head, 9);
-    insert_front(&head, 8);
-    insert_front(&head, 7);
-    insert_front(&head, 6);
-    insert_front(&head, 5);
-    insert_front(&head, 4);
-    insert_front(&head, 3);
-    insert_front(&head, 2);
-    insert_front(&head, 1);
-    insert_front(&head, 0);
-
-    print_node(head);
-
-    destroy(head);
-    head = NULL;
+    test_insert_front();
+    test_insert_sorted();
 
     puts("No prob");
 
     return 0;
 }
 
-void insert_front(node_t** phead, int n)
+void test_insert_front(void)
+{
+    node_t* head = NULL;
+
+    insert_front(&head, 3);
+    insert_front(&head, 1);
+    insert_front(&head, 5);
+
+    print_node(head);
+
+    destroy(head);
+}
+
+void test_insert_sorted(void)
+{
+    node_t* head = NULL;
+
+    insert_sorted(&head, 3);
+    insert_sorted(&head, 2);
+    insert_sorted(&head, 5);
+
+    print_node(head);
+
+    destroy(head);
+}
+
+void insert_front(node_t** phead, int value)
 {
     node_t* new_node;
 
     new_node = malloc(sizeof(node_t));
-
-    new_node->value = n;
+    new_node->value = value;
 
     new_node->next = *phead;
     *phead = new_node;
 }
 
-void remove(node_t** phead, int n)
+void insert_sorted(node_t** phead, int value)
 {
-    node_t** pp;
+    node_t** pp = phead;
+    node_t* new_node;
 
-    pp = phead;
     while (*pp != NULL) {
-        if ((*pp)->value == n) {
-            node_t tmp = *pp;
-            *pp = (*pp)->next;
-            free(tmp);
+        if ((*pp)->value > value) {
             break;
         }
 
         pp = &(*pp)->next;
     }
+
+    new_node = malloc(sizeof(node_t));
+    new_node->value = value;
+
+    new_node->next = *pp;
+    *pp = new_node; 
+}
+
+void print_node(node_t* phead)
+{
+    while (phead != NULL) {
+        printf("%d->", phead->value);
+
+        phead = phead->next;
+    }
+
+    puts("NULL");
 }
 
 void destroy(node_t* phead)
 {
-    node_t* tmp;
+    node_t* p = phead;
 
-    while (phead != NULL) {
-        tmp = phead->next;
-        free(phead);
-        phead = tmp;
+    while (p != NULL) {
+        node_t* tmp = p->next;
+        free(p);
+
+        p = tmp;
     }
-}
-
-void print_node(const node_t* phead)
-{
-    const node_t* pp = phead;
-
-    while (pp != NULL){
-        printf("%d->", pp->value);
-        pp = pp->next;
-    }
-
-    puts("NULL");
 }

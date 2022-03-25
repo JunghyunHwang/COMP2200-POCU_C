@@ -12,6 +12,8 @@ void test_peek_or_null(todo_list_t* todo_list);
 
 void test_same_priority(void);
 
+void test_test_same_priority(void);
+
 void test_max_size_zero(void);
 
 void print_todo_list(todo_list_t* todo_list);
@@ -20,7 +22,7 @@ void official_test(void);
 
 int main(void)
 {
-    test_same_priority();
+    test_test_same_priority();
     official_test();
 
     /*
@@ -163,6 +165,38 @@ void test_same_priority(void)
 
     assert(complete_todo(&todo_list));
     print_todo_list(&todo_list);
+
+    finalize_todo_list(&todo_list);
+}
+
+void test_test_same_priority(void)
+{
+    todo_list_t todo_list = init_todo_list(3);
+
+    assert(add_todo(&todo_list, 0, "Workout"));
+    assert(add_todo(&todo_list, 0, "Watch 'Attack on titan'"));
+    assert(add_todo(&todo_list, 0, "Go to school"));
+
+    assert(strcmp(peek_or_null(&todo_list), "Workout") == 0);
+    assert(complete_todo(&todo_list));
+
+    assert(strcmp(peek_or_null(&todo_list), "Watch 'Attack on titan'") == 0);
+    assert(complete_todo(&todo_list));
+
+    assert(add_todo(&todo_list, 0, "Go to caffe"));
+    assert(strcmp(peek_or_null(&todo_list), "Go to school") == 0);
+
+    assert(add_todo(&todo_list, 1, "Go to PC caffe"));
+    assert(strcmp(peek_or_null(&todo_list), "Go to PC caffe") == 0);
+    assert(complete_todo(&todo_list));
+
+    assert(strcmp(peek_or_null(&todo_list), "Go to school") == 0);
+    assert(complete_todo(&todo_list));
+
+    assert(strcmp(peek_or_null(&todo_list), "Go to caffe") == 0);
+    assert(complete_todo(&todo_list));
+
+    assert(NULL == peek_or_null(&todo_list));
 
     finalize_todo_list(&todo_list);
 }
