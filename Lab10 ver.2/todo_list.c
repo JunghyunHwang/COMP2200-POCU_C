@@ -6,6 +6,7 @@
 
 #define INVALID_PRIORITY (-1)
 #define INVALID_TASK_NAME ("")
+#define MAX_TASK_LENGTH (64)
 
 todo_list_t init_todo_list(size_t max_size)
 {

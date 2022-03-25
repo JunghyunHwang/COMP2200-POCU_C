@@ -6,10 +6,19 @@
 
 #include "task.h"
 
+typedef struct {
+    void* memory;
+    size_t front;
+    size_t back;
+    size_t max;
+    size_t count;
+} memory_queue_t;
+
 typedef struct todo_list {
     int dummy;
     size_t max;
     task_t* tasks;
+    memory_queue_t mem_pool;
 } todo_list_t;
 
 todo_list_t init_todo_list(size_t max_size);
