@@ -25,9 +25,6 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
     hashmap_t* hashmap = NULL;
     size_t i;
 
-    puts("==================");
-    puts("Init hashmap start");
-
     hashmap = malloc(sizeof(hashmap_t));
     hashmap->hash_func = p_hash_func;
     hashmap->length = length;
@@ -38,8 +35,6 @@ hashmap_t* init_hashmap_malloc(size_t length, size_t (*p_hash_func)(const char* 
         (hashmap->plist)[i] = NULL;
     }
 
-    puts("Init hashmap complete");
-    puts("==================");
     return hashmap;
 }
 
@@ -55,8 +50,6 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
         return FALSE;
     }
 
-    key_len = strlen(key);
-
     index = hashmap->hash_func(key) % hashmap->length;
     pp_next_node = &(hashmap->plist)[index];
 
@@ -68,26 +61,24 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
         pp_next_node = &(*pp_next_node)->next;
     }
 
+    key_len = strlen(key);
     key_value = malloc(key_len + 1);
     memcpy(key_value, key, key_len);
-    *(key_value + key_len) = '\0';
+    key_value[key_len] = '\0';
 
     new_node = malloc(sizeof(node_t));
-
     new_node->key = key_value;
     new_node->value = value;
-
     new_node->next = *pp_next_node;
-    *pp_next_node = new_node;
 
-    key_value = NULL;
+    *pp_next_node = new_node;
 
     return TRUE;
 }
 
 int get_value(const hashmap_t* hashmap, const char* key)
 {
-    node_t** pp_next_node;
+    node_t* p_curr_node;
     size_t index;
     int result = -1;
 
@@ -96,21 +87,46 @@ int get_value(const hashmap_t* hashmap, const char* key)
     }
 
     index = hashmap->hash_func(key) % hashmap->length;
-    pp_next_node = &(hashmap->plist)[index];
+    p_curr_node = (hashmap->plist)[index];
 
-    while (*pp_next_node != NULL) {
-        if (strcmp((*pp_next_node)->key, key) == 0) {
-            result = (*pp_next_node)->value;
+    while (p_curr_node != NULL) {
+        if (strcmp(p_curr_node->key, key) == 0) {
+            result = p_curr_node->value;
             break;
         }
 
-        pp_next_node = &(*pp_next_node)->next;
+        p_curr_node = p_curr_node->next;
     }
 
     return result;
 }
 
 int update_value(hashmap_t* hashmap, const char* key, const int value)
+{
+    node_t* p_curr_node;
+    size_t index;
+
+    if (hashmap->length == 0) {
+        return FALSE;
+    }
+
+    index = hashmap->hash_func(key) % hashmap->length;
+    p_curr_node = (hashmap->plist)[index];
+
+    while (p_curr_node != NULL) {
+        if (strcmp(p_curr_node->key, key) == 0) {
+            p_curr_node->value = value;
+
+            return TRUE;
+        }
+
+        p_curr_node = p_curr_node->next;
+    }
+
+    return FALSE;
+}
+
+int remove_key(hashmap_t* hashmap, const char* key)
 {
     node_t** pp_next_node;
     size_t index;
@@ -121,34 +137,6 @@ int update_value(hashmap_t* hashmap, const char* key, const int value)
 
     index = hashmap->hash_func(key) % hashmap->length;
     pp_next_node = &(hashmap->plist)[index];
-
-    if (*pp_next_node == NULL) {
-        return FALSE;
-    }
-
-    while (*pp_next_node != NULL) {
-        if (strcmp((*pp_next_node)->key, key) == 0) {
-            (*pp_next_node)->value = value;
-
-            return TRUE;
-        }
-
-        pp_next_node = &(*pp_next_node)->next;
-    }
-
-    return FALSE;
-}
-
-int remove_key(hashmap_t* hashmap, const char* key)
-{
-    node_t** pp_next_node;
-    size_t index = hashmap->hash_func(key) % hashmap->length;
-
-    pp_next_node = &(hashmap->plist)[index];
-
-    if (*pp_next_node == NULL) {
-        return FALSE;
-    }
 
     while (*pp_next_node != NULL) {
         if (strcmp((*pp_next_node)->key, key) == 0) {
@@ -170,9 +158,6 @@ void destroy(hashmap_t* hashmap)
 {
     size_t i;
 
-    puts("==================");
-    puts("Dispose start");
-
     for (i = 0; i < hashmap->length; ++i) {
         node_t* p_node = (hashmap->plist)[i];
 
@@ -190,7 +175,4 @@ void destroy(hashmap_t* hashmap)
 
     free(hashmap);
     hashmap = NULL;
-
-    puts("Dispose complete");
-    puts("==================");
 }

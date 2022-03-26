@@ -11,7 +11,19 @@
 todo_list_t init_todo_list(size_t max_size)
 {
     todo_list_t todo_list;
-    todo_list.tasks = malloc(sizeof(task_t) * max_size);
+    memory_queue_t memory;
+
+    memory = malloc(sizeof(task_t) * max_size + (sizeof(char) * 64) * max_size);
+    memory.front = 0;
+    memory.back = 0;
+    memory.count = 0;
+    memory.max = sizeof(task_t) * max_size + (sizeof(char) * 64) * max_size;
+
+    if (memory.max - memory.count >= sizeof(task_t) * max_size) {
+        todo_list.tasks = memory;
+    }
+
+    todo_list.tasks = 
 
     task_t* p_tasks = todo_list.tasks;
 
