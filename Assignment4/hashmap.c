@@ -67,6 +67,7 @@ int add_key(hashmap_t* hashmap, const char* key, const int value)
     key_value[key_len] = '\0';
 
     new_node = malloc(sizeof(node_t));
+    
     new_node->key = key_value;
     new_node->value = value;
     new_node->next = *pp_next_node;

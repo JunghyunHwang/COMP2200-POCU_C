@@ -18,7 +18,7 @@ todo_list_t init_todo_list(size_t max_size)
     todo_list.max = max_size;
 
     for (size_t i = 0; i < max_size; ++i) {
-        p_tasks[i].task_name = "";
+        p_tasks[i].task_name = INVALID_TASK_NAME;
         p_tasks[i].priority = INVALID_PRIORITY;
     }
 
@@ -48,7 +48,7 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     char* task_name = malloc(task_name_length + 1);
 
     memcpy(task_name, task, task_name_length);
-    *(task_name + task_name_length) = '\0';
+    task_name[task_name_length] = '\0';
 
     task_t new_task;
     new_task.task_name = task_name;
@@ -85,7 +85,7 @@ bool complete_todo(todo_list_t* todo_list)
     task_t* p_tasks = todo_list->tasks;
     size_t task_count = (size_t)todo_list->dummy;
 
-    free(p_tasks[0].task_name);
+    free(p_tasks->task_name);
 
     for (size_t i = 0; i < task_count - 1; ++i) {
         p_tasks[i] = p_tasks[i + 1];
@@ -105,9 +105,7 @@ const char* peek_or_null(const todo_list_t* todo_list)
         return NULL;
     }
 
-    task_t* p_tasks = todo_list->tasks;
-
-    return (const char*)p_tasks[0].task_name;
+    return (const char*)(todo_list->tasks)->task_name;
 }
 
 size_t get_count(const todo_list_t* todo_list)
