@@ -13,10 +13,13 @@ int main(void)
     user_t** users = get_test_users_malloc();
 
     user_t* user = get_user_by_id_or_null(users, 3);
+    assert(user->id == 3);
     printf("User id: %d\n", user->id);
     printf("User name: %s\n", user->username);
     printf("User email: %s\n", user->email);
     printf("User password: %s\n", user->password);
+
+    assert(update_email(users, 3, "dmagk560@gmail.com"));
 
     destroy_users(users);
 
