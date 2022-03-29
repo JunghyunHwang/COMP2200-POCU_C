@@ -22,8 +22,19 @@ void official_test(void);
 
 int main(void)
 {
+    todo_list_t todo_list = init_todo_list(3);
+    test_add_todo_list(&todo_list);
+    test_complete_todo(&todo_list);
+    test_peek_or_null(&todo_list);
+    finalize_todo_list(&todo_list);
+
     test_test_same_priority();
+
     official_test();
+
+    test_same_priority();
+
+    test_max_size_zero();
 
     /*
     todo_list_t todo_list = init_todo_list(3);
@@ -37,6 +48,8 @@ int main(void)
     test_same_priority();
 
     test_max_size_zero();
+
+    test_test_same_priority();
     */
     puts("No prob");
 
@@ -50,9 +63,9 @@ void print_todo_list(todo_list_t* todo_list)
     size_t i;
 
     p_tasks = todo_list->tasks;
-    task_count = (size_t)todo_list->dummy;
+    task_count = (size_t)todo_list->count;
 
-    printf("dummys: %d\n", (int)task_count);
+    printf("counts: %d\n", (int)task_count);
     puts("-------------");
 
     if (task_count == 0) {

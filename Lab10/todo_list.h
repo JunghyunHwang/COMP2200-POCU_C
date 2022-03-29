@@ -7,7 +7,7 @@
 #include "task.h"
 
 typedef struct todo_list {
-    int dummy;
+    int count;
     size_t max;
     task_t* tasks;
 } todo_list_t;

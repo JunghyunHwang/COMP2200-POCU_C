@@ -18,9 +18,10 @@ int main(void)
 {
     test_insert_front();
     test_insert_back();
-    test_insert_sorted();
+    
 
     /*
+    test_insert_sorted();
     */
 
     puts("No prob");
@@ -53,17 +54,3 @@ void test_insert_back(void)
 
     destroy(head);
 }
-
-void test_insert_sorted(void)
-{
-    node_t* head = NULL;
-
-    insert_sorted(&head, 3);
-    insert_sorted(&head, 1);
-    insert_sorted(&head, 5);
-
-    print_node(head);
-
-    destroy(head);
-}
-

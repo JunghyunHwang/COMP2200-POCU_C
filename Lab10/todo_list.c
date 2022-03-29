@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "todo_list.h"
 
@@ -14,12 +15,12 @@ todo_list_t init_todo_list(size_t max_size)
 
     task_t* p_tasks = todo_list.tasks;
 
-    todo_list.dummy = 0;
+    todo_list.count = 0;
     todo_list.max = max_size;
 
     for (size_t i = 0; i < max_size; ++i) {
         p_tasks[i].task_name = INVALID_TASK_NAME;
-        p_tasks[i].priority = INVALID_PRIORITY;
+        p_tasks[i].priority = INT_MAX;
     }
 
     return todo_list;
@@ -29,7 +30,7 @@ void finalize_todo_list(todo_list_t* todo_list)
 {
     task_t* p_tasks = todo_list->tasks;
 
-    for (size_t i = 0; i < (size_t)todo_list->dummy; ++i) {
+    for (size_t i = 0; i < (size_t)todo_list->count; ++i) {
         free(p_tasks[i].task_name);
     }
 
@@ -40,7 +41,7 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
 {
     if (priority <= INVALID_PRIORITY) {
         return false;
-    } else if (todo_list->dummy >= (int)todo_list->max) {
+    } else if (todo_list->count >= (int)todo_list->max) {
         return false;
     }
     
@@ -55,11 +56,11 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
     new_task.priority = priority;
 
     task_t* p_tasks = todo_list->tasks;
-    size_t task_count = (size_t)todo_list->dummy;
+    size_t task_count = (size_t)todo_list->count;
     size_t i;
 
     for (i = 0; i < task_count + 1; ++i) {
-        if (p_tasks[i].priority < new_task.priority) {
+        if (p_tasks[i].priority >= new_task.priority) {
             break;
         }
     }
@@ -71,49 +72,47 @@ bool add_todo(todo_list_t* todo_list, const int32_t priority, const char* task)
         new_task = tmp;
     }
 
-    ++todo_list->dummy;
+    ++todo_list->count;
 
     return true;
 }
 
 bool complete_todo(todo_list_t* todo_list)
 {
-    if (todo_list->dummy <= 0) {
+    if (todo_list->count <= 0) {
         return false;
     }
 
     task_t* p_tasks = todo_list->tasks;
-    size_t task_count = (size_t)todo_list->dummy;
+    size_t task_count = (size_t)todo_list->count;
 
-    free(p_tasks->task_name);
-
-    for (size_t i = 0; i < task_count - 1; ++i) {
-        p_tasks[i] = p_tasks[i + 1];
-    }
+    free(p_tasks[task_count - 1].task_name);
 
     p_tasks[task_count - 1].task_name = INVALID_TASK_NAME;
-    p_tasks[task_count - 1].priority = INVALID_PRIORITY;
+    p_tasks[task_count - 1].priority = INT_MAX;
 
-    --todo_list->dummy;
+    --todo_list->count;
 
     return true;
 }
 
 const char* peek_or_null(const todo_list_t* todo_list)
 {
-    if (todo_list->dummy == 0) {
+    if (todo_list->count == 0) {
         return NULL;
     }
 
-    return (const char*)(todo_list->tasks)->task_name;
+    int last_index = todo_list->count - 1;
+
+    return (const char*)todo_list->tasks[last_index].task_name;
 }
 
 size_t get_count(const todo_list_t* todo_list)
 {
-    return (size_t)todo_list->dummy;
+    return (size_t)todo_list->count;
 }
 
 bool is_empty(const todo_list_t* todo_list)
 {
-    return (todo_list->dummy == 0);
+    return (todo_list->count == 0);
 }
