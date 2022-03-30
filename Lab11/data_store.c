@@ -103,10 +103,10 @@ bool update_email(user_t** user_or_null, size_t id, const char* email)
 
     FILE* stream = fopen("log.txt", "ab");
 
-    #if defined(RELEASE)
-        convert_email_string(old_email);
-        convert_email_string(new_email);
-    #endif
+#if defined(RELEASE)
+    convert_email_string(old_email);
+    convert_email_string(new_email);
+#endif
     
     sprintf(log_message, "TRACE: User %d updated email from \"%s\" to \"%s\"\n", user->id, old_email, new_email);
     fprintf(stream, "%s", log_message);
@@ -138,10 +138,10 @@ bool update_password(user_t** user_or_null, size_t id, const char* password)
 
     FILE* stream = fopen("log.txt", "ab");
 
-    #if defined(RELEASE)
-        convert_password_string(old_password);
-        convert_password_string(new_password);
-    #endif
+#if defined(RELEASE)
+    convert_password_string(old_password);
+    convert_password_string(new_password);
+#endif
 
     sprintf(log_message, "TRACE: User %d updated password from \"%s\" to \"%s\"\n", user->id, old_password, new_password);
     fprintf(stream, "%s", log_message);
