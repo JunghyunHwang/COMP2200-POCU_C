@@ -2,11 +2,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "user.h"
 #include "data_store.h"
 
 #define USER_INFO_LENGTH (51)
 #define LOG_MESSAGE_LENGTH (1024)
 
+#if defined(RELEASE)
 void convert_email_string(char* str)
 {
     char* p_curr = strstr(str, "@");
@@ -35,6 +37,7 @@ void convert_password_string(char* str)
         str[i] = '*';
     }
 }
+#endif
 
 user_t* get_user_by_id_or_null(user_t** user_or_null, size_t id)
 {
