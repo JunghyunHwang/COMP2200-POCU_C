@@ -100,7 +100,7 @@ bool update_email(user_t** user_or_null, size_t id, const char* email)
 
     FILE* stream = fopen("log.txt", "ab");
 
-    #if (RELEASE)
+    #if defined(RELEASE)
         convert_email_string(old_email);
         convert_email_string(new_email);
     #endif
@@ -135,7 +135,7 @@ bool update_password(user_t** user_or_null, size_t id, const char* password)
 
     FILE* stream = fopen("log.txt", "ab");
 
-    #if (RELEASE)
+    #if defined(RELEASE)
         convert_password_string(old_password);
         convert_password_string(new_password);
     #endif
