@@ -7,7 +7,34 @@
 #define USER_INFO_LENGTH (51)
 #define LOG_MESSAGE_LENGTH (1024)
 
-void convert_string(char* str);
+void convert_email_string(char* str)
+{
+    char* p_curr = strstr(str, "@");
+    size_t diff = p_curr - str;
+
+    if (diff <= 2) {
+        *(p_curr - 1) = '*';
+        return;
+    }
+    
+    for (size_t i = 1; i < diff - 1; ++i) {
+        str[i] = '*';
+    }
+}
+
+void convert_password_string(char* str)
+{
+    size_t password_len = strlen(str);
+
+    if (password_len <= 2) {
+        str[password_len - 1] = '*';
+        return;
+    }
+
+    for (size_t i = 1; i < password_len - 1; ++i) {
+        str[i] = '*';
+    }
+}
 
 user_t* get_user_by_id_or_null(user_t** user_or_null, size_t id)
 {
@@ -64,17 +91,56 @@ bool update_email(user_t** user_or_null, size_t id, const char* email)
     }
 
     char old_email[USER_INFO_LENGTH];
+    char new_email[USER_INFO_LENGTH];
     char log_message[LOG_MESSAGE_LENGTH];
 
     strcpy(old_email, user->email);
+    strcpy(new_email, email);
     strcpy(user->email, email);
 
-    printf("old: %s\n", old_email);
-    printf("new: %s\n", user->email);
+    FILE* stream = fopen("log.txt", "ab");
 
-    FILE* stream = fopen("log.txt", "wb");
+    #if RELEASE
+        convert_email_string(old_email);
+        convert_email_string(new_email);
+    #endif
+    
+    sprintf(log_message, "TRACE: User %d updated email from \"%s\" to \"%s\"\n", user->id, old_email, new_email);
+    fprintf(stream, "%s", log_message);
 
-    sprintf(log_message, "TRACE: User %d updated email from \"%s\" to \"%s\"\n", user->id, old_email, user->email);
+    fclose(stream);
+
+    return true;
+}
+
+bool update_password(user_t** user_or_null, size_t id, const char* password)
+{
+    if (user_or_null == NULL) {
+        return false;
+    }
+
+    user_t* user = get_user_by_id_or_null(user_or_null, id);
+
+    if (user == NULL) {
+        return false;
+    }
+
+    char old_password[USER_INFO_LENGTH];
+    char new_password[USER_INFO_LENGTH];
+    char log_message[LOG_MESSAGE_LENGTH];
+
+    strcpy(old_password, user->password);
+    strcpy(new_password, password);
+    strcpy(user->password, password);
+
+    FILE* stream = fopen("log.txt", "ab");
+
+    #if RELEASE
+        convert_password_string(old_password);
+        convert_password_string(new_password);
+    #endif
+
+    sprintf(log_message, "TRACE: User %d updated password from \"%s\" to \"%s\"\n", user->id, old_password, new_password);
     fprintf(stream, "%s", log_message);
 
     fclose(stream);

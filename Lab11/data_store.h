@@ -9,7 +9,9 @@ typedef enum {
     MODE_RELEASE
 } build_mode_t;
 
-void convert_string(char* str);
+void convert_email_string(char* str);
+
+void convert_password_string(char* str);
 
 user_t* get_user_by_id_or_null(user_t** user_or_null, size_t id);
 
