@@ -135,7 +135,7 @@ bool update_password(user_t** user_or_null, size_t id, const char* password)
 
     FILE* stream = fopen("log.txt", "ab");
 
-    #if RELEASE
+    #if (RELEASE)
         convert_password_string(old_password);
         convert_password_string(new_password);
     #endif
