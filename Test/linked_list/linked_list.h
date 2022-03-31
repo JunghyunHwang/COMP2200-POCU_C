@@ -1,6 +1,9 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
+#define TRUE (1)
+#define FALSE (0)
+
 typedef struct node {
     int value;
     struct node* next;
@@ -11,6 +14,14 @@ void insert_front(node_t** phead, int value);
 void insert_back(node_t** phead, int value);
 
 void insert_sorted(node_t** phead, int value);
+
+void delete_first(node_t** phead);
+
+void delete_last(node_t** phead);
+
+int delete_by_value(node_t** phead, int value);
+
+void find_by_value(node_t* phead, int value);
 
 void print_node(node_t* phead);
 
