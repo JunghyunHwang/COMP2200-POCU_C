@@ -74,9 +74,26 @@ void test_sprintf(void)
     printf("return value: %d\n", return_value);
 }
 
+void test_pointer(void)
+{
+    char des[51];
+    char src[51] = "Hi";
+    char* p_des = des;
+
+    printf("%s\n", src);
+    strncpy(p_des, src, 3);
+
+    printf("%s\n", src);
+    printf("%s\n", des);
+}
+
 int main(void)
 {
-    test_strncpy();
+    test_pointer();
 
+    /*
+    test_strncpy();
+    */
+    puts("No prob");
     return 0;
 }

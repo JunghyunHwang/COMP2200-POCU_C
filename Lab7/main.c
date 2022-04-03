@@ -114,7 +114,6 @@ void check_multi_pointer(void)
     char str7[] = "Hi";
     char str8[] = "you can call me";
     char str9[] = "Junseok";
-    size_t i;
     size_t sentence_count;
 
     sentence1[0] = str1;
@@ -162,6 +161,26 @@ int main(void)
     too_many_tokenized();
     puts("=====Complete too_many_tokenized=====\n");
     */
+
+    puts("=====Start official_test=====");
+    official_test();
+    puts("=====Complete official_test=====\n");
+
+    puts("=====Start no_delim=====");
+    test_no_delim();
+    puts("=====Complete no_delim=====\n");
+
+    puts("=====Start no_str=====");
+    test_no_str();
+    puts("=====Complete no_str=====\n");
+
+    puts("=====Start no_matched_delim=====");
+    test_no_matched_delim();
+    puts("=====Complete no_matched_delim=====\n");
+
+    puts("=====Start too_many_tokenized=====");
+    too_many_tokenized();
+    puts("=====Complete too_many_tokenized=====\n");
 
     check_multi_pointer();
 

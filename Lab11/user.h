@@ -3,9 +3,9 @@
 
 typedef struct {
     size_t id;
-    char username[51];
-    char email[51];
-    char password[51];
+    char* username;
+    char* email;
+    char* password;
 } user_t;
 
 #endif /* USER_H */
