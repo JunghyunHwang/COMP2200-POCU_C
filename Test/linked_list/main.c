@@ -38,6 +38,7 @@ void test_insert_front(void)
     node_t* head = NULL;
 
     puts("==============");
+    puts("Insert front");
     insert_front(&head, 3);
     insert_front(&head, 1);
     insert_front(&head, 5);
@@ -61,6 +62,7 @@ void test_insert_back(void)
     node_t* head = NULL;
 
     puts("==============");
+    puts("Insert back");
     insert_back(&head, 3);
     insert_back(&head, 1);
     insert_back(&head, 5);
@@ -84,6 +86,7 @@ void test_insert_sorted(void)
     node_t* head = NULL;
 
     puts("==============");
+    puts("Insert sorted");
     insert_sorted(&head, 3);
     insert_sorted(&head, 1);
     insert_sorted(&head, 5);

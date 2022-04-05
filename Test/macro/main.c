@@ -8,7 +8,7 @@
         r *= n;               \
     }\
 
-#define DEF(d) #d
+#define GET_SIZE(type) sizeof(type)
 
 #define message_for(a, b) \
     printf(#a " and " #b ": We love you!\n")
@@ -43,8 +43,11 @@ int main(void)
     POW(2, 8, i, result);
     printf("result: %d\n", result);
 
-    printf("%s\n", DEF(Hi));
-
+    printf("Size of short: %d\n", GET_SIZE(short));
+    printf("Size of int: %d\n", GET_SIZE(int));
+    printf("Size of float: %d\n", GET_SIZE(float));
+    printf("Size of double: %d\n", GET_SIZE(double));
+    printf("Size of pointer: %d\n", GET_SIZE(void*));
 
     puts("No prob");
 
