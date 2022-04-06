@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 
 #include "linked_list.h"
@@ -11,16 +12,14 @@ void insert_front(node_t** phead, int val)
 
     new_node->value = val;
     new_node->next = *phead;
-
     *phead = new_node;
 }
 
 void insert_back(node_t** phead, int val)
 {
-    node_t** pp;
+    node_t** pp = phead;
     node_t* new_node;
 
-    pp = phead;
     while (*pp != NULL) {
         pp = &(*pp)->next;
     }
@@ -35,12 +34,11 @@ void insert_back(node_t** phead, int val)
 
 void insert_sorted(node_t** phead, int val)
 {
-    node_t** pp;
+    node_t** pp = phead;
     node_t* new_node;
 
-    pp = phead;
     while (*pp != NULL) {
-        if ((*pp)->value > val) {
+        if ((*pp)->value > val){
             break;
         }
 
@@ -57,15 +55,18 @@ void insert_sorted(node_t** phead, int val)
 
 void delete_first(node_t** phead)
 {
-    node_t* tmp = (*phead)->next;
+    node_t** pp = phead;
+    node_t* tmp;
 
-    free(*phead);
-    *phead = tmp;
+    tmp = (*pp)->next;
+    free(*pp);
+    *pp = tmp;
 }
 
 void delete_last(node_t** phead)
 {
     node_t** pp = phead;
+    node_t* tmp;
 
     while (TRUE) {
         if ((*pp)->next == NULL) {
@@ -75,8 +76,11 @@ void delete_last(node_t** phead)
         pp = &(*pp)->next;
     }
 
+    tmp = (*pp)->next;
+    assert(tmp == NULL);
+
     free(*pp);
-    *pp = NULL;
+    *pp = tmp;
 }
 
 int delete_by_value(node_t** phead, int val)
@@ -87,7 +91,6 @@ int delete_by_value(node_t** phead, int val)
     while (*pp != NULL) {
         if ((*pp)->value == val) {
             node_t* tmp = (*pp)->next;
-
             free(*pp);
             *pp = tmp;
 
