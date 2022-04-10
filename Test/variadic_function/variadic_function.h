@@ -1,9 +1,13 @@
 #ifndef VARIADIC_H
 #define VARIADIC_H
 
-#define MOVE_POINTER_FOR_WIN(p, size) (p) += sizeof(size)
+#if defined _WIN32
+#define MOVE_POINTER(p, size) (p) += sizeof(size)
+#endif
 
-#define MOVE_POINTER_FOR_MAC(p, size) (p) -= sizeof(size)
+#if defined __APPLE__
+#define MOVE_POINTER(p, size) (p) -= sizeof(size)
+#endif
 
 int sum_by_parameter_pointer(int a, int b);
 

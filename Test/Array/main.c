@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_LEN (3)
 
@@ -112,6 +113,14 @@ void test_midterm(void)
 
 int main(void)
 {
+	int nums[3] = { 1, 2, 3 };
+	int (*p)[3];
+
+	p = &nums;
+	printf("first element: %d\n", **p);
+	printf("second element: %d\n", *((*p) + 1));
+
     test_midterm();
+
 	return 0;
 }

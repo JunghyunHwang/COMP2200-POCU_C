@@ -5,7 +5,7 @@
 
 #define NONVALUE (-1)
 
-stack_t init_stack(size_t max)
+stack_t init_stack_malloc(size_t max)
 {
     stack_t stack;
     size_t i;

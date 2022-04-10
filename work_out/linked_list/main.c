@@ -16,27 +16,6 @@ void test_delet_by_value(void);
 
 int main(void)
 {
-    node_t** list;
-    size_t i;
-
-    list = malloc(sizeof(node_t*));
-    *list = NULL;
-
-    for (i = 0; i < 3; i++)
-    {
-        node_t* n = malloc(sizeof(node_t));
-
-        n->value = i+1;
-        n->next = *list;
-
-        *list = n;
-    }
-
-    print_node(*list);
-
-    destroy(*list);
-    free(list);
-
     /*
     test_insert_front();
     test_insert_back();
@@ -47,6 +26,11 @@ int main(void)
     puts("No prob");
 
     return 0;
+}
+
+void test_doubly(void)
+{
+    double_node_t* head = NULL;
 }
 
 void test_insert_front(void)

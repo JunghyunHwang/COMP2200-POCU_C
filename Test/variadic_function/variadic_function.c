@@ -14,13 +14,7 @@ int sum_by_parameter_pointer(int a, int b)
     p = (char*)&a;
     a_value = *(int*)p;
 
-#if defined _WIN32
-    MOVE_POINTER_FOR_WIN(p, a);
-#endif
-
-#if defined __APPLE__
-    MOVE_POINTER_FOR_MAC(p, a);
-#endif
+    MOVE_POINTER(p, a);
 
     b_value = *(int*)p;
     result = a_value + b_value;
