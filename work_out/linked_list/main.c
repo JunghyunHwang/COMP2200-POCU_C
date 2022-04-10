@@ -16,6 +16,10 @@ void test_delet_by_value(void);
 
 int main(void)
 {
+    test_insert_front();
+    test_insert_back();
+    test_insert_sorted();
+    test_delet_by_value();
     /*
     test_insert_front();
     test_insert_back();
@@ -26,11 +30,6 @@ int main(void)
     puts("No prob");
 
     return 0;
-}
-
-void test_doubly(void)
-{
-    double_node_t* head = NULL;
 }
 
 void test_insert_front(void)
