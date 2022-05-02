@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <assert.h>
 #include <stdlib.h>
 
 #include "linked_list.h"
@@ -18,41 +17,40 @@ void insert_front(node_t** phead, int val)
 
 void insert_back(node_t** phead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp_node = phead;
     node_t* new_node;
 
-    while (*pp != NULL) {
-        pp = &(*pp)->next;
+    while (*pp_node != NULL) {
+        pp_node = &(*pp_node)->next;
     }
 
-    assert(*pp == NULL);
     new_node = malloc(sizeof(node_t));
 
     new_node->value = val;
-    new_node->next = *pp;
+    new_node->next = *pp_node;
 
-    *pp = new_node;
+    *pp_node = new_node;
 }
 
 void insert_sorted(node_t** phead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp_node = phead;
     node_t* new_node;
 
-    while (*pp != NULL) {
-        if ((*pp)->value > val) {
+    while (*pp_node != NULL) {
+        if ((*pp_node)->value > val) {
             break;
         }
 
-        pp = &(*pp)->next;
+        pp_node = &(*pp_node)->next;
     }
 
     new_node = malloc(sizeof(node_t));
 
     new_node->value = val;
-    new_node->next = *pp;
+    new_node->next = *pp_node;
 
-    *pp = new_node;
+    *pp_node = new_node;
 }
 
 void delete_first(node_t** phead)
@@ -65,33 +63,31 @@ void delete_first(node_t** phead)
 
 void delete_last(node_t** phead)
 {
-    node_t** pp = phead;
+    node_t** pp_node = phead;
 
-    while (TRUE) {
-        if ((*pp)->next == NULL) {
-            break;
-        }
-
-        pp = &(*pp)->next;
+    while ((*pp_node)->next != NULL) {
+        pp_node = &(*pp_node)->next;
     }
 
-    free(*pp);
-    *pp = NULL;
+    free(*pp_node);
+    *pp_node = NULL;
 }
 
 int delete_by_value(node_t** phead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp_node = phead;
 
-    while (*pp != NULL) {
-        if ((*pp)->value == val) {
-            node_t* tmp = (*pp)->next;
-            free(*pp);
-            *pp = tmp;
+    while (*pp_node != NULL) {
+        if ((*pp_node)->value == val) {
+            node_t* tmp = (*pp_node)->next;
+
+            free(*pp_node);
+            *pp_node = tmp;
+
             return TRUE;
         }
 
-        pp = &(*pp)->next;
+        pp_node = &(*pp_node)->next;
     }
 
     return FALSE;
