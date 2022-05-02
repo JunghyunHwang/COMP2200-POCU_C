@@ -7,6 +7,9 @@ static void test_wrong_access(void);
 
 int main(void)
 {
+    int x;
+    printf("%d\n", x);
+    
     test_simple_variadic();
     test_wrong_access();
 

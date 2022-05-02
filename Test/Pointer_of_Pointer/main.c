@@ -1,79 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void test1(void)
-{
-    int a;
-    int* p;
-    int** p_p;
-
-    p = &a;
-    p_p = &p;
-
-    printf("p: %p \n", (void*)p);
-    printf("p value: %d \n", *p);
-    printf("p_p: %p \n", (void*)p_p);
-}
-
-void test2(void)
-{
-	int a;
-	int* p;
-
-	a = 97;
-	p = &a;
-	*p += 1;
-
-	printf("%c\n", (char*)*p);
-}
-
-void size_of_array(int arr[])
-{
-    printf("arr size: %d\n", sizeof(arr));
-}
-
-void size_of_pointer(void)
-{
-    int arr[3];
-
-    size_of_array(arr);
-}
-
-void cast_point(void)
-{
-    int a[2] = { 1, 2 };
-    int* p;
-    size_t i;
-
-    p = a;
-
-    for (i = 0; i < 4; ++i) {
-    	printf("%d try value: %d\n", i + 1, *p);
-    	printf("Address: %p\n", (void*)p);
-    	p = (char*)p + 1;
-    }
-
-    printf("result: %d\n", *p);
-	printf("Address: %p\n", (void*)p);
-}
+static void test_multi_pointer_char(void);
 
 int main(void)
 {
-    /*
-    cast_point();
-    size_of_pointer();
-    */
-    int num = 12;
-    char* p_char;
-    int* p_int;
+    int nums1[3] = { 1, 2, 3 };
+    int nums2[2] = { 4, 5 };
+    int nums3[2] = { 6, 7 };
 
-    p_int = &num;
-    p_char = (char*)&num;
+    int** p = malloc(sizeof(int*) * 3);
 
-    printf("p_int: %4p\n", (void*)p_int);
-    printf("p_char: %4p\n", (void*)p_char);
+    *p = nums1;
+    *(p + 1) = nums2;
+    *(p + 2) = nums3;
 
-    printf("p_int + 1: %p\n", (void*)(p_int + 1));
-    printf("p_char + 1: %p\n", (void*)(p_char + 1));
+    printf("%d\n", **p);
+    printf("%d\n", **(p + 1));
+    printf("%d\n", **(p + 2));
 
+    test_multi_pointer_char();
+
+    puts("No prob");
     return 0;
+}
+
+static void test_multi_pointer_char(void)
+{
+    char** a;
+
+    a = malloc(sizeof(char*) * 3);
+
+    printf("addr of a: 0x%p\n", (void*)a);
+    printf("addr of a + 1: 0x%p\n", (void*)(a + 1));
+    printf("addr differnet: %d\n", (char*)(a + 1) - (char*)a);
+
+    free(a);
 }

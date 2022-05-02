@@ -2,7 +2,7 @@
 
 typedef struct {
 	unsigned char ch;
-	unsigned short num;
+	unsigned int num;
 	char str[64];
 } padding_t;
 
@@ -32,11 +32,13 @@ void test_array_size(void)
 		{ 3.14, 2.18, 18.1},
 		{ 19.8, 36.5, 67.7}
 	};
+	int** ary[3];
+	
 
 	printf("0x%p\n", (void*)&d_nums[0]);
 	printf("0x%p\n", (void*)&d_nums[1]);
 	printf("Distance %d\n", d_nums[1] - d_nums[0]); /* 3 */
-	printf("%f\n", *(d_nums + 1));
+	printf("%f\n", **d_nums);
 }
 
 int main(void)
