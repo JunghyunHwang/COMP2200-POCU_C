@@ -5,38 +5,65 @@
 #define MAX_BOARD_SIZE (20)
 #define MIN_BOARD_SIZE (10)
 #define DEFAULT_BOARD_SIZE (15)
-#define EMPTY (-1)
-#define TRUE (1)
-#define FALSE (0)
 
 static int s_board[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
-static size_t s_valid_row_size;
-static size_t s_valid_column_size;
+static unsigned int s_valid_row_size;
+static unsigned int s_valid_column_size;
 static int s_player_score[2];
+
+/*
+void draw_board(void)
+{
+    unsigned int i;
+    unsigned int j;
+
+    for (i = 0; i < s_valid_row_size; ++i) {
+        for (j = 0; j < s_valid_column_size; ++j) {
+            switch (s_board[i][j]) {
+            case COLOR_BLACK:
+                printf("X");
+                break;
+            case COLOR_WHITE:
+                printf("O");
+                break;
+            case COLOR_NULL:
+                printf("+");
+                break;
+            default:
+                assert(FALSE);
+                break;
+            }
+        }
+        puts("");
+    }
+
+    puts("===============================");
+}
+*/
 
 void init_game(void)
 {
-    size_t i;
-    size_t j;
+    unsigned int i;
+    unsigned int j;
     s_valid_row_size = DEFAULT_BOARD_SIZE;
     s_valid_column_size = DEFAULT_BOARD_SIZE;
 
     for (i = 0; i < MAX_BOARD_SIZE; i++) {
         for (j = 0; j < MAX_BOARD_SIZE; j++) {
-            s_board[i][j] = EMPTY;
+            s_board[i][j] = COLOR_NULL;
         }
     }
 
-    s_player_score[0] = 0; /* COLOR_BLACK */
-    s_player_score[1] = 0; /* COLOR_WHITE */
+    s_player_score[COLOR_BLACK] = 0; /* COLOR_BLACK */
+    s_player_score[COLOR_WHITE] = 0; /* COLOR_WHITE */
 }
 
-size_t get_row_count(void)
+unsigned int get_row_count(void)
 {
     return s_valid_row_size;
 }
 
-size_t get_column_count(void)
+unsigned int get_column_count(void)
 {
     return s_valid_column_size;
 }
@@ -44,32 +71,32 @@ size_t get_column_count(void)
 
 int get_score(const color_t color)
 {
-    if (color != 0 && color != 1) {
+    if (color != COLOR_BLACK && color != COLOR_WHITE) {
         return -1;
     }
 
     return s_player_score[color];
 }
 
-int get_color(const size_t row, const size_t col)
+int get_color(const unsigned int row, const unsigned int col)
 {
     return s_board[row][col];
 }
 
-int is_placeable(const size_t row, const size_t col)
+int is_placeable(const unsigned int row, const unsigned int col)
 {
-    if (row >= s_valid_row_size || col >= s_valid_column_size || s_board[row][col] != EMPTY) {
+    if (row >= s_valid_row_size || col >= s_valid_column_size || s_board[row][col] != COLOR_NULL) {
         return FALSE;
     } else {
         return TRUE;
     }
 }
 
-int place_stone(const color_t color, const size_t row, const size_t col)
+int place_stone(const color_t color, const unsigned int row, const unsigned int col)
 {
     int valid_location;
 
-    if (color != 0 && color != 1) {
+    if (color != COLOR_BLACK && color != COLOR_WHITE) {
         return FALSE;
     }
 
@@ -84,7 +111,7 @@ int place_stone(const color_t color, const size_t row, const size_t col)
     }
 }
 
-void count_stone(const color_t color, const size_t row, const size_t col)
+void count_stone(const color_t color, const unsigned int row, const unsigned int col)
 {
     int horizontal_score;
     int vertical_score;
@@ -101,7 +128,7 @@ void count_stone(const color_t color, const size_t row, const size_t col)
     s_player_score[color] += total_score;
 }
 
-int check_horizontal_chaining(const color_t color, size_t row, size_t col)
+int check_horizontal_chaining(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 1;
 
@@ -115,11 +142,11 @@ int check_horizontal_chaining(const color_t color, size_t row, size_t col)
     }
 }
 
-int check_west_recursive(const color_t color, const size_t row, size_t col)
+int check_west_recursive(const color_t color, const unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
-    if (col == 0 || s_board[row][col - 1] != (int)color) {
+    if (col == 0 || s_board[row][col - 1] != color) {
         return chaining_stone_count;
     }
 
@@ -127,7 +154,7 @@ int check_west_recursive(const color_t color, const size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-int check_east_recursive(const color_t color, const size_t row, size_t col)
+int check_east_recursive(const color_t color, const unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -139,7 +166,7 @@ int check_east_recursive(const color_t color, const size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-int check_vertical_chaining(const color_t color, size_t row, size_t col)
+int check_vertical_chaining(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 1;
 
@@ -153,7 +180,7 @@ int check_vertical_chaining(const color_t color, size_t row, size_t col)
     }
 }
 
-int check_north_recursive(const color_t color, size_t row, const size_t col)
+int check_north_recursive(const color_t color, unsigned int row, const unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -165,7 +192,7 @@ int check_north_recursive(const color_t color, size_t row, const size_t col)
     return ++chaining_stone_count;
 }
 
-int check_south_recursive(const color_t color, size_t row, const size_t col)
+int check_south_recursive(const color_t color, unsigned int row, const unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -177,7 +204,7 @@ int check_south_recursive(const color_t color, size_t row, const size_t col)
     return ++chaining_stone_count;
 }
 
-int check_left_diagonal_chaining(const color_t color, size_t row, size_t col)
+int check_left_diagonal_chaining(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 1;
 
@@ -191,7 +218,7 @@ int check_left_diagonal_chaining(const color_t color, size_t row, size_t col)
     }
 }
 
-int check_north_west_recursive(const color_t color, size_t row, size_t col)
+int check_north_west_recursive(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -203,7 +230,7 @@ int check_north_west_recursive(const color_t color, size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-int check_south_east_recursive(const color_t color, size_t row, size_t col)
+int check_south_east_recursive(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -215,7 +242,7 @@ int check_south_east_recursive(const color_t color, size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-int check_right_diagonal_chaining(const color_t color, size_t row, size_t col)
+int check_right_diagonal_chaining(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 1;
 
@@ -229,7 +256,7 @@ int check_right_diagonal_chaining(const color_t color, size_t row, size_t col)
     }
 }
 
-int check_north_east_recursive(const color_t color, size_t row, size_t col)
+int check_north_east_recursive(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -241,7 +268,7 @@ int check_north_east_recursive(const color_t color, size_t row, size_t col)
     return ++chaining_stone_count;
 }
 
-int check_south_west_recursive(const color_t color, size_t row, size_t col)
+int check_south_west_recursive(const color_t color, unsigned int row, unsigned int col)
 {
     int chaining_stone_count = 0;
 
@@ -255,16 +282,33 @@ int check_south_west_recursive(const color_t color, size_t row, size_t col)
 
 /* special move */
 
-int insert_row(const color_t color, const size_t row)
+int check_valid_stone(const color_t color)
+{
+    if (color == COLOR_BLACK || color == COLOR_WHITE) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+int insert_row(const color_t color, const unsigned int row)
 {
     int require_score = 3;
-    int new_row_array[MAX_BOARD_SIZE] = { -1, };
+    int new_row_array[MAX_BOARD_SIZE];
     int temp;
-    size_t i;
-    size_t j;
+    unsigned int i;
+    unsigned int j;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || s_valid_row_size >= MAX_BOARD_SIZE || row > s_valid_row_size) {
         return FALSE;
+    }
+
+    for (i = 0; i < MAX_BOARD_SIZE; ++i) {
+        new_row_array[i] = COLOR_NULL;
     }
 
     ++s_valid_row_size;
@@ -282,16 +326,24 @@ int insert_row(const color_t color, const size_t row)
     return TRUE;
 }
 
-int insert_column(const color_t color, const size_t col)
+int insert_column(const color_t color, const unsigned int col)
 {
     int require_score = 3;
-    int new_column_array[MAX_BOARD_SIZE] = { -1, };
+    int new_column_array[MAX_BOARD_SIZE];
     int temp;
-    size_t i;
-    size_t j;
+    unsigned int i;
+    unsigned int j;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || s_valid_column_size >= MAX_BOARD_SIZE || col > s_valid_column_size) {
         return FALSE;
+    }
+
+    for (i = 0; i < MAX_BOARD_SIZE; ++i) {
+        new_column_array[i] = COLOR_NULL;
     }
 
     ++s_valid_column_size;
@@ -309,11 +361,15 @@ int insert_column(const color_t color, const size_t col)
     return TRUE;
 }
 
-int remove_row(const color_t color, const size_t row)
+int remove_row(const color_t color, const unsigned int row)
 {
     int require_score = 3;
-    size_t i;
-    size_t j;
+    unsigned int i;
+    unsigned int j;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || s_valid_row_size <= MIN_BOARD_SIZE || row >= s_valid_row_size) {
         return FALSE;
@@ -332,11 +388,15 @@ int remove_row(const color_t color, const size_t row)
     return TRUE;
 }
 
-int remove_column(const color_t color, const size_t col)
+int remove_column(const color_t color, const unsigned int col)
 {
     int require_score = 3;
-    size_t i;
-    size_t j;
+    unsigned int i;
+    unsigned int j;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || s_valid_column_size <= MIN_BOARD_SIZE || col >= s_valid_column_size) {
         return FALSE;
@@ -355,11 +415,15 @@ int remove_column(const color_t color, const size_t col)
     return TRUE;
 }
 
-int swap_rows(const color_t color, const size_t row0, const size_t row1)
+int swap_rows(const color_t color, const unsigned int row0, const unsigned int row1)
 {
     int require_score = 2;
     int temp;
-    size_t i;
+    unsigned int i;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || row0 >= s_valid_row_size || row1 >= s_valid_row_size) {
         return FALSE;
@@ -376,11 +440,15 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
     return TRUE;
 }
 
-int swap_columns(const color_t color, const size_t col0, const size_t col1)
+int swap_columns(const color_t color, const unsigned int col0, const unsigned int col1)
 {
     int require_score = 2;
     int temp;
-    size_t i;
+    unsigned int i;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || col0 >= s_valid_column_size || col1 >= s_valid_column_size) {
         return FALSE;
@@ -397,10 +465,14 @@ int swap_columns(const color_t color, const size_t col0, const size_t col1)
     return TRUE;
 }
 
-int copy_row(const color_t color, const size_t src, const size_t dst)
+int copy_row(const color_t color, const unsigned int src, const unsigned int dst)
 {
     int require_score = 4;
-    size_t i;
+    unsigned int i;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || src >= s_valid_row_size || dst >= s_valid_row_size) {
         return FALSE;
@@ -415,10 +487,14 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
     return TRUE;
 }
 
-int copy_column(const color_t color, const size_t src, const size_t dst)
+int copy_column(const color_t color, const unsigned int src, const unsigned int dst)
 {
     int require_score = 4;
-    size_t i;
+    unsigned int i;
+
+    if (check_valid_stone(color) == FALSE) {
+        return FALSE;
+    }
 
     if (s_player_score[color] < require_score || src >= s_valid_column_size || dst >= s_valid_column_size) {
         return FALSE;
