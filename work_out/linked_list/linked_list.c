@@ -8,7 +8,6 @@ void insert_front(node_t** phead, int val)
     node_t* new_node;
 
     new_node = malloc(sizeof(node_t));
-
     new_node->value = val;
     new_node->next = *phead;
 
@@ -17,40 +16,38 @@ void insert_front(node_t** phead, int val)
 
 void insert_back(node_t** phead, int val)
 {
-    node_t** pp_node = phead;
+    node_t** pp = phead;
     node_t* new_node;
 
-    while (*pp_node != NULL) {
-        pp_node = &(*pp_node)->next;
+    while (*pp != NULL) {
+        pp = &(*pp)->next;
     }
 
     new_node = malloc(sizeof(node_t));
-
     new_node->value = val;
-    new_node->next = *pp_node;
+    new_node->next = *pp;
 
-    *pp_node = new_node;
+    *pp = new_node;
 }
 
 void insert_sorted(node_t** phead, int val)
 {
-    node_t** pp_node = phead;
+    node_t** pp = phead;
     node_t* new_node;
 
-    while (*pp_node != NULL) {
-        if ((*pp_node)->value > val) {
+    while (*pp != NULL) {
+        if ((*pp)->value > val) {
             break;
         }
 
-        pp_node = &(*pp_node)->next;
+        pp = &(*pp)->next;
     }
 
     new_node = malloc(sizeof(node_t));
-
     new_node->value = val;
-    new_node->next = *pp_node;
+    new_node->next = *pp;
 
-    *pp_node = new_node;
+    *pp = new_node;
 }
 
 void delete_first(node_t** phead)
@@ -63,31 +60,30 @@ void delete_first(node_t** phead)
 
 void delete_last(node_t** phead)
 {
-    node_t** pp_node = phead;
+    node_t** pp = phead;
 
-    while ((*pp_node)->next != NULL) {
-        pp_node = &(*pp_node)->next;
+    while ((*pp)->next != NULL) {
+        pp = &(*pp)->next;
     }
 
-    free(*pp_node);
-    *pp_node = NULL;
+    free(*pp);
+    *pp = NULL;
 }
 
 int delete_by_value(node_t** phead, int val)
 {
-    node_t** pp_node = phead;
+    node_t** pp = phead;
 
-    while (*pp_node != NULL) {
-        if ((*pp_node)->value == val) {
-            node_t* tmp = (*pp_node)->next;
-
-            free(*pp_node);
-            *pp_node = tmp;
+    while (*pp != NULL) {
+        if ((*pp)->value == val) {
+            node_t* tmp = (*pp)->next;
+            free(*pp);
+            *pp = tmp;
 
             return TRUE;
         }
 
-        pp_node = &(*pp_node)->next;
+        pp = &(*pp)->next;
     }
 
     return FALSE;
@@ -95,11 +91,9 @@ int delete_by_value(node_t** phead, int val)
 
 void print_node(node_t* phead)
 {
-    node_t* p_node = phead;
-
-    while (p_node != NULL) {
-        printf("%d->", p_node->value);
-        p_node = p_node->next;
+    while (phead != NULL) {
+        printf("%d->", phead->value);
+        phead = phead->next;
     }
 
     puts("NULL");
@@ -107,11 +101,9 @@ void print_node(node_t* phead)
 
 void destroy(node_t* phead)
 {
-    node_t* p_node = phead;
-
-    while (p_node != NULL) {
-        node_t* tmp = p_node->next;
-        free(p_node);
-        p_node = tmp;
+    while (phead != NULL) {
+        node_t* tmp = phead->next;
+        free(phead);
+        phead = tmp;
     }
 }
