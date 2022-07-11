@@ -1,6 +1,8 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
+#include <stdio.h>
+
 typedef enum version {
     NOT_DEFINE,
     VERSION_1,

@@ -305,12 +305,21 @@ void B02_2ClustersNoOverlap4(void)
     assert(out_longest_safe_area_length == 9);
 }
 
+void test_no_safe_area(void)
+{
+    
+}
+
 int main(void)
 {    
+    /*
     my_test_case();
     test_cab_length_upto_100();
     test_etc();
     B02_2ClustersNoOverlap4();
+    */
+
+    
 
     {
         int test[5] = { 5, 5, 5, 5, 0 };
