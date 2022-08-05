@@ -46,6 +46,8 @@ int index_of(const char* str, const char* word)
         ++word_length;
     }
 
+    word_start_p = word;
+
     while (*str_start_p != '\0') {
         if (*str_start_p == *word) {
             const char* temp_str_p = str_start_p;

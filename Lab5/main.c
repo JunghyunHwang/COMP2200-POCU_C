@@ -57,7 +57,7 @@ int main(void)
 
     set_tip(5);
 
-    set_message("Thanks for dining with us! Give me the beat, I ride it like a jetski So many bitches");
+    set_message("&WQ*XCCD^@kmhUc[8Y`=,<\\IJ3=*?Nj]j)!w;zP`P94u'H1vH]");
 
     assert(TRUE == print_receipt("receipt3.txt", time));
 
