@@ -1,68 +1,114 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "linked_list.h"
+#include <time.h>
 
-void insert_front(node_t** phead, int value) 
+#include "test.h"
+
+void start_test(void)
 {
-    node_t* new_node;
-
-    new_node = malloc(sizeof(node_t));
-    new_node->value = value;
-
-    new_node->next = *phead;
-    *phead = new_node;
+    // Randomly generate test data
+    srand(time(NULL));
 }
 
-void inesrt_back(node_t** phead, int value) 
+void test_insert_front(void)
 {
-    node_t* new_node;
+    node_t* head = NULL;
+    node_t* next = NULL;
+    size_t i;
 
-    while (*phead != NULL) {
-        phead = &(*phead)->next;
+    for (i = 0; i < DATA_SIZE; ++i) {
+        insert_front(&head, s_nums[i]);
+
+        assert(head->value == s_nums[i]);
+        assert(head->next == next);
+        next = head;
     }
 
-    new_node = malloc(sizeof(node_t));
-    new_ndoe->value = value;
-
-    new_node->next = *phead;
-    *phead = new_node;
+    destroy(&head);
+    assert(head == NULL);
 }
 
-void insert_sorted(node_t** phead, int value) 
+void test_insert_back(void)
 {
-    node_t** pp = phead;
-    node_t* new_node;
+    node_t* head = NULL;
+    node_t* last = NULL;
+    size_t i;
 
-    while (*pp != NULL) {
-        if ((*pp)->value > value) {
-            break;
-        }
+    insert_back(&head, s_nums[0]);
+    last = head;
+    assert(last->value == s_nums[0]);
+    assert(last->next == NULL);
 
-        pp = &(*pp)->next;
+    for (i = 1; i < DATA_SIZE; ++i) {
+        insert_back(&head, s_nums[i]);
+        last = last->next;
+        assert(last != NULL);
+        assert(last->value == s_nums[i]);
+        assert(last->next == NULL);
     }
 
-    new_node = malloc(sizeof(node_t));
-    new_node->value = value;
-    new_node->next = *pp;
-
-    *pp = new_node;
+    destroy(&head);
+    assert(head == NULL);
 }
 
-void print_node(node_t* phead)
+void test_insert_sorted(void)
 {
-    while (phead != NULL) {
-        printf("%d->" phead->value);
-        phead = phead->next;
+    node_t* head = NULL;
+    node_t* p_curr;
+    node_t* p_prev;
+    size_t i;
+
+    for (i = 0; i < DATA_SIZE; ++i) {
+        insert_sorted(&head, s_nums[i]);
     }
-    puts("NULL");
+
+    p_curr = head->next;
+    p_prev = head;
+
+    while (p_curr != NULL) {
+        assert(p_prev->value <= p_curr->value);
+
+        p_prev = p_curr;
+        p_curr = p_curr->next;
+    }
+
+    destroy(&head);
+    assert(head == NULL);
 }
 
-void destroy(node_t* phead)
+void test_delete_first(void)
 {
-    while (phead != NULL) {
-        node_t* tmp = phead->next;
-        
-        free(phead);
-        phead = tmp;
+
+}
+
+void test_delete_last(void)
+{
+
+}
+
+void test_delete_by_value(void)
+{
+    node_t* head = NULL;
+    size_t i;
+
+    for (i = 0; i < DATA_SIZE; ++i) {
+        insert_sorted(&head, s_nums[i]);
     }
+    
+    assert(!delete_by_value(&head, -1));
+
+    assert(delete_by_value(&head, 3));
+    assert(!delete_by_value(&head, 3));
+
+    assert(delete_by_value(&head, 2));
+    assert(!delete_by_value(&head, 2));
+
+    assert(delete_by_value(&head, 5));
+    assert(!delete_by_value(&head, 5));
+
+    destroy(&head);
+    assert(head == NULL);
+}
+
+void test_find_by_value(void)
+{
+
 }

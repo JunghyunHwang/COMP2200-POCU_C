@@ -3,36 +3,35 @@
 
 #include "linked_list.h"
 
-void insert_front(node_t** phead, int val)
+void insert_front(node_t** pphead, int val)
 {
     node_t* new_node;
-
-    new_node = malloc(sizeof(node_t));
+    new_node = (node_t*)malloc(sizeof(node_t));
     new_node->value = val;
-    new_node->next = *phead;
+    new_node->next = *pphead;
 
-    *phead = new_node;
+    *pphead = new_node;
 }
 
-void insert_back(node_t** phead, int val)
+void insert_back(node_t** pphead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp = pphead;
     node_t* new_node;
 
     while (*pp != NULL) {
         pp = &(*pp)->next;
     }
 
-    new_node = malloc(sizeof(node_t));
+    new_node = (node_t*)malloc(sizeof(node_t));
     new_node->value = val;
-    new_node->next = *pp;
+    new_node->next = NULL;
 
     *pp = new_node;
 }
 
-void insert_sorted(node_t** phead, int val)
+void insert_sorted(node_t** pphead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp = pphead;
     node_t* new_node;
 
     while (*pp != NULL) {
@@ -43,24 +42,24 @@ void insert_sorted(node_t** phead, int val)
         pp = &(*pp)->next;
     }
 
-    new_node = malloc(sizeof(node_t));
+    new_node = (node_t*)malloc(sizeof(node_t));
     new_node->value = val;
     new_node->next = *pp;
 
     *pp = new_node;
 }
 
-void delete_first(node_t** phead)
+void delete_first(node_t** pphead)
 {
-    node_t* tmp = (*phead)->next;
+    node_t* second = (*pphead)->next;
 
-    free(*phead);
-    *phead = tmp;
+    free(*pphead);
+    *pphead = second;
 }
 
-void delete_last(node_t** phead)
+void delete_last(node_t** pphead)
 {
-    node_t** pp = phead;
+    node_t** pp = pphead;
 
     while ((*pp)->next != NULL) {
         pp = &(*pp)->next;
@@ -70,15 +69,15 @@ void delete_last(node_t** phead)
     *pp = NULL;
 }
 
-int delete_by_value(node_t** phead, int val)
+int delete_by_value(node_t** pphead, int val)
 {
-    node_t** pp = phead;
+    node_t** pp = pphead;
 
     while (*pp != NULL) {
         if ((*pp)->value == val) {
-            node_t* tmp = (*pp)->next;
+            node_t* next = (*pp)->next;
             free(*pp);
-            *pp = tmp;
+            *pp = next;
 
             return TRUE;
         }
@@ -89,21 +88,26 @@ int delete_by_value(node_t** phead, int val)
     return FALSE;
 }
 
-void print_node(node_t* phead)
+void print_node(node_t** pphead)
 {
-    while (phead != NULL) {
-        printf("%d->", phead->value);
-        phead = phead->next;
+    node_t** pp = pphead;
+
+    while (*pp != NULL) {
+        printf("%d, ", (*pp)->value);
+
+        pp = &(*pp)->next;
     }
 
-    puts("NULL");
+    printf("\n");
 }
 
-void destroy(node_t* phead)
+void destroy(node_t** pphead)
 {
-    while (phead != NULL) {
-        node_t* tmp = phead->next;
-        free(phead);
-        phead = tmp;
+    node_t** pp = pphead;
+
+    while (*pp != NULL) {
+        node_t* next = (*pp)->next;
+        free(*pp);
+        *pp = next;
     }
 }
